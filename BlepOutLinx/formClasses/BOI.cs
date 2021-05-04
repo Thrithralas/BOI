@@ -10,12 +10,18 @@ using Blep.Backend;
 
 namespace Blep
 {
+    /// <summary>
+    /// Main window form and actual mod manager - all in one
+    /// </summary>
     public partial class BlepOut : Form
     {
+        /// <summary>
+        /// The one and only ctor
+        /// </summary>
         public BlepOut()
         {
-            
-            InitializeComponent();
+            InitializeComponent();            
+            this.Text = this.Text.Replace("<VersionNumber>", VersionNumber);
             firstshow = true;
             MaskModeSelect.Items.AddRange(new object[] {Maskmode.Names, Maskmode.Tags, Maskmode.NamesAndTags});
             MaskModeSelect.SelectedItem = Maskmode.NamesAndTags;
@@ -52,7 +58,11 @@ namespace Blep
             if (VoiceOfBees.ModEntryList.Count > 0) { VoiceOfBees.ModEntryList[0].TryDownload(ModFolder); }
         }
         
-
+        /// <summary>
+        /// Ran every time there's a need to refresh mod manager's state, with new path or the same one as before.
+        /// Runs regardless of whether selected path is valid or not.
+        /// </summary>
+        /// <param name="path">Path to check</param>
         public void UpdateTargetPath(string path)
         {
             btnLaunch.Enabled = false;
@@ -65,6 +75,14 @@ namespace Blep
             if (IsMyPathCorrect) Setup();
             StatusUpdate();
         }
+
+        /// <summary>
+        /// Continuation of <see cref="UpdateTargetPath(string)"/>: only ran when selected path is valid. 
+        /// <para>
+        /// Loads file blacklists, does active folder cleanup / mod file retrieval and compiles modlist.
+        /// </para>
+        /// Also displays certain popup windows. See: <see cref="PubstuntInfoPopup"/>, <see cref="MixmodsPopup"/>
+        /// </summary>
         private void Setup()
         {
             Wood.WriteLine("Path valid, starting setup " + DateTime.Now);
@@ -109,7 +127,10 @@ namespace Blep
             RetrievePtBlacklist();
         }
 
-        //deletes Pubstunt and mixmods from where they shouldn't be
+        //
+        /// <summary>
+        /// Deletes Pubstunt and invalid mods from where they shouldn't be.
+        /// </summary>
         private void Rootout()
         {
             string[] patchfoldercontents = Directory.GetFiles(PatchesFolder);
@@ -119,26 +140,22 @@ namespace Blep
                 var fi = new FileInfo(s);
                 if (fi.Extension == ".dll" && !fi.Attributes.HasFlag(FileAttributes.ReparsePoint))
                 {
+                    //PS should never be enabled
                     if (AintThisPS(s))
                     {
                         PubstuntFound = true;
                         Wood.WriteLine("Located PublicityStunt in active Plugins folder, removing.");
                         File.Delete(s);
                     }
+                    //other invalid mods can live
                     else
                     {
                         ModRelay.ModType mt = ModRelay.GetModType(s);
                         if (!(mt == ModRelay.ModType.Patch || mt == ModRelay.ModType.Invalid) && !patchBlacklist.Contains(s) && !fi.Attributes.HasFlag(FileAttributes.ReparsePoint))
                         {
                             Wood.WriteLine("Found a misplaced mod in Patches folder: " + fi.Name + "; Type: " + mt.ToString());
-                            if (File.Exists(ModFolder + PtModData.GiveMeBackMyName(fi.Name)))
-                            {
-                                File.Delete(s);
-                            }
-                            else
-                            {
-                                File.Move(s, ModFolder + PtModData.GiveMeBackMyName(fi.Name));
-                            }
+                            File.Delete(s);
+                            
                         }
                     }
                 }
@@ -148,13 +165,14 @@ namespace Blep
                 var fi = new FileInfo(s);
                 if (fi.Extension == ".dll" && !pluginBlacklist.Contains(s) && !fi.Attributes.HasFlag(FileAttributes.ReparsePoint))
                 {
-
+                    //KILL pubstunt...
                     if (AintThisPS(s))
                     {
                         File.Delete(s);
                         Wood.WriteLine("Located PublicityStunt in active Plugins folder, removing.");
                         PubstuntFound = true;
                     }
+                    //
                     else
                     {
                         ModRelay.ModType mt = ModRelay.GetModType(s);
@@ -162,21 +180,15 @@ namespace Blep
                         if (mt == ModRelay.ModType.Patch || mt == ModRelay.ModType.Invalid)
                         {
                             Wood.WriteLine("Found a misplaced mod in Plugins folder: " + fi.Name + "; Type: " + mt.ToString());
-                            if (File.Exists(ModFolder + PtModData.GiveMeBackMyName(fi.Name)))
-                            {
-                                File.Delete(s);
-                                Wood.WriteLine("Duplicate exists in Mods folder, deleting.");
-                            }
-                            else
-                            {
-                                Wood.WriteLine("Moving to Mods folder.");
-                                File.Move(s, ModFolder + PtModData.GiveMeBackMyName(fi.Name));
-                            }
+                            File.Delete(s);
                         }
                     }
                 }
             }
         }
+        /// <summary>
+        /// Creates mods folder if there isn't one; checks if there is leftover PL junk.
+        /// </summary>
         private void PrepareModsFolder()
         {
             metafiletracker = false;
@@ -196,9 +208,10 @@ namespace Blep
             }
             Wood.WriteLineIf(metafiletracker, "Found modhash/modmeta files in mods folder.");
         }
-        //
-        //blacklist stuff
-        //
+        
+        /// <summary>
+        /// Tries fetching plugins blacklist; if there isn't one, creates a new file.
+        /// </summary>
         private void RetrieveHkBlacklist()
         {
             if (File.Exists(hkblacklistpath))
@@ -222,6 +235,9 @@ namespace Blep
             }
             Wood.Unindent();
         }
+        /// <summary>
+        /// Creates file blacklist for plugins folder.
+        /// </summary>
         private void CreateHkBlacklist()
         {
             Wood.WriteLine("Creating new plugin blacklist file.");
@@ -231,6 +247,10 @@ namespace Blep
             sw.Dispose();
 
         }
+
+        /// <summary>
+        /// Tries fetching patches blacklist; if there isn't one, creates a new file.
+        /// </summary>
         private void RetrievePtBlacklist()
         {
             if (File.Exists(ptblacklistpath))
@@ -254,6 +274,9 @@ namespace Blep
             }
             Wood.Unindent();
         }
+        /// <summary>
+        /// Creates file blacklist for patches folder.
+        /// </summary>
         private void CreatePtBlacklist()
         {
             StreamWriter sw = File.CreateText(ptblacklistpath);
@@ -265,7 +288,9 @@ namespace Blep
         //blacklist stuff over
         //
 
-        //brings mods up to date if necessary
+        /// <summary>
+        /// 
+        /// </summary>
         private void RetrieveAllDlls()
         {
             var plugins = new DirectoryInfo(PluginsFolder);
@@ -305,6 +330,9 @@ namespace Blep
             }
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
         private void CompileModList()
         {
             string[] ModsFolderContents = Directory.GetFiles(ModFolder);
@@ -331,6 +359,10 @@ namespace Blep
                 }
             }
         }
+        /// <summary>
+        /// Applies search mask to visible modlist; depending on selected search mode, names and/or tags will be accounted for.
+        /// </summary>
+        /// <param name="mask">Mask contents.</param>
         private void ApplyMaskToModlist(string mask)
         {
             bool oldrst = ReadyForRefresh;
@@ -351,6 +383,13 @@ namespace Blep
             }
             ReadyForRefresh = oldrst;
         }
+
+        /// <summary>
+        /// Returns if a <see cref="ModRelay"/> is selected by a given mask.
+        /// </summary>
+        /// <param name="mask">Mask text.</param>
+        /// <param name="mr"><see cref="ModRelay"/> to be checked.</param>
+        /// <returns></returns>
         private bool ModSelectedByMask(string mask, ModRelay mr)
         {
             if (mask == string.Empty) return true;
@@ -377,30 +416,10 @@ namespace Blep
             NamesAndTags
         }
 
-        //apply/unapply all mods needed
-        //overload for autorefreshes (unneeded)
-        [Obsolete]
-        private void ApplyModlist()
-        {
-            Wood.WriteLine("Applying modlist.");
-            Wood.Indent();
-            for (int i = 0; i < Modlist.Items.Count; i++)
-            {
-                if (Modlist.Items[i] is ModRelay)
-                {
-                    ModRelay mr = Modlist.Items[i] as ModRelay;
-                    if (Modlist.GetItemChecked(i))
-                    {
-                        mr.Enable();
-                    }
-                    else mr.Disable();
-                    Wood.WriteLine(mr.AssociatedModData.DisplayedName + " : " + ((mr.enabled) ? "ON" : "OFF"));
-                }
-
-            }
-            Wood.Unindent();
-        }
-        //overload for manual checks/unchecks
+        /// <summary>
+        /// Cycles through modlist and makes sure mod enable states are up to date with check states.
+        /// </summary>
+        /// <param name="cst"></param>
         private void ApplyModlist(CheckState[] cst)
         {
             Wood.WriteLine("Applying modlist from manual check.");
@@ -421,6 +440,9 @@ namespace Blep
             }
         }
 
+        /// <summary>
+        /// Checks if enabled mods are identical to their counterparts in active folders; if not, brings the needed side up to date.
+        /// </summary>
         private void BringUpToDate()
         {
             foreach (ModRelay mr in Modlist.Items)
@@ -428,7 +450,6 @@ namespace Blep
                 if (mr.MyType == ModRelay.ModType.Invalid || !mr.enabled || new FileInfo(mr.TarPath).Attributes.HasFlag(FileAttributes.ReparsePoint)) continue;
                 byte[] ModOrigSha = mr.origchecksum;
                 byte[] ModTarSha = mr.TarCheckSum;
-
                 if (!BoiCustom.BOIC_Bytearr_Compare(ModTarSha, ModOrigSha))
                 {
                     FileInfo orfi = new FileInfo(mr.ModPath);
@@ -453,6 +474,9 @@ namespace Blep
             get { return (currentStructureState.HasFlag(FolderStructureState.BlepFound | FolderStructureState.GameFound)); }
         }
 
+        /// <summary>
+        /// Gets <see cref="FolderStructureState"/> for currently selected path.
+        /// </summary>
         private static FolderStructureState currentStructureState 
         {
             get
@@ -471,15 +495,47 @@ namespace Blep
             GameFound = 2
         }
 
+        /// <summary>
+        /// Path to the game's root folder.
+        /// </summary>
         public static string RootPath = string.Empty;
+        /// <summary>
+        /// Indicates whether modhash/modmeta files were found during setup.
+        /// </summary>
         private static bool metafiletracker;
+        /// <summary>
+        /// State tracker for path select dialog and button; janky, definitely subject to change.
+        /// </summary>
         private static bool TSbtnMode = true;
+        /// <summary>
+        /// <see cref="Options"/> form instance.
+        /// </summary>
         private Options opwin;
+        /// <summary>
+        /// <see cref="InvalidModPopup"/> form instance.
+        /// </summary>
         private InvalidModPopup inp;
+        /// <summary>
+        /// <see cref="InfoWindow"/> form instance.
+        /// </summary>
         private InfoWindow iw;
+        /// <summary>
+        /// Returns BOI folder path.
+        /// </summary>
         public static string BOIpath => Directory.GetCurrentDirectory();
+        /// <summary>
+        /// Returns path to BOI config file.
+        /// </summary>
         public static string cfgpath => Path.Combine(BOIpath, "cfg.json");
+        /// <summary>
+        /// Returns path to tag data file.
+        /// </summary>
         public static string tagfilePath => Path.Combine(BOIpath, "MODTAGS.txt");
+        /// <summary>
+        /// Checks if the file under a given path is Pubstunt.
+        /// </summary>
+        /// <param name="path">Path to be checked.</param>
+        /// <returns></returns>
         public static bool AintThisPS(string path)
         {
             var fi = new FileInfo(path);
@@ -503,21 +559,59 @@ namespace Blep
 
         }
 
+        /// <summary>
+        /// Blacklist for monomod folder.
+        /// </summary>
         private List<string> patchBlacklist;
+        /// <summary>
+        /// Blacklist for plugins folder.
+        /// </summary>
         private List<string> pluginBlacklist;
+        /// <summary>
+        /// List of mods that have been erased during rootout.
+        /// </summary>
         private List<string> outrmixmods;
+        /// <summary>
+        /// Modlist.
+        /// </summary>
         private List<ModRelay> targetFiles;
+        /// <summary>
+        /// For launching the game directly; janky, subject to change.
+        /// </summary>
         private Process rw;
+        /// <summary>
+        /// Indicates whether the form is being viewed for the first time in the session.
+        /// </summary>
         private bool firstshow;
+        /// <summary>
+        /// Indicates whether certain events should be ran; used to avoid stack overflows.
+        /// </summary>
         private bool ReadyForRefresh;
+        /// <summary>
+        /// Setup tracker for pubstunt.
+        /// </summary>
         private bool PubstuntFound;
+        /// <summary>
+        /// Setup tracker for invalid mods.
+        /// </summary>
         private bool MixmodsFound;
+        /// <summary>
+        /// Path to plugins blacklist.
+        /// </summary>
         private string hkblacklistpath => Path.Combine(PluginsFolder, @"plugins_blacklist.txt");
+        /// <summary>
+        /// Path to monomod blacklist.
+        /// </summary>
         private string ptblacklistpath => Path.Combine(PatchesFolder, @"patches_blacklist.txt");
         public static string ModFolder => Path.Combine(RootPath, "Mods");
         public static string PluginsFolder => Path.Combine(RootPath, "BepInEx", "plugins");
         public static string PatchesFolder => Path.Combine(RootPath, "BepInEx", "monomod");
 
+        /// <summary>
+        /// Ran when the user clicks path select button. <see cref="TSbtnMode"/> is used here.
+        /// </summary>
+        /// <param name="sender">Unused.</param>
+        /// <param name="e">Unused.</param>
         private void buttonSelectPath_Click(object sender, EventArgs e)
         {
 
@@ -536,6 +630,11 @@ namespace Blep
                 TSbtnMode = true;
             }
         }
+        /// <summary>
+        /// Ran when the window is brought into focus.
+        /// </summary>
+        /// <param name="sender">Unused.</param>
+        /// <param name="e">Unused.</param>
         private void BlepOut_Activated(object sender, EventArgs e)
         {
             UpdateTargetPath(RootPath);
@@ -551,6 +650,9 @@ namespace Blep
             }
             TagManager.SaveToFile(tagfilePath);
         }
+        /// <summary>
+        /// Updates the status bars.
+        /// </summary>
         private void StatusUpdate()
         {
             var cf = currentStructureState;
@@ -582,11 +684,16 @@ namespace Blep
             btnSelectPath.Enabled = Modlist.Enabled;
 
         }
+        /// <summary>
+        /// Ran when <see cref="btnLaunch"/> is clicked.
+        /// </summary>
+        /// <param name="sender">Unused.</param>
+        /// <param name="e">Unused.</param>
         private void btnLaunch_MouseClick(object sender, MouseEventArgs e)
         {
             try
             {
-                rw = new System.Diagnostics.Process();
+                rw = new Process();
                 rw.StartInfo.FileName = Path.Combine(RootPath, "RainWorld.exe");
                 rw.Start();
                 Wood.WriteLine("Game launched.");
@@ -601,23 +708,43 @@ namespace Blep
             StatusUpdate();
 
         }
+        /// <summary>
+        /// Brings up the help window.
+        /// </summary>
+        /// <param name="sender">Unused.</param>
+        /// <param name="e">Unused.</param>
         private void btn_Help_Click(object sender, EventArgs e)
         {
             if (iw == null || iw.IsDisposed) iw = new Blep.InfoWindow(this);
             iw.Show();
         }
+        /// <summary>
+        /// Shows PL uproot dialog.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonUprootPart_Click(object sender, EventArgs e)
         {
             Blep.PartYeet py = new Blep.PartYeet(this);
             AddOwnedForm(py);
             py.ShowDialog();
         }
+        /// <summary>
+        /// Brings up PL junk cleanup dialog.
+        /// </summary>
+        /// <param name="sender">Unused.</param>
+        /// <param name="e">Unused.</param>
         private void buttonClearMeta_Click(object sender, EventArgs e)
         {
             Blep.MetafilePurgeSuggestion psg = new Blep.MetafilePurgeSuggestion(this);
             AddOwnedForm(psg);
             psg.ShowDialog();
         }
+        /// <summary>
+        /// Ran every time a modlist item is checked.
+        /// </summary>
+        /// <param name="sender">Unused.</param>
+        /// <param name="e"></param>
         private void Modlist_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             if (!ReadyForRefresh) return;
@@ -637,6 +764,12 @@ namespace Blep
             ApplyModlist(ich);
             Wood.WriteLine("Resulting state: " + ((Modlist.Items[e.Index] as ModRelay).enabled ? "ON" : "OFF"));
         }
+
+        /// <summary>
+        /// Ran when the form is closing, as the name suggests.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BlepOut_FormClosing(object sender, FormClosingEventArgs e)
         {
             Wood.WriteLine("BOI shutting down. " + DateTime.Now);
@@ -646,12 +779,21 @@ namespace Blep
             TagManager.TagCleanup(mns.ToArray());
             TagManager.SaveToFile(tagfilePath);
         }
+        /// <summary>
+        /// Brings up the options + tools dialog.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonOption_Click(object sender, EventArgs e)
         {
             if (opwin == null || opwin.IsDisposed) opwin = new Options(this);
             opwin.Show();
         }
-
+        /// <summary>
+        /// Used to handle data drop events for modlist.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Modlist_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -686,6 +828,11 @@ namespace Blep
             Wood.Unindent();
             Wood.WriteLine("Drag&Drop operation ended.");
         }
+        /// <summary>
+        /// Used to handle data drop events for modlist.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Modlist_DragEnter(object sender, DragEventArgs e)
         {
             // if we're about to drop a file, indicate a copy to allow the drop
@@ -695,7 +842,11 @@ namespace Blep
         {
             ApplyMaskToModlist(textBox_MaskInput.Text);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Modlist_SelectionChanged(object sender, EventArgs e)
         {
             if (Modlist.SelectedItem == null) return;
@@ -711,12 +862,18 @@ namespace Blep
             if (!ReadyForRefresh) return;
             ApplyMaskToModlist(textBox_MaskInput.Text);
         }
-
+        /// <summary>
+        /// Brings up AUDBrowser.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OpenAudbBrowser(object sender, EventArgs e)
         {
             if (browser == null || browser.IsDisposed) { browser = new AUDBBrowser(); browser.Show(); }
         }
         private AUDBBrowser browser;
 
+
+        public static string VersionNumber => "0.1.6";
     }
 }

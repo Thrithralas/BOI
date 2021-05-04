@@ -255,7 +255,7 @@ namespace Blep
             if (!BlepOut.IsMyPathCorrect) return;
             if (ReferenceEquals(sender, btnNukeActiveSave))
             {
-                BackupManager.DeleteSave(BackupManager.ActiveSave);
+                BackupManager.TryDeleteSave(BackupManager.ActiveSave);
             }
             else if (ReferenceEquals(sender, btnMakeBackup))
             {
@@ -264,11 +264,11 @@ namespace Blep
             if (listBackups.SelectedItem == null) return;
             else if (ReferenceEquals(sender, btnDeletBackup))
             {
-                if (listBackups.SelectedItem != null) BackupManager.DeleteSave((BackupManager.UserDataStateRelay)listBackups.SelectedItem);
+                if (listBackups.SelectedItem != null) BackupManager.TryDeleteSave((BackupManager.UserDataStateRelay)listBackups.SelectedItem);
             }
             else if (ReferenceEquals(sender, btnRestoreBackup))
             {
-                BackupManager.DeleteSave(BackupManager.ActiveSave);
+                BackupManager.TryDeleteSave(BackupManager.ActiveSave);
                 BackupManager.ActiveSave = ((BackupManager.UserDataStateRelay)listBackups.SelectedItem).CloneTo(BackupManager.UserDataFolder);
             }
             BackupManager.SaveSettingsForAll();

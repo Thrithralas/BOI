@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Diagnostics;
+using Newtonsoft.Json.Linq;
+using System.Net;
 
 namespace Blep.Backend
 {
@@ -52,6 +54,31 @@ namespace Blep.Backend
             }
             return errc;
         }
+        
+        public static bool AmITheLatestOfAll()
+        {
+            using (var wc = new WebClient())
+            {
+                try
+                {
+                    var json = wc.DownloadString(RepoAddress);
+                    var arr = JArray.Parse(json);
+                    var tok = arr[0];
+                    var jo = (JObject)tok;
+                    JToken j;
+                    if (jo.TryGetValue("tag_name", out j))
+                    {
+                        return (string)j == BlepOut.VersionNumber;
+                    }
+                }
+                catch (Exception e)
+                {
+                    return true;
+                }
+            }
+            return true;
+        }
+        private static string RepoAddress = "https://api.github.com/repos/Rain-World-Modding/BOI/releases";
     }
 
     
