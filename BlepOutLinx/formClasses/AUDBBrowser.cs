@@ -25,13 +25,14 @@ namespace Blep
         
         public void FetchAndRefresh()
         {
-            VoiceOfBees.FetchList();
+            bool fl = VoiceOfBees.FetchList();
             listAUDBEntries.Items.Clear();
-            foreach (var rel in VoiceOfBees.EntryList)
+            foreach (var rel in VoiceOfBees.ModEntryList)
             {
                 listAUDBEntries.Items.Add(rel);
             }
             DrawBoxes();
+            if (!fl) labelOperationStatus.Text = "Retrieving modlist failed, check BOILOG.txt for details";
         }
 
         public void DrawBoxes()

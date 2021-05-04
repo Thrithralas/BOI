@@ -19,7 +19,7 @@ namespace Blep
             firstshow = true;
             MaskModeSelect.Items.AddRange(new object[] {Maskmode.Names, Maskmode.Tags, Maskmode.NamesAndTags});
             MaskModeSelect.SelectedItem = Maskmode.NamesAndTags;
-            Wood.LogPath = Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt");
+            Wood.SetNewPathAndErase(Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt"));
             Wood.WriteLine("BOI starting " + DateTime.Now);
             targetFiles = new List<ModRelay>();
             pluginBlacklist = new List<string>();
@@ -49,9 +49,10 @@ namespace Blep
                     Wood.WriteLine("Wish you all well. Bzz!");
                 }
             }
-            VoiceOfBees.FetchList();
-            if (VoiceOfBees.EntryList.Count > 0) { VoiceOfBees.EntryList[0].TryDownload(ModFolder); }
+            if (VoiceOfBees.ModEntryList.Count > 0) { VoiceOfBees.ModEntryList[0].TryDownload(ModFolder); }
         }
+        
+
         public void UpdateTargetPath(string path)
         {
             btnLaunch.Enabled = false;
@@ -449,8 +450,27 @@ namespace Blep
         }
         public static bool IsMyPathCorrect
         {
-            get { return (Directory.Exists(PluginsFolder) && Directory.Exists(PatchesFolder)); }
+            get { return (currentStructureState.HasFlag(FolderStructureState.BlepFound | FolderStructureState.GameFound)); }
         }
+
+        private static FolderStructureState currentStructureState 
+        {
+            get
+            {
+                FolderStructureState res = 0;
+                if (Directory.Exists(PluginsFolder) && Directory.Exists(PatchesFolder)) res = res | FolderStructureState.BlepFound;
+                if (Directory.Exists(Path.Combine(RootPath, "RainWorld_Data"))) res = res | FolderStructureState.GameFound;
+                return res;
+            }
+        }
+
+        [Flags]
+        private enum FolderStructureState
+        {
+            BlepFound = 1,
+            GameFound = 2
+        }
+
         public static string RootPath = string.Empty;
         private static bool metafiletracker;
         private static bool TSbtnMode = true;
@@ -533,8 +553,23 @@ namespace Blep
         }
         private void StatusUpdate()
         {
-            lblPathStatus.Text = IsMyPathCorrect ? "Path valid" : "Path invalid";
-            lblPathStatus.BackColor = IsMyPathCorrect ? System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.LightGreen) : System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.LightSalmon);
+            var cf = currentStructureState;
+            if (cf.HasFlag(FolderStructureState.BlepFound | FolderStructureState.GameFound))
+            {
+                lblPathStatus.Text = "Path valid";
+                lblPathStatus.BackColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.LightGreen);
+            }
+            else if (cf.HasFlag(FolderStructureState.GameFound))
+            {
+                lblPathStatus.Text = "No bepinex";
+                lblPathStatus.BackColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.LightYellow);
+            }
+            else
+            {
+                lblPathStatus.Text = "Path invalid";
+                lblPathStatus.BackColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Salmon);
+            }
+            
             lblProcessStatus.Visible = IsMyPathCorrect;
             lblProcessStatus.Text = (rw != null && !rw.HasExited) ? "Running" : "Not running";
             lblProcessStatus.BackColor = (rw != null && !rw.HasExited) ? System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Orange) : System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Gray);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace Blep.Backend
 {
@@ -44,19 +45,43 @@ namespace Blep.Backend
             {
                 LogPath = Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt");
             }
+            try
+            {
+                int ml = 512;
+                while (WriteQueue.Count > 0 && ml > 0) 
+                {
+                    ml--;
+                    RawWrite(WriteQueue[0]);
+                    WriteQueue.RemoveAt(0);
+                }
+            }
+            catch (IOException) { };
             FileInfo lf = new FileInfo(LogPath);
             try
             {
-                string result = o?.ToString() ?? "null";
-                File.AppendAllText(LogPath, result);
+                RawWrite(o);
             }
             catch (IOException)
             {
-
+                WriteQueue.Add(o);
             }
         }
+        private static void RawWrite(object o)
+        {
+            Debug.Write(o);
+            string result = o?.ToString() ?? "null";
+            File.AppendAllText(LogPath, result);
+        }
+        public static void SetNewPathAndErase(string tar)
+        {
+            LogPath = tar;
+            if (File.Exists(tar)) File.Delete(tar);
+        }
 
+        public static List<object> WriteQueue { get { _wc = _wc ?? new List<object>(); return _wc; } set { _wc = value; } }
+        private static List<Object> _wc;
         public static string LogPath { get; set; } = string.Empty;
+        
 
         public static int IndentLevel { get { return _il; } set { _il = Math.Max(value, 0); } }
         private static int _il = 0;
