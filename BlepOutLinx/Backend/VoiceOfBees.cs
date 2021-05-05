@@ -12,8 +12,20 @@ using System.IO;
 
 namespace Blep.Backend
 {
+    /// <summary>
+    /// Provides an interface for interacting with related AUDB endpoints.
+    /// </summary>
     public static class VoiceOfBees
     {
+        /// <summary>
+        /// EUV endpoint
+        /// </summary>
+        public static string ModEntriesEP = "https://beestuff.pythonanywhere.com/audb/api/v2/enduservisible";
+
+        /// <summary>
+        /// Downloads 
+        /// </summary>
+        /// <returns></returns>
         public static bool FetchList()
         {
             using (var wc = new WebClient())
@@ -22,7 +34,7 @@ namespace Blep.Backend
                 {
                     ModEntryList.Clear();
                     Wood.WriteLine($"Fetching mod entries from AUDB... {DateTime.Now}");
-                    string euv_json = wc.DownloadString("https://beestuff.pythonanywhere.com/audb/api/v2/enduservisible");
+                    string euv_json = wc.DownloadString(ModEntriesEP);
                     var jo = JArray.Parse(euv_json);
                     foreach (JToken entry in jo)
                     {
@@ -53,7 +65,9 @@ namespace Blep.Backend
         public static List<AUDBEntryRelay> ModEntryList { get { _el = _el ?? new List<AUDBEntryRelay>(); return _el; } set { _el = value; } }
         private static List<AUDBEntryRelay> _el;
 
-
+        /// <summary>
+        /// Represents download data for a single AUDB file entry
+        /// </summary>
         public class AUDBEntryRelay : IEquatable<AUDBEntryRelay>
         {
             public List<AUDBEntryRelay> deps { get { _deps = _deps ?? new List<AUDBEntryRelay>(); return _deps; } set { _deps = value; } }
@@ -65,14 +79,18 @@ namespace Blep.Backend
             public string download;
             public string sig;
             public List<string> relativePath;
-            public string fileExtension = ".dll";
+            public string fileExtension = "dll";
 
             public class KEY
             {
                 public string e;
                 public string n;
+                /// <summary>
+                /// Used for keys signed by other keys
+                /// </summary>
                 public KEYSRCDATA sig;
             }
+
             public class KEYSRCDATA
             {
                 public KEY by;
@@ -83,7 +101,11 @@ namespace Blep.Backend
             {
                 return $"{name}";
             }
-
+            /// <summary>
+            /// Attempts downloading the entry into a selected directory.
+            /// </summary>
+            /// <param name="TargetDirectory">Target path.</param>
+            /// <returns><c>true</c> if successful, <c>false</c> otherwise. </returns>
             public bool TryDownload(string TargetDirectory)
             {
                 using (var dwc = new WebClient())

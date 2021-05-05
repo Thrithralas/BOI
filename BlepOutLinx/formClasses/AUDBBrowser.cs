@@ -37,6 +37,7 @@ namespace Blep
 
         public void DrawBoxes()
         {
+            buttonDownload.Enabled = BlepOut.IsMyPathCorrect;
             var currEntry = listAUDBEntries.SelectedItem as VoiceOfBees.AUDBEntryRelay;
 
             labelEntryAuthors.Text = currEntry?.author ?? string.Empty;

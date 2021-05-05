@@ -8,6 +8,12 @@ namespace Blep.Backend
 {
     public static class BoiCustom
     {
+        /// <summary>
+        /// Compares two byte arrays.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns><c>true</c> if arrays are identical; <c>false</c> otherwise.</returns>
         public static bool BOIC_Bytearr_Compare(byte[] a, byte[] b)
         {
             if (a == null || b == null) return false;
@@ -19,6 +25,12 @@ namespace Blep.Backend
             }
             return true;
         }
+        /// <summary>
+        /// Recursively moves a directory and all its contents into a new location.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns>Number of IO errors encountered during the operation. </returns>
         public static int BOIC_RecursiveDirectoryCopy(string from, string to)
         {
             int errc = 0;
@@ -48,37 +60,12 @@ namespace Blep.Backend
                     Wood.Indent();
                     Wood.WriteLine(ioe);
                     Wood.Unindent();
-                    
+
                 }
-                
+
             }
             return errc;
         }
-        
-        public static bool AmITheLatestOfAll()
-        {
-            using (var wc = new WebClient())
-            {
-                try
-                {
-                    var json = wc.DownloadString(RepoAddress);
-                    var arr = JArray.Parse(json);
-                    var tok = arr[0];
-                    var jo = (JObject)tok;
-                    JToken j;
-                    if (jo.TryGetValue("tag_name", out j))
-                    {
-                        return (string)j == BlepOut.VersionNumber;
-                    }
-                }
-                catch (Exception e)
-                {
-                    return true;
-                }
-            }
-            return true;
-        }
-        private static string RepoAddress = "https://api.github.com/repos/Rain-World-Modding/BOI/releases";
     }
 
     

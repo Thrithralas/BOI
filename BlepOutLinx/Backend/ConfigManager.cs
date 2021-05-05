@@ -7,6 +7,7 @@ using System.IO;
 
 namespace Blep.Backend
 {
+
     internal class BoiConfigManager
     {
         public static JObject confjo;

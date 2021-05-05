@@ -57,7 +57,8 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>formClasses\BOIS.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -202,8 +203,6 @@
       <Link>.editorconfig</Link>
     </None>
     <None Include="app.config" />
-    <None Include="Blep_TemporaryKey.pfx" />
-    <None Include="formClasses\BOIS.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\MonoMod.MonoModPatch.datasource">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

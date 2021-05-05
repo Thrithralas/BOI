@@ -12,6 +12,9 @@ namespace Blep.Backend
     //  CODE MODS
     //
 
+    /// <summary>
+    /// Unified relay class for <see cref="ModData"/> and its children.
+    /// </summary>
     public class ModRelay
     {
         public ModRelay(string path)
@@ -208,6 +211,9 @@ namespace Blep.Backend
         }
     }
 
+    /// <summary>
+    /// Base representationn for RW code mods.
+    /// </summary>
     public class ModData
     {
         public ModData(string path)
@@ -235,6 +241,9 @@ namespace Blep.Backend
         }
     }
 
+    /// <summary>
+    /// Implementation of <see cref="ModData"/> for Partiality mods.
+    /// </summary>
     public class HkModData : ModData
     {
         public HkModData(string path) : base(path)
@@ -248,6 +257,9 @@ namespace Blep.Backend
         }
     }
 
+    /// <summary>
+    /// Implementation of <see cref="ModData"/> for Monomod patches.
+    /// </summary>
     public class PtModData : ModData
     {
         public PtModData(string path) : base(path)
@@ -278,6 +290,9 @@ namespace Blep.Backend
         }
     }
 
+    /// <summary>
+    /// Implementation of <see cref="ModData"/> for Bepinex plugins.
+    /// </summary>
     public class BepPluginData : ModData
     {
         public BepPluginData(string path) : base(path)
@@ -291,6 +306,9 @@ namespace Blep.Backend
         }
     }
 
+    /// <summary>
+    /// Implementation of <see cref="ModData"/> for invalid mods (mixing mm patches with elsewhat)
+    /// </summary>
     public class InvalidModData : PtModData
     {
         public InvalidModData(string path) : base(path)
@@ -309,6 +327,9 @@ namespace Blep.Backend
     //  REGMODS
     //
 
+    /// <summary>
+    /// Represents a CRS regpack state.
+    /// </summary>
     public class RegModData
     {
         public RegModData(string pth)
@@ -328,6 +349,7 @@ namespace Blep.Backend
             PackInfo,
             None
         }
+        //Config file type
         public CfgState CurrCfgState
         {
             get
@@ -411,6 +433,9 @@ namespace Blep.Backend
                 jo["loadOrder"] = value;
             }
         }
+        /// <summary>
+        /// Reads regionInfo.json / packInfo.json
+        /// </summary>
         public void ReadRegInfo()
         {
             if (pathToCfg != null)
@@ -431,6 +456,9 @@ namespace Blep.Backend
                 
             }
         }
+        /// <summary>
+        /// Writes regpack settings json
+        /// </summary>
         public void WriteRegInfo()
         {
             if (jo == null)
@@ -456,6 +484,9 @@ namespace Blep.Backend
     // EDT CONFIG
     //
 
+    /// <summary>
+    /// it's bad
+    /// </summary>
     public static class EDTCFGDATA
     {
         public static JObject jo;

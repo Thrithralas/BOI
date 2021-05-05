@@ -7,6 +7,9 @@ using System.Diagnostics;
 
 namespace Blep.Backend
 {
+    /// <summary>
+    /// Replacement for <see cref="Debug"/> because <see cref="Debug"/> doesn't work on release build
+    /// </summary>
     public static class Wood
     {
         public static void Indent()
@@ -45,6 +48,7 @@ namespace Blep.Backend
             {
                 LogPath = Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt");
             }
+
             try
             {
                 int ml = 512;

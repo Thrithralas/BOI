@@ -8,8 +8,16 @@ using System.IO;
 
 namespace Blep.Backend
 {
+    /// <summary>
+    /// Static class for managing search tag fields for mod entries.
+    /// </summary>
     public static class TagManager
     {
+        /// <summary>
+        /// Deserializes tag data from a given file.
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns><c>true</c> if successful, otherwise <c>false</c>.</returns>
         public static bool ReadTagsFromFile(string filepath)
         {
             try
@@ -42,9 +50,13 @@ namespace Blep.Backend
             }
             
         }
+
         private static Dictionary<string, string> TagData { get { if (_td == null) _td = new Dictionary<string, string>(); return _td; } set => _td = value; }
         private static Dictionary<string, string> _td;
 
+        /// <summary>
+        /// </summary>
+        /// <returns>JSON to be saved.</returns>
         private static string GetTDToSave()
         {
             return JsonConvert.SerializeObject(TagData, Formatting.Indented);
@@ -66,9 +78,13 @@ namespace Blep.Backend
             }
         }
 
+        /// <summary>
+        /// Sets tag data for a specified modname
+        /// </summary>
+        /// <param name="modname"></param>
+        /// <param name="tagText"></param>
         public static void SetTagData(string modname, string tagText)
         {
-            
             if (!TagData.ContainsKey(modname)) TagData.Add(modname, tagText);
             else TagData[modname] = tagText;
         }

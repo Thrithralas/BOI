@@ -81,8 +81,8 @@
             // 
             // Modlist
             // 
-            this.Modlist.AllowDrop = true;
             resources.ApplyResources(this.Modlist, "Modlist");
+            this.Modlist.AllowDrop = true;
             this.Modlist.FormattingEnabled = true;
             this.Modlist.Name = "Modlist";
             this.Modlist.Sorted = true;

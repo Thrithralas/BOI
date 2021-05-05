@@ -874,6 +874,6 @@ namespace Blep
         private AUDBBrowser browser;
 
 
-        public static string VersionNumber => "0.1.6";
+        public static string VersionNumber => "0.1.5+";
     }
 }
