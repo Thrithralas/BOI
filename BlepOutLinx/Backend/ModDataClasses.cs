@@ -1,4 +1,5 @@
 ﻿using Mono.Cecil;
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -26,52 +27,71 @@ namespace Blep.Backend
                 if (BlepOut.AintThisPS(path))
                 {
                     AssociatedModData = new InvalidModData(path);
-                    MyType = ModType.Invalid;
+                    MyType = EUModType.Invalid;
                     return;
                 }
-                ModType mt = GetModType(ModPath);
+                EUModType mt = GetModType(ModPath);
                 switch (mt)
                 {
-                    case ModType.Unknown:
+                    case EUModType.Unknown:
                         AssociatedModData = new ModData(path);
-                        MyType = ModType.Unknown;
+                        MyType = EUModType.Unknown;
                         break;
-                    case ModType.Patch:
+                    case EUModType.Patch:
                         AssociatedModData = new PtModData(path);
-                        MyType = ModType.Patch;
+                        MyType = EUModType.Patch;
                         break;
-                    case ModType.Partmod:
+                    case EUModType.Partmod:
                         AssociatedModData = new HkModData(path);
-                        MyType = ModType.Partmod;
+                        MyType = EUModType.Partmod;
                         break;
-                    case ModType.BepPlugin:
+                    case EUModType.BepPlugin:
                         AssociatedModData = new BepPluginData(path);
-                        MyType = ModType.BepPlugin;
+                        MyType = EUModType.BepPlugin;
                         break;
-                    case ModType.Invalid:
+                    case EUModType.Invalid:
                         AssociatedModData = new InvalidModData(path);
-                        MyType = ModType.Invalid;
+                        MyType = EUModType.Invalid;
                         break;
                 }
             }
         }
 
-        public static ModType GetModType(string path)
+
+        public static EUModType GetModType(ModuleDefinition md)
         {
-            mttup ultstate = new mttup(false, false, false);
+            var tstate = default(ModTypeFlags);
+            foreach (TypeDefinition t in md.Types)
+            {
+                CheckThisType(t, ref tstate);
+            }
+#warning redo and finish
+            if (tstate.HasFlag(ModTypeFlags.MMpatch))
+            {
+                if (tstate != ModTypeFlags.MMpatch) return EUModType.Invalid;
+                else return EUModType.Patch;
+            }
+            if (tstate.HasFlag(ModTypeFlags.BepPatcher))
+            {
+                if (tstate != ModTypeFlags.BepPatcher) return EUModType.Invalid;
+                else return EUModType.BepPatcher;
+            }
+            if (tstate.HasFlag(ModTypeFlags.PartMod) ^ tstate.HasFlag(ModTypeFlags.BepPlugin))
+            {
+                return tstate.HasFlag(ModTypeFlags.PartMod) ? EUModType.Partmod : EUModType.BepPlugin; 
+            }
+            return EUModType.Unknown;
+        }
+
+        public static EUModType GetModType(string path)
+        {
+            
             try
             {
                 using (ModuleDefinition md = ModuleDefinition.ReadModule(path))
                 {
 
-                    foreach (TypeDefinition t in md.Types)
-                    {
-                        mttup tstate = new mttup(false, false, false);
-                        CheckThisType(t, out tstate);
-                        ultstate.ishk = (tstate.ishk) ? true : ultstate.ishk;
-                        ultstate.ispt = (tstate.ispt) ? true : ultstate.ispt;
-                        ultstate.isbeppl = (tstate.isbeppl) ? true : ultstate.isbeppl;
-                    }
+                    return GetModType(md);
 
                 }
             }
@@ -81,52 +101,42 @@ namespace Blep.Backend
                 Wood.Indent();
                 Wood.WriteLine(ioe);
                 Wood.Unindent();
+                return EUModType.Unknown;
             }
-            int ftc = 0;
-            if (ultstate.ishk) ftc++;
-            if (ultstate.ispt) ftc++;
-            if (ultstate.isbeppl) ftc++;
-            switch (ftc)
-            {
-                case 0:
-                    return ModType.Unknown;
-                case 3:
-                    return ModType.Invalid;
-                case 2:
-                    return (ultstate.ispt) ? ModType.Invalid : ModType.Unknown;
-                case 1:
-                    if (ultstate.ishk) return ModType.Partmod;
-                    else if (ultstate.ispt) return ModType.Patch;
-                    else return ModType.BepPlugin;
-                default:
-                    return ModType.Unknown;
-            }
-            
+
         }
 
-        public static void CheckThisType(TypeDefinition td, out mttup state)
+        public static void CheckThisType(TypeDefinition td, ref ModTypeFlags state)
         {
-            state.ishk = false;
-            state.ispt = false;
-            state.isbeppl = false;
-            if (td.BaseType != null && td.BaseType.Name == "PartialityMod") state.ishk = true;
+            
+            if (td.BaseType != null && td.BaseType.Name == "PartialityMod") state |= ModTypeFlags.PartMod;
+            var contract_M = false;
+            var contract_P = false;
+            foreach (var method in td.Methods)
+            {
+                if (method.IsStatic && method.Name == "Patch" && method.HasParameters && method.Parameters[0].Name == "assembly" && method.Parameters[0].ParameterType.Name == "AssemblyDefinition" ) { contract_M = true; break; }
+            }
+            foreach (var prop in td.Properties)
+            {
+                if (prop.Name == "TargetDLLs" && prop.GetMethod != null && prop.PropertyType.Name.Contains("IEnumerable")) { contract_P = true; break; }
+            }
+            if (contract_P & contract_M) state |= ModTypeFlags.BepPatcher;
+
             if (td.HasCustomAttributes)
             {
                 foreach (CustomAttribute catr in td.CustomAttributes)
                 {
-                    if (catr.AttributeType.Name == "MonoModPatch") state.ispt = true;
-                    if (catr.AttributeType.Namespace == "BepInEx") state.isbeppl = true;
+                    if (catr.AttributeType.Name == "MonoModPatch") state |= ModTypeFlags.MMpatch;
+                    if (catr.AttributeType.Namespace == "BepInEx") state |= ModTypeFlags.BepPlugin;
                 }
             }
             if (td.HasNestedTypes)
             {
                 foreach (TypeDefinition ntd in td.NestedTypes)
                 {
-                    mttup nestate;
-                    CheckThisType(ntd, out nestate);
-                    state.ishk = (nestate.ishk) ? true : state.ishk;
-                    state.ispt = (nestate.ispt) ? true : state.ispt;
-                    state.isbeppl = (nestate.isbeppl) ? true : state.isbeppl;
+                    ModTypeFlags nestate = 0;
+                    CheckThisType(ntd, ref nestate);
+                    state |= nestate;
                 }
             }
         }
@@ -143,6 +153,28 @@ namespace Blep.Backend
             public bool ispt;
             public bool isbeppl;
         }
+
+        [Flags]
+        public enum ModTypeFlags
+        {
+            PartMod = 1,
+            MMpatch = 2,
+            BepPlugin = 4,
+            BepPatcher = 8,
+        }
+        public enum EUModType
+        {
+            Patch,
+            Partmod,
+            Invalid,
+            BepPlugin,
+            BepPatcher,
+            Unknown
+        }
+        public EUModType MyType;
+
+
+
         public byte[] origchecksum
         {
             get
@@ -181,15 +213,6 @@ namespace Blep.Backend
         public ModData AssociatedModData { get; set; }
         public bool isValid { get; set; }
 
-        public enum ModType
-        {
-            Patch,
-            Partmod,
-            Invalid,
-            BepPlugin,
-            Unknown
-        }
-        public ModType MyType;
 
         public bool enabled
         {
@@ -321,6 +344,12 @@ namespace Blep.Backend
             return DisplayedName + ": INVALID";
         }
 
+    }
+
+    public class BepPatcherData : ModData
+    {
+        public BepPatcherData(string path) : base(path) { }
+        public override string TarFolder => Path.Combine(BlepOut.RootPath, "BepInEx", "patchers");
     }
 
     //

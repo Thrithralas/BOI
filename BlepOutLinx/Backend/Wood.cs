@@ -60,7 +60,7 @@ namespace Blep.Backend
                 }
             }
             catch (IOException) { };
-            FileInfo lf = new FileInfo(LogPath);
+            
             try
             {
                 RawWrite(o);

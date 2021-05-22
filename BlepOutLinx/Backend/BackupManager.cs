@@ -229,10 +229,12 @@ namespace Blep.Backend
 
                 int terrc = BoiCustom.BOIC_RecursiveDirectoryCopy(Location, to);
                 Wood.WriteLine((terrc == 0) ? $"Savefolder state successfully copied to {to}" : $"Attempt to copy a savefolder from {Location} to {to} complete; total of {terrc} errors encountered.");
-                UserDataStateRelay Nudsr = new UserDataStateRelay(to);
-                Nudsr.CreationTime = DateTime.Now;
-                Nudsr.UserDefinedName = this.UserDefinedName;
-                Nudsr.UserNotes = this.UserNotes;
+                UserDataStateRelay Nudsr = new UserDataStateRelay(to)
+                {
+                    CreationTime = DateTime.Now,
+                    UserDefinedName = this.UserDefinedName,
+                    UserNotes = this.UserNotes
+                };
                 return Nudsr;
             }
             public override string ToString()

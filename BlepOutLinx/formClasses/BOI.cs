@@ -65,7 +65,7 @@ namespace Blep
         /// <param name="path">Path to check</param>
         public void UpdateTargetPath(string path)
         {
-            btnLaunch.Enabled = false;
+            //btnLaunch.Enabled = false;
             Modlist.Enabled = false;
             RootPath = path;
             BoiConfigManager.TarPath = path;
@@ -102,7 +102,7 @@ namespace Blep
             CompileModList();
             BringUpToDate();
             Modlist.Enabled = true;
-            btnLaunch.Enabled = true;
+            //btnLaunch.Enabled = true;
             TargetSelect.SelectedPath = RootPath;
             if (PubstuntFound && firstshow)
             {
@@ -127,7 +127,6 @@ namespace Blep
             RetrievePtBlacklist();
         }
 
-        //
         /// <summary>
         /// Deletes Pubstunt and invalid mods from where they shouldn't be.
         /// </summary>
@@ -150,8 +149,8 @@ namespace Blep
                     //other invalid mods can live
                     else
                     {
-                        ModRelay.ModType mt = ModRelay.GetModType(s);
-                        if (!(mt == ModRelay.ModType.Patch || mt == ModRelay.ModType.Invalid) && !patchBlacklist.Contains(s) && !fi.Attributes.HasFlag(FileAttributes.ReparsePoint))
+                        ModRelay.EUModType mt = ModRelay.GetModType(s);
+                        if (!(mt == ModRelay.EUModType.Patch || mt == ModRelay.EUModType.Invalid) && !patchBlacklist.Contains(s) && !fi.Attributes.HasFlag(FileAttributes.ReparsePoint))
                         {
                             Wood.WriteLine("Found a misplaced mod in Patches folder: " + fi.Name + "; Type: " + mt.ToString());
                             File.Delete(s);
@@ -175,9 +174,9 @@ namespace Blep
                     //
                     else
                     {
-                        ModRelay.ModType mt = ModRelay.GetModType(s);
+                        ModRelay.EUModType mt = ModRelay.GetModType(s);
 
-                        if (mt == ModRelay.ModType.Patch || mt == ModRelay.ModType.Invalid)
+                        if (mt == ModRelay.EUModType.Patch || mt == ModRelay.EUModType.Invalid)
                         {
                             Wood.WriteLine("Found a misplaced mod in Plugins folder: " + fi.Name + "; Type: " + mt.ToString());
                             File.Delete(s);
@@ -447,7 +446,7 @@ namespace Blep
         {
             foreach (ModRelay mr in Modlist.Items)
             {
-                if (mr.MyType == ModRelay.ModType.Invalid || !mr.enabled || new FileInfo(mr.TarPath).Attributes.HasFlag(FileAttributes.ReparsePoint)) continue;
+                if (mr.MyType == ModRelay.EUModType.Invalid || !mr.enabled || new FileInfo(mr.TarPath).Attributes.HasFlag(FileAttributes.ReparsePoint)) continue;
                 byte[] ModOrigSha = mr.origchecksum;
                 byte[] ModTarSha = mr.TarCheckSum;
                 if (!BoiCustom.BOIC_Bytearr_Compare(ModTarSha, ModOrigSha))
@@ -458,13 +457,13 @@ namespace Blep
                     {
                         File.Delete(tarfi.FullName);
                         File.Copy(orfi.FullName, tarfi.FullName);
-                        Wood.WriteLine($"Bringing {orfi.Name} up to date: copying from Mods to {((mr.MyType != ModRelay.ModType.Patch) ? "Plugins" : "Monomod")}.");
+                        Wood.WriteLine($"Bringing {orfi.Name} up to date: copying from Mods to {((mr.MyType != ModRelay.EUModType.Patch) ? "Plugins" : "Monomod")}.");
                     }
                     else
                     {
                         File.Delete(orfi.FullName);
                         File.Copy(tarfi.FullName, orfi.FullName);
-                        Wood.WriteLine($"Bringing {orfi.Name} up to date: copying from {((mr.MyType != ModRelay.ModType.Patch) ? "Plugins" : "Monomod")} to Mods.");
+                        Wood.WriteLine($"Bringing {orfi.Name} up to date: copying from {((mr.MyType != ModRelay.EUModType.Patch) ? "Plugins" : "Monomod")} to Mods.");
                     }
                 }
             }
@@ -482,8 +481,8 @@ namespace Blep
             get
             {
                 FolderStructureState res = 0;
-                if (Directory.Exists(PluginsFolder) && Directory.Exists(PatchesFolder)) res = res | FolderStructureState.BlepFound;
-                if (Directory.Exists(Path.Combine(RootPath, "RainWorld_Data"))) res = res | FolderStructureState.GameFound;
+                if (Directory.Exists(PluginsFolder) && Directory.Exists(PatchesFolder)) res |= FolderStructureState.BlepFound;
+                if (Directory.Exists(Path.Combine(RootPath, "RainWorld_Data"))) res |= FolderStructureState.GameFound;
                 return res;
             }
         }
@@ -558,7 +557,6 @@ namespace Blep
             }
 
         }
-
         /// <summary>
         /// Blacklist for monomod folder.
         /// </summary>
@@ -620,7 +618,7 @@ namespace Blep
                 TargetSelect.ShowDialog();
                 btnSelectPath.Text = "Press again to load modlist";
                 TSbtnMode = false;
-                btnLaunch.Enabled = false;
+                //btnLaunch.Enabled = false;
 
             }
             else
@@ -671,17 +669,21 @@ namespace Blep
                 lblPathStatus.Text = "Path invalid";
                 lblPathStatus.BackColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Salmon);
             }
+
+            //lblProcessStatus.Visible = IsMyPathCorrect;
+            //lblProcessStatus.Text = (rw != null && !rw.HasExited) ? "Running" : "Not running";
+            //lblProcessStatus.BackColor = (rw != null && !rw.HasExited) ? System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Orange) : System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Gray);
+            //if (rw != null && !rw.HasExited)
+            //{
+            //    Modlist.Enabled = false;
+
+            //}
+            //else Modlist.Enabled = true;
             
-            lblProcessStatus.Visible = IsMyPathCorrect;
-            lblProcessStatus.Text = (rw != null && !rw.HasExited) ? "Running" : "Not running";
-            lblProcessStatus.BackColor = (rw != null && !rw.HasExited) ? System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Orange) : System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Gray);
-            if (rw != null && !rw.HasExited)
-            {
-                Modlist.Enabled = false;
-            }
-            else Modlist.Enabled = true;
-            btnLaunch.Enabled = Modlist.Enabled;
-            btnSelectPath.Enabled = Modlist.Enabled;
+            lblProcessStatus.BackColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.PaleTurquoise);
+            Modlist.Enabled = IsMyPathCorrect;
+            //btnLaunch.Enabled = Modlist.Enabled;
+            btnSelectPath.Enabled = true;
 
         }
         /// <summary>
@@ -704,7 +706,7 @@ namespace Blep
                 Wood.WriteLine("Launch failed");
                 Wood.WriteLine(ce);
             }
-            btnLaunch.Enabled = false;
+            //btnLaunch.Enabled = false;
             StatusUpdate();
 
         }
@@ -748,7 +750,7 @@ namespace Blep
         private void Modlist_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             if (!ReadyForRefresh) return;
-            if (Modlist.Items[e.Index] is ModRelay && (Modlist.Items[e.Index] as ModRelay).MyType == ModRelay.ModType.Invalid && e.NewValue == CheckState.Checked)
+            if (Modlist.Items[e.Index] is ModRelay && (Modlist.Items[e.Index] as ModRelay).MyType == ModRelay.EUModType.Invalid && e.NewValue == CheckState.Checked)
             {
                 //e.NewValue = CheckState.Unchecked;
                 if (inp == null || inp.IsDisposed) inp = new InvalidModPopup(this, (Modlist.Items[e.Index] as ModRelay).AssociatedModData.DisplayedName);

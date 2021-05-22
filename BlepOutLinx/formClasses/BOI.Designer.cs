@@ -36,7 +36,6 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.lblPathStatus = new System.Windows.Forms.Label();
             this.lblProcessStatus = new System.Windows.Forms.Label();
-            this.btnLaunch = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.labelDesc = new System.Windows.Forms.Label();
             this.labelHead = new System.Windows.Forms.Label();
@@ -57,6 +56,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.TagInputBox = new System.Windows.Forms.RichTextBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -96,7 +96,7 @@
             resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
             this.tableLayoutPanel1.Controls.Add(this.btnSelectPath, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnLaunch, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 2, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             // 
             // tableLayoutPanel4
@@ -119,13 +119,6 @@
             resources.ApplyResources(this.lblProcessStatus, "lblProcessStatus");
             this.lblProcessStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblProcessStatus.Name = "lblProcessStatus";
-            // 
-            // btnLaunch
-            // 
-            resources.ApplyResources(this.btnLaunch, "btnLaunch");
-            this.btnLaunch.Name = "btnLaunch";
-            this.btnLaunch.UseVisualStyleBackColor = true;
-            this.btnLaunch.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnLaunch_MouseClick);
             // 
             // tableLayoutPanel2
             // 
@@ -268,6 +261,12 @@
             this.tableLayoutPanel3.Controls.Add(this.Modlist, 0, 2);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             // 
+            // label5
+            // 
+            resources.ApplyResources(this.label5, "label5");
+            this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label5.Name = "label5";
+            // 
             // BlepOut
             // 
             resources.ApplyResources(this, "$this");
@@ -283,6 +282,7 @@
             this.Enter += new System.EventHandler(this.BlepOut_Activated);
             this.Leave += new System.EventHandler(this.BlepOut_Deactivate);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -305,7 +305,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label labelHead;
-        private System.Windows.Forms.Button btnLaunch;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Label lblPathStatus;
         private System.Windows.Forms.Label lblProcessStatus;
@@ -327,6 +326,7 @@
         private System.Windows.Forms.RichTextBox TagInputBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Button buttonBrowseAUDB;
+        private System.Windows.Forms.Label label5;
     }
 }
 
