@@ -20,7 +20,7 @@ namespace Blep
         /// </summary>
         public BlepOut()
         {
-#warning nuke all the old intertwined UI/modlist code
+#warning Nuking nearing completion
             InitializeComponent();            
             this.Text = this.Text.Replace("<VersionNumber>", VersionNumber);
             firstshow = true;
@@ -70,7 +70,6 @@ namespace Blep
             if (IsMyPathCorrect) Setup();
             StatusUpdate();
         }
-
         /// <summary>
         /// Continuation of <see cref="UpdateTargetPath(string)"/>: only ran when selected path is valid. 
         /// <para>
@@ -136,14 +135,11 @@ namespace Blep
             }
             Wood.WriteLineIf(metafiletracker, "Found modhash/modmeta files in mods folder.");
         }
-
         /// <summary>
         /// Adds all mods from <see cref="Donkey.cargo" into current modlist/>
         /// </summary>
         private void FillModList()
         {
-#warning unfinished
-
             Modlist.Items.Clear();
             Modlist.ItemCheck -= Modlist_ItemCheck;
             foreach (var mod in Donkey.cargo) { Modlist.Items.Add(mod); Modlist.SetItemChecked(Modlist.Items.Count - 1, mod.enabled); }
@@ -314,10 +310,6 @@ namespace Blep
         }
         private void BlepOut_Deactivate(object sender, EventArgs e)
         {
-            if (IsMyPathCorrect && Directory.Exists(ModFolder))
-            {
-#warning empty action block? might have wanted to add something
-            }
             TagManager.SaveToFile(tagfilePath);
         }
         /// <summary>
@@ -400,8 +392,19 @@ namespace Blep
         {
 #warning readd invalid mod warnings, additional pubstunt check
             var tm = Modlist.Items[e.Index] as ModRelay;
-            if (e.NewValue == CheckState.Checked) tm.Enable();
-            else tm.Disable();
+            if (Donkey.AintThisPS(tm.AssociatedModData.OrigLocation.FullName))
+            {
+                e.NewValue = CheckState.Unchecked;
+                var warning = new PubstuntInfoPopup();
+                warning.Show();
+            }
+            else if (tm.MyType == ModRelay.EUModType.Invalid && e.CurrentValue == CheckState.Unchecked)
+            {
+                var warning = new InvalidModPopup(this, tm.AssociatedModData.DisplayedName);
+                warning.Show();
+            }
+            if (e.NewValue == CheckState.Checked) Donkey.TryDeliver(Donkey.cargo.IndexOf(tm));
+            else Donkey.TryRetract(Donkey.cargo.IndexOf(tm));
         }
 
         /// <summary>
@@ -511,7 +514,47 @@ namespace Blep
         }
         private AUDBBrowser browser;
 
-
         public static string VersionNumber => "0.1.5+";
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+            var r = new Random();
+            var possible_lines = new[]
+            {
+                "Launch the game as you normally would",
+                "You don't need to launch through BOI",
+                "Please, stop being confused",
+                "There's nothing for you here",
+                "Thrith? Is this you? Go away",
+                "Can you actually play already",
+                "Don't contrib to tConfigWrapper",
+                "\'Substratum\'\n(c) Substratum",
+                "el garon",
+                "Don't click for too long",
+                "bzzzz",
+                "This label is provided by Donkey",
+                "Consider playing Vangers",
+                $"Singal {r.Next(-9,10)}.{r.Next(1, 1000)}e+{r.Next(0, 34)} ready to view",
+                "Miimows style slugcat hips",
+                "We are the Skeleton Crew, or What Remains",
+                "Demon_Swedish.ogg",
+                "Seven Flowers, Mood Is Sung",
+                "Papu flowers for the Fung",
+                "goto picular;",
+                "You can do this all day",
+                "You can drag-n-drop DLLs into BOI",
+                "UnityEngine.Random.value has getter and setter",
+                "Getter is broken, setter is broken too",
+                "No one can hear you scream",
+                "Boulder and granite",
+                "Vaccinated and ready to reassemble",
+                "How much of these trash jokes can you endure?",
+                "Can't even swear in a public use app",
+                "This is actually a copy of Slime",
+                "I am the real turtle road",
+
+            };
+            label5.Text = possible_lines[r.Next(0, possible_lines.Length)];
+        }
     }
 }

@@ -125,6 +125,7 @@
             resources.ApplyResources(this.label5, "label5");
             this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label5.Name = "label5";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // tableLayoutPanel2
             // 

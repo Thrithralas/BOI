@@ -105,6 +105,11 @@ namespace Blep.Backend
         public static DirectoryInfo bepPatcherTargetPath;
         public static List<string> bepPatcherBlacklist = new List<string>();
 
+        /// <summary>
+        /// Enables a mod under selected index in <see cref="cargo"/>
+        /// </summary>
+        /// <param name="tIndex"></param>
+        /// <returns>true if successful, false otherwise</returns>
         public static bool TryDeliver(int tIndex)
         {
             if (tIndex < 0 || tIndex >= cargo.Count) return false;
@@ -120,6 +125,11 @@ namespace Blep.Backend
                 return false; 
             }
         }
+        /// <summary>
+        /// Enables mods by a range of indices
+        /// </summary>
+        /// <param name="range"></param>
+        /// <returns>number of failed operations</returns>
         public static int TryDeliverRange(IEnumerable<int> range)
         {
             var errcount = 0;
@@ -129,6 +139,11 @@ namespace Blep.Backend
             }
             return errcount;
         }
+        /// <summary>
+        /// Disables a mod under selected index in <see cref="cargo"/>
+        /// </summary>
+        /// <param name="tIndex"></param>
+        /// <returns>true if successful, false otherwise</returns>
         public static bool TryRetract(int tIndex)
         {
             if (tIndex < 0 || tIndex >= cargo.Count) return false;
@@ -144,6 +159,11 @@ namespace Blep.Backend
                 return false;
             }
         }
+        /// <summary>
+        /// Disables mods by a range of indices
+        /// </summary>
+        /// <param name="range"></param>
+        /// <returns>number of failed operations</returns>
         public static int TryretractRange (IEnumerable<int> range)
         {
             var errcount = 0;
@@ -155,7 +175,7 @@ namespace Blep.Backend
         }
 
         /// <summary>
-        /// Deletes files that are extremely likely to crash the game instantly and absolutely should not be there
+        /// Deletes files from active folders that are extremely likely to crash the game instantly and absolutely should not be there
         /// </summary>
         /// <returns>Number of errors encountered during the operation</returns>
         public static int CriticalSweep()
