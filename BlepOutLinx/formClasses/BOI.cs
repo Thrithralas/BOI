@@ -20,6 +20,7 @@ namespace Blep
         /// </summary>
         public BlepOut()
         {
+#warning nuke all the old intertwined UI/modlist code
             InitializeComponent();            
             this.Text = this.Text.Replace("<VersionNumber>", VersionNumber);
             firstshow = true;
@@ -27,9 +28,6 @@ namespace Blep
             MaskModeSelect.SelectedItem = Maskmode.NamesAndTags;
             Wood.SetNewPathAndErase(Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt"));
             Wood.WriteLine("BOI starting " + DateTime.Now);
-            targetFiles = new List<ModRelay>();
-            pluginBlacklist = new List<string>();
-            patchBlacklist = new List<string>();
             outrmixmods = new List<string>();
             TagManager.ReadTagsFromFile(tagfilePath);
             BoiConfigManager.ReadConfig();
@@ -55,7 +53,7 @@ namespace Blep
                     Wood.WriteLine("Wish you all well. Bzz!");
                 }
             }
-            if (VoiceOfBees.ModEntryList.Count > 0) { VoiceOfBees.ModEntryList[0].TryDownload(ModFolder); }
+            //if (VoiceOfBees.ModEntryList.Count > 0) { VoiceOfBees.ModEntryList[0].TryDownload(ModFolder); }
         }
         
         /// <summary>
@@ -69,9 +67,6 @@ namespace Blep
             Modlist.Enabled = false;
             RootPath = path;
             BoiConfigManager.TarPath = path;
-            targetFiles.Clear();
-            pluginBlacklist.Clear();
-            patchBlacklist.Clear();
             if (IsMyPathCorrect) Setup();
             StatusUpdate();
         }
@@ -90,17 +85,16 @@ namespace Blep
             PubstuntFound = false;
             MixmodsFound = false;
             metafiletracker = false;
-            ReadyForRefresh = false;
             Modlist.Items.Clear();
             outrmixmods.Clear();
-            targetFiles.Clear();
 
-            Rootout();
+            Donkey.TryLoadCargo(new DirectoryInfo(ModFolder));
+            Donkey.SetBepPatcherTarget(PatchersFolder);
+            Donkey.SetMmpTarget(mmFolder);
+            Donkey.SetPluginsTarget(PluginsFolder);
+            Donkey.CriticalSweep();
             PrepareModsFolder();
-            ResolveBlacklists();
-            RetrieveAllDlls();
-            CompileModList();
-            BringUpToDate();
+            FillModList();
             Modlist.Enabled = true;
             //btnLaunch.Enabled = true;
             TargetSelect.SelectedPath = RootPath;
@@ -117,73 +111,8 @@ namespace Blep
                 AddOwnedForm(mixmodsPopup);
                 mixmodsPopup.Show();
             }
-            ReadyForRefresh = true;
             buttonClearMeta.Visible = metafiletracker;
             Wood.Unindent();
-        }
-        private void ResolveBlacklists()
-        {
-            RetrieveHkBlacklist();
-            RetrievePtBlacklist();
-        }
-
-        /// <summary>
-        /// Deletes Pubstunt and invalid mods from where they shouldn't be.
-        /// </summary>
-        private void Rootout()
-        {
-            string[] patchfoldercontents = Directory.GetFiles(PatchesFolder);
-            string[] pluginfoldercontents = Directory.GetFiles(PluginsFolder);
-            foreach (string s in patchfoldercontents)
-            {
-                var fi = new FileInfo(s);
-                if (fi.Extension == ".dll" && !fi.Attributes.HasFlag(FileAttributes.ReparsePoint))
-                {
-                    //PS should never be enabled
-                    if (AintThisPS(s))
-                    {
-                        PubstuntFound = true;
-                        Wood.WriteLine("Located PublicityStunt in active Plugins folder, removing.");
-                        File.Delete(s);
-                    }
-                    //other invalid mods can live
-                    else
-                    {
-                        ModRelay.EUModType mt = ModRelay.GetModType(s);
-                        if (!(mt == ModRelay.EUModType.Patch || mt == ModRelay.EUModType.Invalid) && !patchBlacklist.Contains(s) && !fi.Attributes.HasFlag(FileAttributes.ReparsePoint))
-                        {
-                            Wood.WriteLine("Found a misplaced mod in Patches folder: " + fi.Name + "; Type: " + mt.ToString());
-                            File.Delete(s);
-                            
-                        }
-                    }
-                }
-            }
-            foreach (string s in pluginfoldercontents)
-            {
-                var fi = new FileInfo(s);
-                if (fi.Extension == ".dll" && !pluginBlacklist.Contains(s) && !fi.Attributes.HasFlag(FileAttributes.ReparsePoint))
-                {
-                    //KILL pubstunt...
-                    if (AintThisPS(s))
-                    {
-                        File.Delete(s);
-                        Wood.WriteLine("Located PublicityStunt in active Plugins folder, removing.");
-                        PubstuntFound = true;
-                    }
-                    //
-                    else
-                    {
-                        ModRelay.EUModType mt = ModRelay.GetModType(s);
-
-                        if (mt == ModRelay.EUModType.Patch || mt == ModRelay.EUModType.Invalid)
-                        {
-                            Wood.WriteLine("Found a misplaced mod in Plugins folder: " + fi.Name + "; Type: " + mt.ToString());
-                            File.Delete(s);
-                        }
-                    }
-                }
-            }
         }
         /// <summary>
         /// Creates mods folder if there isn't one; checks if there is leftover PL junk.
@@ -207,156 +136,19 @@ namespace Blep
             }
             Wood.WriteLineIf(metafiletracker, "Found modhash/modmeta files in mods folder.");
         }
-        
-        /// <summary>
-        /// Tries fetching plugins blacklist; if there isn't one, creates a new file.
-        /// </summary>
-        private void RetrieveHkBlacklist()
-        {
-            if (File.Exists(hkblacklistpath))
-            {
-                string[] sl = File.ReadAllLines(hkblacklistpath);
-                foreach (string s in sl)
-                {
-                    pluginBlacklist.Add(s);
-                }
-            }
-            if (pluginBlacklist.Count == 0)
-            {
-                CreateHkBlacklist();
-                pluginBlacklist.Add("LogFix.dll");
-            }
-            Wood.WriteLine("Plugin folder blacklist contents: ");
-            Wood.Indent();
-            foreach (string s in pluginBlacklist)
-            {
-                Wood.WriteLine(new FileInfo(s).Name);
-            }
-            Wood.Unindent();
-        }
-        /// <summary>
-        /// Creates file blacklist for plugins folder.
-        /// </summary>
-        private void CreateHkBlacklist()
-        {
-            Wood.WriteLine("Creating new plugin blacklist file.");
-            StreamWriter sw = File.CreateText(hkblacklistpath);
-            sw.WriteLine("LogFix.dll");
-            sw.Close();
-            sw.Dispose();
-
-        }
 
         /// <summary>
-        /// Tries fetching patches blacklist; if there isn't one, creates a new file.
+        /// Adds all mods from <see cref="Donkey.cargo" into current modlist/>
         /// </summary>
-        private void RetrievePtBlacklist()
+        private void FillModList()
         {
-            if (File.Exists(ptblacklistpath))
-            {
-                string[] pblcts = File.ReadAllLines(ptblacklistpath);
-                foreach (string s in pblcts)
-                {
-                    patchBlacklist.Add(s);
-                }
-            }
-            if (patchBlacklist.Count == 0)
-            {
-                CreatePtBlacklist();
-                patchBlacklist.Add("Assembly-CSharp.PatchNothing.mm.dll");
-            }
-            Wood.WriteLine("Patch folder blacklist contents: ");
-            Wood.Indent();
-            foreach (string s in patchBlacklist)
-            {
-                Wood.WriteLine(new FileInfo(s).Name);
-            }
-            Wood.Unindent();
-        }
-        /// <summary>
-        /// Creates file blacklist for patches folder.
-        /// </summary>
-        private void CreatePtBlacklist()
-        {
-            StreamWriter sw = File.CreateText(ptblacklistpath);
-            sw.WriteLine("Assembly-CSharp.PatchNothing.mm.dll");
-            sw.Close();
-        }
+#warning unfinished
 
-        //
-        //blacklist stuff over
-        //
+            Modlist.Items.Clear();
+            Modlist.ItemCheck -= Modlist_ItemCheck;
+            foreach (var mod in Donkey.cargo) { Modlist.Items.Add(mod); Modlist.SetItemChecked(Modlist.Items.Count - 1, mod.enabled); }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private void RetrieveAllDlls()
-        {
-            var plugins = new DirectoryInfo(PluginsFolder);
-            var monomod = new DirectoryInfo(PatchesFolder);
-            List<string> bl = new List<string>();
-            bl.AddRange(pluginBlacklist);
-            bl.AddRange(patchBlacklist);
-            var fl = plugins.GetFiles().ToList();
-            fl.AddRange(monomod.GetFiles());
-            foreach (FileInfo inpl in fl)
-            {
-                try
-                {
-                    if (inpl.Attributes.HasFlag(FileAttributes.ReparsePoint)) continue;
-                    string pb = PathBack(inpl);
-                    if (pb == null || bl.Contains(inpl.Name)) continue;
-                    var wayBack = new FileInfo(pb);
-                    if (!wayBack.Exists) inpl.CopyTo(wayBack.FullName);
-                }
-                catch (IOException ioe)
-                {
-                    Wood.WriteLine($"ERROR WHILE RETRIEVING {inpl}: ");
-                    Wood.Indent();
-                    Wood.WriteLine(ioe);
-                    Wood.Unindent();
-                }
-                
-            }
-            
-            
-            
-
-            string PathBack(FileInfo fi)
-            {
-                if (fi.Attributes.HasFlag(FileAttributes.ReparsePoint) || fi.Extension != ".dll") { return null; }
-                return Path.Combine(ModFolder, PtModData.GiveMeBackMyName(fi.Name));
-            }
-
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        private void CompileModList()
-        {
-            string[] ModsFolderContents = Directory.GetFiles(ModFolder);
-            foreach (string s in ModsFolderContents)
-            {
-                var fi = new FileInfo(s);
-                if (fi.Extension == ".dll" && !fi.Attributes.HasFlag(FileAttributes.ReparsePoint))
-                {
-                    targetFiles.Add(new ModRelay(s));
-                }
-                if (AintThisPS(s)) PubstuntFound = true;
-            }
-            foreach (ModRelay mr in targetFiles)
-            {
-                Modlist.Items.Add(mr);
-
-            }
-            for (int i = 0; i < Modlist.Items.Count; i++)
-            {
-                if (Modlist.Items[i] is ModRelay)
-                {
-                    ModRelay mr = Modlist.Items[i] as ModRelay;
-                    Modlist.SetItemCheckState(i, (mr.enabled) ? CheckState.Checked : CheckState.Unchecked);
-                }
-            }
+            Modlist.ItemCheck += Modlist_ItemCheck;
         }
         /// <summary>
         /// Applies search mask to visible modlist; depending on selected search mode, names and/or tags will be accounted for.
@@ -364,23 +156,10 @@ namespace Blep
         /// <param name="mask">Mask contents.</param>
         private void ApplyMaskToModlist(string mask)
         {
-            bool oldrst = ReadyForRefresh;
-            ReadyForRefresh = false;
             Modlist.Items.Clear();
-            foreach (ModRelay mr in targetFiles)
-            {
-                if (ModSelectedByMask(mask, mr)) Modlist.Items.Add(mr);
-
-            }
-            for (int i = 0; i < Modlist.Items.Count; i++)
-            {
-                if (Modlist.Items[i] is ModRelay)
-                {
-                    ModRelay mr = Modlist.Items[i] as ModRelay;
-                    Modlist.SetItemCheckState(i, (mr.enabled) ? CheckState.Checked : CheckState.Unchecked);
-                }
-            }
-            ReadyForRefresh = oldrst;
+            Modlist.ItemCheck -= Modlist_ItemCheck;
+            foreach (var mod in Donkey.cargo) { if (ModSelectedByMask(mask, mod)) Modlist.Items.Add(mod); Modlist.SetItemChecked(Modlist.Items.Count - 1, mod.enabled); }
+            Modlist.ItemCheck += Modlist_ItemCheck;
         }
 
         /// <summary>
@@ -416,58 +195,8 @@ namespace Blep
         }
 
         /// <summary>
-        /// Cycles through modlist and makes sure mod enable states are up to date with check states.
-        /// </summary>
-        /// <param name="cst"></param>
-        private void ApplyModlist(CheckState[] cst)
-        {
-            Wood.WriteLine("Applying modlist from manual check.");
-            if (cst != null && cst.Length == Modlist.Items.Count)
-            {
-                for (int i = 0; i < cst.Length; i++)
-                {
-                    if (Modlist.Items[i] is ModRelay)
-                    {
-                        ModRelay mr = Modlist.Items[i] as ModRelay;
-                        if (cst[i] == CheckState.Checked)
-                        {
-                            mr.Enable();
-                        }
-                        else mr.Disable();
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Checks if enabled mods are identical to their counterparts in active folders; if not, brings the needed side up to date.
         /// </summary>
-        private void BringUpToDate()
-        {
-            foreach (ModRelay mr in Modlist.Items)
-            {
-                if (mr.MyType == ModRelay.EUModType.Invalid || !mr.enabled || new FileInfo(mr.TarPath).Attributes.HasFlag(FileAttributes.ReparsePoint)) continue;
-                byte[] ModOrigSha = mr.origchecksum;
-                byte[] ModTarSha = mr.TarCheckSum;
-                if (!BoiCustom.BOIC_Bytearr_Compare(ModTarSha, ModOrigSha))
-                {
-                    FileInfo orfi = new FileInfo(mr.ModPath);
-                    FileInfo tarfi = new FileInfo(mr.TarPath);
-                    if (orfi.LastWriteTime > tarfi.LastWriteTime)
-                    {
-                        File.Delete(tarfi.FullName);
-                        File.Copy(orfi.FullName, tarfi.FullName);
-                        Wood.WriteLine($"Bringing {orfi.Name} up to date: copying from Mods to {((mr.MyType != ModRelay.EUModType.Patch) ? "Plugins" : "Monomod")}.");
-                    }
-                    else
-                    {
-                        File.Delete(orfi.FullName);
-                        File.Copy(tarfi.FullName, orfi.FullName);
-                        Wood.WriteLine($"Bringing {orfi.Name} up to date: copying from {((mr.MyType != ModRelay.EUModType.Patch) ? "Plugins" : "Monomod")} to Mods.");
-                    }
-                }
-            }
-        }
         public static bool IsMyPathCorrect
         {
             get { return (currentStructureState.HasFlag(FolderStructureState.BlepFound | FolderStructureState.GameFound)); }
@@ -481,7 +210,7 @@ namespace Blep
             get
             {
                 FolderStructureState res = 0;
-                if (Directory.Exists(PluginsFolder) && Directory.Exists(PatchesFolder)) res |= FolderStructureState.BlepFound;
+                if (Directory.Exists(PluginsFolder) && Directory.Exists(mmFolder)) res |= FolderStructureState.BlepFound;
                 if (Directory.Exists(Path.Combine(RootPath, "RainWorld_Data"))) res |= FolderStructureState.GameFound;
                 return res;
             }
@@ -531,60 +260,13 @@ namespace Blep
         /// </summary>
         public static string tagfilePath => Path.Combine(BOIpath, "MODTAGS.txt");
         /// <summary>
-        /// Checks if the file under a given path is Pubstunt.
-        /// </summary>
-        /// <param name="path">Path to be checked.</param>
-        /// <returns></returns>
-        public static bool AintThisPS(string path)
-        {
-            var fi = new FileInfo(path);
-            if (fi.Extension != ".dll" || fi.Attributes.HasFlag(FileAttributes.ReparsePoint)) return false;
-            try
-            {
-                using (ModuleDefinition md = ModuleDefinition.ReadModule(path))
-                {
-                    return (md.Assembly.FullName.Contains("PublicityStunt"));
-                }
-            }
-            catch (IOException ioe)
-            {
-                Wood.WriteLine("ATPS: ERROR CHECKING MOD ASSEMBLY :");
-                Wood.Indent();
-                Wood.WriteLine(ioe);
-                Wood.Unindent();
-                Wood.WriteLine("Well, it's probably not PS.");
-                return false;
-            }
-
-        }
-        /// <summary>
-        /// Blacklist for monomod folder.
-        /// </summary>
-        private List<string> patchBlacklist;
-        /// <summary>
-        /// Blacklist for plugins folder.
-        /// </summary>
-        private List<string> pluginBlacklist;
-        /// <summary>
         /// List of mods that have been erased during rootout.
         /// </summary>
         private List<string> outrmixmods;
         /// <summary>
-        /// Modlist.
-        /// </summary>
-        private List<ModRelay> targetFiles;
-        /// <summary>
-        /// For launching the game directly; janky, subject to change.
-        /// </summary>
-        private Process rw;
-        /// <summary>
         /// Indicates whether the form is being viewed for the first time in the session.
         /// </summary>
         private bool firstshow;
-        /// <summary>
-        /// Indicates whether certain events should be ran; used to avoid stack overflows.
-        /// </summary>
-        private bool ReadyForRefresh;
         /// <summary>
         /// Setup tracker for pubstunt.
         /// </summary>
@@ -592,18 +274,11 @@ namespace Blep
         /// <summary>
         /// Setup tracker for invalid mods.
         /// </summary>
-        private bool MixmodsFound;
-        /// <summary>
-        /// Path to plugins blacklist.
-        /// </summary>
-        private string hkblacklistpath => Path.Combine(PluginsFolder, @"plugins_blacklist.txt");
-        /// <summary>
-        /// Path to monomod blacklist.
-        /// </summary>
-        private string ptblacklistpath => Path.Combine(PatchesFolder, @"patches_blacklist.txt");
+        private bool MixmodsFound;        
         public static string ModFolder => Path.Combine(RootPath, "Mods");
         public static string PluginsFolder => Path.Combine(RootPath, "BepInEx", "plugins");
-        public static string PatchesFolder => Path.Combine(RootPath, "BepInEx", "monomod");
+        public static string mmFolder => Path.Combine(RootPath, "BepInEx", "monomod");
+        public static string PatchersFolder => Path.Combine(RootPath, "BepInEx", "patchers");
 
         /// <summary>
         /// Ran when the user clicks path select button. <see cref="TSbtnMode"/> is used here.
@@ -612,14 +287,11 @@ namespace Blep
         /// <param name="e">Unused.</param>
         private void buttonSelectPath_Click(object sender, EventArgs e)
         {
-
             if (TSbtnMode)
             {
                 TargetSelect.ShowDialog();
                 btnSelectPath.Text = "Press again to load modlist";
                 TSbtnMode = false;
-                //btnLaunch.Enabled = false;
-
             }
             else
             {
@@ -644,7 +316,7 @@ namespace Blep
         {
             if (IsMyPathCorrect && Directory.Exists(ModFolder))
             {
-
+#warning empty action block? might have wanted to add something
             }
             TagManager.SaveToFile(tagfilePath);
         }
@@ -686,30 +358,7 @@ namespace Blep
             btnSelectPath.Enabled = true;
 
         }
-        /// <summary>
-        /// Ran when <see cref="btnLaunch"/> is clicked.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
-        private void btnLaunch_MouseClick(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                rw = new Process();
-                rw.StartInfo.FileName = Path.Combine(RootPath, "RainWorld.exe");
-                rw.Start();
-                Wood.WriteLine("Game launched.");
-            }
-
-            catch (Exception ce)
-            {
-                Wood.WriteLine("Launch failed");
-                Wood.WriteLine(ce);
-            }
-            //btnLaunch.Enabled = false;
-            StatusUpdate();
-
-        }
+        
         /// <summary>
         /// Brings up the help window.
         /// </summary>
@@ -749,22 +398,10 @@ namespace Blep
         /// <param name="e"></param>
         private void Modlist_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            if (!ReadyForRefresh) return;
-            if (Modlist.Items[e.Index] is ModRelay && (Modlist.Items[e.Index] as ModRelay).MyType == ModRelay.EUModType.Invalid && e.NewValue == CheckState.Checked)
-            {
-                //e.NewValue = CheckState.Unchecked;
-                if (inp == null || inp.IsDisposed) inp = new InvalidModPopup(this, (Modlist.Items[e.Index] as ModRelay).AssociatedModData.DisplayedName);
-                inp.ShowDialog();
-            }
-            CheckState[] ich = new CheckState[Modlist.Items.Count];
-            for (int i = 0; i < ich.Length; i++)
-            {
-                ich[i] = Modlist.GetItemCheckState(i);
-            }
-            ich[e.Index] = e.NewValue;
-            Wood.WriteLine("Mod state about to change: " + (Modlist.Items[e.Index] as ModRelay).AssociatedModData.DisplayedName + "; Type: " + (Modlist.Items[e.Index] as ModRelay).MyType.ToString());
-            ApplyModlist(ich);
-            Wood.WriteLine("Resulting state: " + ((Modlist.Items[e.Index] as ModRelay).enabled ? "ON" : "OFF"));
+#warning readd invalid mod warnings, additional pubstunt check
+            var tm = Modlist.Items[e.Index] as ModRelay;
+            if (e.NewValue == CheckState.Checked) tm.Enable();
+            else tm.Disable();
         }
 
         /// <summary>
@@ -777,7 +414,7 @@ namespace Blep
             Wood.WriteLine("BOI shutting down. " + DateTime.Now);
             BoiConfigManager.WriteConfig();
             List<string> mns = new List<string>();
-            foreach (ModRelay mr in targetFiles) mns.Add(mr.AssociatedModData.DisplayedName);
+            foreach (ModRelay mr in Donkey.cargo) mns.Add(mr.AssociatedModData.DisplayedName);
             TagManager.TagCleanup(mns.ToArray());
             TagManager.SaveToFile(tagfilePath);
         }
@@ -823,7 +460,7 @@ namespace Blep
                 // get mod data
                 var mr = new ModRelay(ModFilePath);
                 // add the mod to the mod list
-                targetFiles.Add(mr);
+                Donkey.cargo.Add(mr);
                 Wood.WriteLine($"{ModFileInfo.Name} successfully added.");
                 // since it's a new mod just added to the folder, it shouldn't be checked as active, nothing else to do here
             }
@@ -861,7 +498,6 @@ namespace Blep
         }
         private void MaskModeSelect_TextChanged(object sender, EventArgs e)
         {
-            if (!ReadyForRefresh) return;
             ApplyMaskToModlist(textBox_MaskInput.Text);
         }
         /// <summary>

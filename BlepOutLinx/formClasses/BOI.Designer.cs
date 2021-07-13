@@ -36,6 +36,7 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.lblPathStatus = new System.Windows.Forms.Label();
             this.lblProcessStatus = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.labelDesc = new System.Windows.Forms.Label();
             this.labelHead = new System.Windows.Forms.Label();
@@ -56,7 +57,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.TagInputBox = new System.Windows.Forms.RichTextBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -119,6 +119,12 @@
             resources.ApplyResources(this.lblProcessStatus, "lblProcessStatus");
             this.lblProcessStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblProcessStatus.Name = "lblProcessStatus";
+            // 
+            // label5
+            // 
+            resources.ApplyResources(this.label5, "label5");
+            this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label5.Name = "label5";
             // 
             // tableLayoutPanel2
             // 
@@ -260,12 +266,6 @@
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel5, 0, 3);
             this.tableLayoutPanel3.Controls.Add(this.Modlist, 0, 2);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            // 
-            // label5
-            // 
-            resources.ApplyResources(this.label5, "label5");
-            this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label5.Name = "label5";
             // 
             // BlepOut
             // 

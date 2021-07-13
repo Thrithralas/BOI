@@ -18,13 +18,18 @@ namespace Blep.Backend
     /// </summary>
     public class ModRelay
     {
+        public ModRelay (FileInfo file) : this (file.FullName)
+        {
+
+        }
+
         public ModRelay(string path)
         {
             ModPath = path;
             isValid = !ModData.AbsolutelyIgnore(ModPath);
             if (isValid)
             {
-                if (BlepOut.AintThisPS(path))
+                if (Donkey.AintThisPS(path))
                 {
                     AssociatedModData = new InvalidModData(path);
                     MyType = EUModType.Invalid;
@@ -37,17 +42,21 @@ namespace Blep.Backend
                         AssociatedModData = new ModData(path);
                         MyType = EUModType.Unknown;
                         break;
-                    case EUModType.Patch:
-                        AssociatedModData = new PtModData(path);
-                        MyType = EUModType.Patch;
+                    case EUModType.mmPatch:
+                        AssociatedModData = new mmPatchData(path);
+                        MyType = EUModType.mmPatch;
                         break;
                     case EUModType.Partmod:
-                        AssociatedModData = new HkModData(path);
+                        AssociatedModData = new PartModData(path);
                         MyType = EUModType.Partmod;
                         break;
                     case EUModType.BepPlugin:
                         AssociatedModData = new BepPluginData(path);
                         MyType = EUModType.BepPlugin;
+                        break;
+                    case EUModType.BepPatcher:
+                        AssociatedModData = new BepPatcherData(path);
+                        MyType = EUModType.BepPatcher;
                         break;
                     case EUModType.Invalid:
                         AssociatedModData = new InvalidModData(path);
@@ -69,7 +78,7 @@ namespace Blep.Backend
             if (tstate.HasFlag(ModTypeFlags.MMpatch))
             {
                 if (tstate != ModTypeFlags.MMpatch) return EUModType.Invalid;
-                else return EUModType.Patch;
+                else return EUModType.mmPatch;
             }
             if (tstate.HasFlag(ModTypeFlags.BepPatcher))
             {
@@ -90,9 +99,7 @@ namespace Blep.Backend
             {
                 using (ModuleDefinition md = ModuleDefinition.ReadModule(path))
                 {
-
                     return GetModType(md);
-
                 }
             }
             catch (IOException ioe)
@@ -108,7 +115,6 @@ namespace Blep.Backend
 
         public static void CheckThisType(TypeDefinition td, ref ModTypeFlags state)
         {
-            
             if (td.BaseType != null && td.BaseType.Name == "PartialityMod") state |= ModTypeFlags.PartMod;
             var contract_M = false;
             var contract_P = false;
@@ -141,19 +147,6 @@ namespace Blep.Backend
             }
         }
 
-        public struct mttup
-        {
-            public mttup(bool hk, bool pt, bool beppl)
-            {
-                isbeppl = beppl;
-                ishk = hk;
-                ispt = pt;
-            }
-            public bool ishk;
-            public bool ispt;
-            public bool isbeppl;
-        }
-
         [Flags]
         public enum ModTypeFlags
         {
@@ -164,7 +157,7 @@ namespace Blep.Backend
         }
         public enum EUModType
         {
-            Patch,
+            mmPatch,
             Partmod,
             Invalid,
             BepPlugin,
@@ -172,8 +165,6 @@ namespace Blep.Backend
             Unknown
         }
         public EUModType MyType;
-
-
 
         public byte[] origchecksum
         {
@@ -205,14 +196,13 @@ namespace Blep.Backend
         {
             get
             {
-                return (Path.Combine(AssociatedModData.TarFolder, AssociatedModData.TarName));
+                return (Path.Combine(AssociatedModData.TarFolder.FullName, AssociatedModData.TarName));
             }
         }
 
         public string ModPath { get; set; }
         public ModData AssociatedModData { get; set; }
         public bool isValid { get; set; }
-
 
         public bool enabled
         {
@@ -221,7 +211,7 @@ namespace Blep.Backend
         public void Enable()
         {
             if (enabled) return;
-            File.Copy(AssociatedModData.OrigPath, TarPath);
+            AssociatedModData.OrigLocation.CopyTo(TarPath);
         }
         public void Disable()
         {
@@ -241,19 +231,19 @@ namespace Blep.Backend
     {
         public ModData(string path)
         {
-            OrigPath = path;
-            DisplayedName = new FileInfo(path).Name;
+            OrigLocation = new FileInfo(path);
+            //DisplayedName = OrigPath.Name;
         }
         public virtual string TarName
         {
             get { return DisplayedName; }
         }
 
-        public virtual string TarFolder => Path.Combine(BlepOut.RootPath, "BepInEx", "plugins");
-        public string OrigPath;
+        public virtual DirectoryInfo TarFolder => Donkey.pluginsTargetPath;
+        public FileInfo OrigLocation;
 
-        public virtual bool Enabled => File.Exists(Path.Combine(TarFolder, TarName));
-        public virtual string DisplayedName { get; set; }
+        public virtual bool Enabled => TarFolder.GetFiles(TarName, SearchOption.TopDirectoryOnly).Length > 0;
+        public virtual string DisplayedName => OrigLocation.Name;
         public static bool AbsolutelyIgnore(string tpath)
         {
             return (new FileInfo(tpath).Extension != @".dll" || new FileInfo(tpath).Attributes.HasFlag(FileAttributes.ReparsePoint));
@@ -267,9 +257,9 @@ namespace Blep.Backend
     /// <summary>
     /// Implementation of <see cref="ModData"/> for Partiality mods.
     /// </summary>
-    public class HkModData : ModData
+    public class PartModData : ModData
     {
-        public HkModData(string path) : base(path)
+        public PartModData(string path) : base(path)
         {
 
         }
@@ -283,17 +273,15 @@ namespace Blep.Backend
     /// <summary>
     /// Implementation of <see cref="ModData"/> for Monomod patches.
     /// </summary>
-    public class PtModData : ModData
+    public class mmPatchData : ModData
     {
-        public PtModData(string path) : base(path)
+        public mmPatchData(string path) : base(path)
         {
 
         }
 
         public override string TarName => "Assembly-CSharp." + DisplayedName.Replace(".dll", string.Empty) + ".mm.dll";
-
-        public override string TarFolder => Path.Combine(BlepOut.RootPath, "BepInEx", "Monomod");
-
+        public override DirectoryInfo TarFolder => Donkey.mmpTargetPath;
         public static string GiveMeBackMyName(string partname)
         {
             string sl = partname;
@@ -304,9 +292,6 @@ namespace Blep.Backend
             }
             return sl;
         }
-
-        //public override bool Enabled => File.Exists(this.TarFolder + this.TarName);
-
         public override string ToString()
         {
             return DisplayedName + " : PATCH";
@@ -332,7 +317,7 @@ namespace Blep.Backend
     /// <summary>
     /// Implementation of <see cref="ModData"/> for invalid mods (mixing mm patches with elsewhat)
     /// </summary>
-    public class InvalidModData : PtModData
+    public class InvalidModData : mmPatchData
     {
         public InvalidModData(string path) : base(path)
         {
@@ -341,15 +326,15 @@ namespace Blep.Backend
 
         public override string ToString()
         {
-            return DisplayedName + ": INVALID";
+            return DisplayedName + " : INVALID";
         }
-
     }
 
     public class BepPatcherData : ModData
     {
         public BepPatcherData(string path) : base(path) { }
-        public override string TarFolder => Path.Combine(BlepOut.RootPath, "BepInEx", "patchers");
+        public override DirectoryInfo TarFolder => Donkey.bepPatcherTargetPath;
+        public override string ToString() { return DisplayedName + " : BEPPATCHER"; }
     }
 
     //

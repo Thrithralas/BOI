@@ -123,8 +123,8 @@ namespace Blep.Backend
                         rsa.ImportParameters(keyData);
                         var def = new RSAPKCS1SignatureDeformatter(rsa);
                         def.SetHashAlgorithm("SHA512");
-                        bool verPart1 = def.VerifySignature(modhash, sigbytes);
-                        bool verPart2 = true;
+                        bool directSigCorrect = def.VerifySignature(modhash, sigbytes);
+                        bool keySigCorrect = (key.e == PrimeKeyE && key.n == PrimeKeyN);
                         if (key.sig != null)
                         {
                             keyData.Exponent = Convert.FromBase64String(key.sig.by.e);
@@ -134,9 +134,9 @@ namespace Blep.Backend
                             def.SetHashAlgorithm("SHA512");
                             var bee = Encoding.ASCII.GetBytes($"postkey:{key.e}-{key.n}");
                             modhash = sha.ComputeHash(bee);
-                            verPart2 = def.VerifySignature(modhash, Convert.FromBase64String(key.sig.data));
+                            keySigCorrect = def.VerifySignature(modhash, Convert.FromBase64String(key.sig.data));
                         }
-                        if (verPart1 && verPart2)
+                        if (directSigCorrect && keySigCorrect)
                         {
                             Wood.WriteLine($"Mod sig verified: {this.name}, saving");
                             try
@@ -181,6 +181,9 @@ namespace Blep.Backend
             {
                 return (this.download == other.download);
             }
+
+            public static readonly string PrimeKeyE = "AQAB";
+            public static readonly string PrimeKeyN = "yu7XMmICrzuavyZRGWoknFIbJX4N4zh3mFPOyfzmQkil2axVIyWx5ogCdQ3OTdSZ0xpQ3yiZ7zqbguLu+UWZMfLOBKQZOs52A9OyzeYm7iMALmcLWo6OdndcMc1Uc4ZdVtK1CRoPeUVUhdBfk2xwjx+CvZUlQZ26N1MZVV0nq54IOEJzC9qQnVNgeeHxO1lRUTdg5ZyYb7I2BhHfpDWyTvUp6d5m6+HPKoalC4OZSfmIjRAi5UVDXNRWn05zeT+3BJ2GbKttwvoEa6zrkVuFfOOe9eOAWO3thXmq9vJLeF36xCYbUJMkGR2M5kDySfvoC7pzbzyZ204rXYpxxXyWPP5CaaZFP93iprZXlSO3XfIWwws+R1QHB6bv5chKxTZmy/Imo4M3kNLo5B2NR/ZPWbJqjew3ytj0A+2j/RVwV9CIwPlN4P50uwFm+Mr0OF2GZ6vU0s/WM7rE78+8Wwbgcw6rTReKhVezkCCtOdPkBIOYv3qmLK2S71NPN2ulhMHD9oj4t0uidgz8pNGtmygHAm45m2zeJOhs5Q/YDsTv5P7xD19yfVcn5uHpSzRIJwH5/DU1+aiSAIRMpwhF4XTUw73+pBujdghZdbdqe2CL1juw7XCa+XfJNtsUYrg+jPaCEUsbMuNxdFbvS0Jleiu3C8KPNKDQaZ7QQMnEJXeusdU=";
         }
     }
 }
