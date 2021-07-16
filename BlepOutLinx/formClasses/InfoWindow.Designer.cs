@@ -388,6 +388,7 @@
             // 
             // tableLayoutPanel4
             // 
+            this.tableLayoutPanel4.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.tableLayoutPanel4.ColumnCount = 2;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.94186F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70.05814F));
@@ -419,9 +420,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(105, 156);
+            this.label16.Location = new System.Drawing.Point(108, 158);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(236, 57);
+            this.label16.Size = new System.Drawing.Size(231, 54);
             this.label16.TabIndex = 9;
             this.label16.Text = "BepInEx loader with a magical Partiality wrapper, provided by almighty Bee (Googl" +
     "e Drive download).";
@@ -434,9 +435,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabelBep.AutoSize = true;
             this.linkLabelBep.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.linkLabelBep.Location = new System.Drawing.Point(3, 156);
+            this.linkLabelBep.Location = new System.Drawing.Point(5, 158);
             this.linkLabelBep.Name = "linkLabelBep";
-            this.linkLabelBep.Size = new System.Drawing.Size(96, 57);
+            this.linkLabelBep.Size = new System.Drawing.Size(95, 54);
             this.linkLabelBep.TabIndex = 8;
             this.linkLabelBep.TabStop = true;
             this.linkLabelBep.Text = "BepInEx 4 RW";
@@ -449,9 +450,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(105, 104);
+            this.label14.Location = new System.Drawing.Point(108, 106);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(236, 52);
+            this.label14.Size = new System.Drawing.Size(231, 50);
             this.label14.TabIndex = 6;
             this.label14.Text = "If you want to start making mods for Rain World, this is your place to start.";
             this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -462,9 +463,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(105, 52);
+            this.label13.Location = new System.Drawing.Point(108, 54);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(236, 52);
+            this.label13.Size = new System.Drawing.Size(231, 50);
             this.label13.TabIndex = 5;
             this.label13.Text = "An island in an ocean of obscurity. Come on in if you haven\'t been there already." +
     "";
@@ -477,9 +478,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabelDiscord.AutoSize = true;
             this.linkLabelDiscord.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.linkLabelDiscord.Location = new System.Drawing.Point(3, 52);
+            this.linkLabelDiscord.Location = new System.Drawing.Point(5, 54);
             this.linkLabelDiscord.Name = "linkLabelDiscord";
-            this.linkLabelDiscord.Size = new System.Drawing.Size(96, 52);
+            this.linkLabelDiscord.Size = new System.Drawing.Size(95, 50);
             this.linkLabelDiscord.TabIndex = 1;
             this.linkLabelDiscord.TabStop = true;
             this.linkLabelDiscord.Text = "RW Discord";
@@ -493,9 +494,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabelWiki.AutoSize = true;
             this.linkLabelWiki.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.linkLabelWiki.Location = new System.Drawing.Point(3, 104);
+            this.linkLabelWiki.Location = new System.Drawing.Point(5, 106);
             this.linkLabelWiki.Name = "linkLabelWiki";
-            this.linkLabelWiki.Size = new System.Drawing.Size(96, 52);
+            this.linkLabelWiki.Size = new System.Drawing.Size(95, 50);
             this.linkLabelWiki.TabIndex = 2;
             this.linkLabelWiki.TabStop = true;
             this.linkLabelWiki.Text = "Modding wiki";
@@ -509,9 +510,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabelRDB.AutoSize = true;
             this.linkLabelRDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.linkLabelRDB.Location = new System.Drawing.Point(3, 0);
+            this.linkLabelRDB.Location = new System.Drawing.Point(5, 2);
             this.linkLabelRDB.Name = "linkLabelRDB";
-            this.linkLabelRDB.Size = new System.Drawing.Size(96, 52);
+            this.linkLabelRDB.Size = new System.Drawing.Size(95, 50);
             this.linkLabelRDB.TabIndex = 3;
             this.linkLabelRDB.TabStop = true;
             this.linkLabelRDB.Text = "RainDB";
@@ -524,9 +525,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(105, 0);
+            this.label12.Location = new System.Drawing.Point(108, 2);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(236, 52);
+            this.label12.Size = new System.Drawing.Size(231, 50);
             this.label12.TabIndex = 4;
             this.label12.Text = "Main hub of Rain World modding community. Can find all sorts of good stuff there." +
     "";
@@ -539,9 +540,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.linkLabel1.Location = new System.Drawing.Point(3, 213);
+            this.linkLabel1.Location = new System.Drawing.Point(5, 214);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(96, 45);
+            this.linkLabel1.Size = new System.Drawing.Size(95, 43);
             this.linkLabel1.TabIndex = 0;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = ":petthebee:";
@@ -555,9 +556,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(105, 213);
+            this.label15.Location = new System.Drawing.Point(108, 214);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(236, 45);
+            this.label15.Size = new System.Drawing.Size(231, 43);
             this.label15.TabIndex = 7;
             this.label15.Text = "loafin";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

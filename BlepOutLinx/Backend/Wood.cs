@@ -48,7 +48,6 @@ namespace Blep.Backend
             {
                 LogPath = Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt");
             }
-
             try
             {
                 int ml = 512;
@@ -57,10 +56,10 @@ namespace Blep.Backend
                     ml--;
                     RawWrite(WriteQueue[0]);
                     WriteQueue.RemoveAt(0);
+                    
                 }
             }
             catch (IOException) { };
-            
             try
             {
                 RawWrite(o);
@@ -74,6 +73,7 @@ namespace Blep.Backend
         {
             Debug.Write(o);
             string result = o?.ToString() ?? "null";
+            Console.Write(o);
             File.AppendAllText(LogPath, result);
         }
         public static void SetNewPathAndErase(string tar)
@@ -81,12 +81,9 @@ namespace Blep.Backend
             LogPath = tar;
             if (File.Exists(tar)) File.Delete(tar);
         }
-
         public static List<object> WriteQueue { get { _wc = _wc ?? new List<object>(); return _wc; } set { _wc = value; } }
         private static List<Object> _wc;
         public static string LogPath { get; set; } = string.Empty;
-        
-
         public static int IndentLevel { get { return _il; } set { _il = Math.Max(value, 0); } }
         private static int _il = 0;
     }

@@ -25,7 +25,7 @@ namespace Blep
         
         public void FetchAndRefresh()
         {
-            bool fl = VoiceOfBees.FetchList();
+            bool fl = VoiceOfBees.FetchRelays();
             listAUDBEntries.Items.Clear();
             foreach (var rel in VoiceOfBees.ModEntryList)
             {
@@ -38,6 +38,7 @@ namespace Blep
         public void DrawBoxes()
         {
             buttonDownload.Enabled = BlepOut.IsMyPathCorrect;
+            btn_InstallBep.Enabled = BlepOut.currentStructureState.HasFlag(BlepOut.FolderStructureState.GameFound);
             var currEntry = listAUDBEntries.SelectedItem as VoiceOfBees.AUDBEntryRelay;
 
             labelEntryAuthors.Text = currEntry?.author ?? string.Empty;
@@ -55,13 +56,18 @@ namespace Blep
 
         private void buttonDownload_Click(object sender, EventArgs e)
         {
-            
             var currEntry = listAUDBEntries.SelectedItem as VoiceOfBees.AUDBEntryRelay;
             if (currEntry != null)
             {
                 labelOperationStatus.Text = $"Downloading {currEntry.name} and dependencies...";
                 labelOperationStatus.Text = (currEntry.TryDownload(BlepOut.ModFolder))? $"Downloaded {currEntry.name}." : $"Could not download {currEntry.name}! Check BOILOG.txt for details";
             }
+        }
+
+        private void btn_InstallBep_Click(object sender, EventArgs e)
+        {
+            int errc = VoiceOfBees.TryDownloadBep(BlepOut.RootPath);
+            labelOperationStatus.Text = (errc == 0) ? "BepInEx installed successfully" : $"{errc} error(s) encountered while installing!";
         }
     }
 }

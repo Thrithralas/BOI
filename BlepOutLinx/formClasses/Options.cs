@@ -73,10 +73,7 @@ namespace Blep
             {
                 if (rmd.hasBeenChanged) rmd.WriteRegInfo();
             }
-            if (EDTCFGDATA.hasBeenChanged)
-            {
-                EDTCFGDATA.SaveJo();
-            }
+            EDTCFGDATA.SaveJo();
             BackupManager.SaveSettingsForAll();
         }
         private void DrawCRSpage()
@@ -111,23 +108,23 @@ namespace Blep
         {
             readytoapply = false;
             EDTCFGDATA.loadJo();
-            if (EDTCFGDATA.jo == null)
+            if (EDTCFGDATA.cfg == null)
             {
                 tableLayoutPanel10.Enabled = false;
             }
             else
             {
                 tableLayoutPanel10.Enabled = true;
-                textBoxEDT_STARTMAP.Text = EDTCFGDATA.startmap;
-                checkBoxEDT_QUICKSTART.Checked = (bool)EDTCFGDATA.skiptitle;
-                textBoxEDT_CHARSELECT.Text = (EDTCFGDATA.forcechar == null) ? string.Empty : EDTCFGDATA.forcechar.ToString();
-                checkBoxEDT_DISABLERAIN.Checked = (bool)EDTCFGDATA.norain;
-                checkBoxEDT_EDT.Checked = (bool)EDTCFGDATA.devtools;
-                TextBoxEDT_CHEATKARMA.Text = (EDTCFGDATA.cheatkarma == null) ? string.Empty : EDTCFGDATA.cheatkarma.ToString();
-                checkBoxEDT_MAPREVEAL.Checked = (bool)EDTCFGDATA.revealmap;
-                checkBoxEDT_FORCEGLOW.Checked = (bool)EDTCFGDATA.forcelight;
-                checkBoxEDT_BAKE.Checked = (bool)EDTCFGDATA.bake;
-                checkBoxEDT_ENCRYPT.Checked = (bool)EDTCFGDATA.encrypt;
+                textBoxEDT_STARTMAP.Text = EDTCFGDATA.cfg.start_map;
+                checkBoxEDT_QUICKSTART.Checked = EDTCFGDATA.cfg.skip_title;
+                textBoxEDT_CHARSELECT.Text = EDTCFGDATA.cfg.force_selected_character.ToString();
+                checkBoxEDT_DISABLERAIN.Checked = EDTCFGDATA.cfg.no_rain;
+                checkBoxEDT_EDT.Checked = EDTCFGDATA.cfg.devtools;
+                TextBoxEDT_CHEATKARMA.Text = EDTCFGDATA.cfg.cheat_karma.ToString();
+                checkBoxEDT_MAPREVEAL.Checked = (bool)EDTCFGDATA.cfg.reveal_map;
+                checkBoxEDT_FORCEGLOW.Checked = (bool)EDTCFGDATA.cfg.force_light;
+                checkBoxEDT_BAKE.Checked = (bool)EDTCFGDATA.cfg.bake;
+                checkBoxEDT_ENCRYPT.Checked = (bool)EDTCFGDATA.cfg.encrypt;
             }
             readytoapply = true;
         }
@@ -181,50 +178,50 @@ namespace Blep
             if (!readytoapply) return;
             if (sender == textBoxEDT_STARTMAP)
             {
-                EDTCFGDATA.startmap = textBoxEDT_STARTMAP.Text;
+                EDTCFGDATA.cfg.start_map = textBoxEDT_STARTMAP.Text;
             }
             else if (sender == checkBoxEDT_QUICKSTART)
             {
-                EDTCFGDATA.skiptitle = checkBoxEDT_QUICKSTART.Checked;
+                EDTCFGDATA.cfg.skip_title = checkBoxEDT_QUICKSTART.Checked;
             }
             else if (sender == textBoxEDT_CHARSELECT)
             {
                 if (int.TryParse(textBoxEDT_CHARSELECT.Text, out int res))
                 {
-                    EDTCFGDATA.forcechar = res;
+                    EDTCFGDATA.cfg.force_selected_character = res;
                 }
 
             }
             else if (sender == checkBoxEDT_DISABLERAIN)
             {
-                EDTCFGDATA.norain = checkBoxEDT_DISABLERAIN.Checked;
+                EDTCFGDATA.cfg.no_rain = checkBoxEDT_DISABLERAIN.Checked;
             }
             else if (sender == checkBoxEDT_EDT)
             {
-                EDTCFGDATA.devtools = checkBoxEDT_EDT.Checked;
+                EDTCFGDATA.cfg.devtools = checkBoxEDT_EDT.Checked;
             }
             else if (sender == TextBoxEDT_CHEATKARMA)
             {
                 if (int.TryParse(TextBoxEDT_CHEATKARMA.Text, out int res))
                 {
-                    EDTCFGDATA.cheatkarma = res;
+                    EDTCFGDATA.cfg.cheat_karma = res;
                 }
             }
             else if (sender == checkBoxEDT_MAPREVEAL)
             {
-                EDTCFGDATA.revealmap = checkBoxEDT_MAPREVEAL.Checked;
+                EDTCFGDATA.cfg.reveal_map = checkBoxEDT_MAPREVEAL.Checked;
             }
             else if (sender == checkBoxEDT_FORCEGLOW)
             {
-                EDTCFGDATA.forcelight = checkBoxEDT_FORCEGLOW.Checked;
+                EDTCFGDATA.cfg.force_light = checkBoxEDT_FORCEGLOW.Checked;
             }
             else if (sender == checkBoxEDT_BAKE)
             {
-                EDTCFGDATA.bake = checkBoxEDT_FORCEGLOW.Checked;
+                EDTCFGDATA.cfg.bake = checkBoxEDT_FORCEGLOW.Checked;
             }
             else if (sender == checkBoxEDT_ENCRYPT)
             {
-                EDTCFGDATA.encrypt = checkBoxEDT_ENCRYPT.Checked;
+                EDTCFGDATA.cfg.encrypt = checkBoxEDT_ENCRYPT.Checked;
             }
         }
         private void buttonclickCOMMOD(object sender, EventArgs e)

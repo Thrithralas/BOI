@@ -4,12 +4,12 @@ namespace Blep
 {
     public partial class InfoWindow : Form
     {
-        public InfoWindow(Blep.BlepOut mainform)
+        public InfoWindow(BlepOut mainform)
         {
             InitializeComponent();
             mf = mainform;
         }
-        private Blep.BlepOut mf;
+        private BlepOut mf;
         private int hmm = 0;
 
         private void linkLabelRDB_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

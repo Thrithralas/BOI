@@ -22,7 +22,6 @@ namespace Blep.Backend
         {
 
         }
-
         public ModRelay(string path)
         {
             ModPath = path;
@@ -65,8 +64,6 @@ namespace Blep.Backend
                 }
             }
         }
-
-
         public static EUModType GetModType(ModuleDefinition md)
         {
             var tstate = default(ModTypeFlags);
@@ -74,7 +71,6 @@ namespace Blep.Backend
             {
                 CheckThisType(t, ref tstate);
             }
-#warning redo and finish
             if (tstate.HasFlag(ModTypeFlags.MMpatch))
             {
                 if (tstate != ModTypeFlags.MMpatch) return EUModType.Invalid;
@@ -503,18 +499,17 @@ namespace Blep.Backend
     /// </summary>
     public static class EDTCFGDATA
     {
-        public static JObject jo;
-        public static bool hasBeenChanged = false;
+        public static edtSetup cfg;
         public static string edtConfigPath => Path.Combine(BlepOut.RootPath, "edtSetup.json");
         public static bool edtConfigExists => File.Exists(edtConfigPath);
         public static void loadJo()
         {
-            jo = null;
             if (!edtConfigExists) return;
+            cfg = null;
             try
             {
                 string jsf = File.ReadAllText(edtConfigPath);
-                jo = JObject.Parse(jsf);
+                cfg = JsonConvert.DeserializeObject<edtSetup>(jsf);
             }
             catch (IOException ioe)
             {
@@ -523,25 +518,24 @@ namespace Blep.Backend
                 Wood.WriteLine(ioe);
                 Wood.Unindent();
             }
-            catch (JsonReaderException jre)
+            catch (Exception e)
             {
                 Wood.WriteLine("Error parsing EDT config:");
                 Wood.Indent();
-                Wood.WriteLine(jre);
+                Wood.WriteLine(e);
                 Wood.Unindent();
             }
-            hasBeenChanged = false;
+            
             
         }
         public static void SaveJo()
         {
-            if (!hasBeenChanged) return;
             try
             {
-                File.WriteAllText(edtConfigPath, jo.ToString());
-                Wood.WriteLine("Saving config. Contents:");
+                File.WriteAllText(edtConfigPath, JsonConvert.SerializeObject(cfg));
+                Wood.WriteLine("Saving EDT config. Contents:");
                 Wood.Indent();
-                Wood.WriteLine(jo.ToString());
+                Wood.WriteLine(JsonConvert.SerializeObject(cfg));
                 Wood.Unindent();
             }
             catch (IOException ioe)
@@ -551,150 +545,23 @@ namespace Blep.Backend
                 Wood.WriteLine(ioe);
                 Wood.Unindent();
             }
-            catch (System.ArgumentNullException)
+            catch (ArgumentNullException)
             {
                 Wood.WriteLine("JO is null; nothing to write.");
             }
         }
-        public static string startmap
-        {
-            get
-            {
-                if (jo == null || !jo.ContainsKey("start_map")) return null;
-                return (string)jo["start_map"];
-            }
-            set
-            {
-                if (jo == null) return;
-                hasBeenChanged = true;
-                jo["start_map"] = value;
-            }
-        }
-        public static bool? skiptitle
-        {
-            get
-            {
-                if (jo == null || !jo.ContainsKey("skip_title")) return null;
-                return (bool)jo["skip_title"];
-            }
-            set
-            {
-                if (jo == null) return;
-                hasBeenChanged = true;
-                jo["skip_title"] = value;
-            }
-        }
-        public static int? forcechar
-        {
-            get
-            {
-                if (jo == null || !jo.ContainsKey("force_selected_character")) return null;
-                return (int)jo["force_selected_character"];
-            }
-            set
-            {
-                if (jo == null) return;
-                hasBeenChanged = true;
-                jo["force_selected_character"] = value;
-            }
-        }
-        public static bool? norain
-        {
-            get
-            {
-                if (jo == null || !jo.ContainsKey("no_rain")) return null;
-                return (bool)jo["no_rain"];
-            }
-            set
-            {
-                if (jo == null) return;
-                hasBeenChanged = true;
-                jo["no_rain"] = value;
-            }
-        }
-        public static bool? devtools
-        {
-            get
-            {
-                if (jo == null || !jo.ContainsKey("devtools")) return null;
-                return (bool)jo["devtools"];
-            }
-            set
-            {
-                if (jo == null) return;
-                hasBeenChanged = true;
-                jo["devtools"] = value;
-            }
-        }
-        public static int? cheatkarma
-        {
-            get
-            {
-                if (jo == null || !jo.ContainsKey("cheat_karma")) return null;
-                return (int)jo["cheat_karma"];
-            }
-            set
-            {
-                if (jo == null) return;
-                hasBeenChanged = true;
-                jo["cheat_karma"] = value;
-            }
-        }
-        public static bool? revealmap
-        {
-            get
-            {
-                if (jo == null || !jo.ContainsKey("reveal_map")) return null;
-                return (bool)jo["reveal_map"];
-            }
-            set
-            {
-                if (jo == null) return;
-                hasBeenChanged = true;
-                jo["reveal_map"] = value;
-            }
-        }
-        public static bool? forcelight
-        {
-            get
-            {
-                if (jo == null || !jo.ContainsKey("force_light")) return null;
-                return (bool)jo["force_light"];
-            }
-            set
-            {
-                if (jo == null) return;
-                hasBeenChanged = true;
-                jo["force_light"] = value;
-            }
-        }
-        public static bool? bake
-        {
-            get
-            {
-                if (jo == null || !jo.ContainsKey("bake")) return null;
-                return (bool)jo["bake"];
-            }
-            set
-            {
-                if (jo == null) return;
-                hasBeenChanged = true;
-                jo["bake"] = value;
-            }
-        }
-        public static bool? encrypt
-        {
-            get
-            {
-                if (jo == null || !jo.ContainsKey("encrypt")) return null;
-                return (bool)jo["encrypt"];
-            }
-            set
-            {
-                if (jo == null) return;
-                hasBeenChanged = true;
-                jo["devtools"] = value;
-            }
-        }
+    }
+    public class edtSetup
+    {
+        public string start_map;
+        public bool skip_title;
+        public int force_selected_character;
+        public bool no_rain;
+        public bool devtools;
+        public int cheat_karma;
+        public bool reveal_map;
+        public bool force_light;
+        public bool bake;
+        public bool encrypt;
     }
 }

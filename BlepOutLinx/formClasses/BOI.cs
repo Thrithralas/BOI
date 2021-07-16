@@ -7,6 +7,9 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Linq;
 using Blep.Backend;
+using System.Runtime.InteropServices;
+
+
 
 namespace Blep
 {
@@ -21,7 +24,7 @@ namespace Blep
         public BlepOut()
         {
 #warning Nuking nearing completion
-            InitializeComponent();            
+            InitializeComponent();
             this.Text = this.Text.Replace("<VersionNumber>", VersionNumber);
             firstshow = true;
             MaskModeSelect.Items.AddRange(new object[] {Maskmode.Names, Maskmode.Tags, Maskmode.NamesAndTags});
@@ -33,27 +36,6 @@ namespace Blep
             BoiConfigManager.ReadConfig();
             UpdateTargetPath(BoiConfigManager.TarPath);
             firstshow = false;
-            if (File.Exists(Path.Combine(RootPath, "BepInEx", "LogOutput.log")))
-            {
-                string[] lans = File.ReadAllLines(Path.Combine(RootPath, "BepInEx", "LogOutput.log"));
-                for (int cuwo = 0; cuwo < lans.Length; cuwo++)
-                {
-                    string scrpyr = lans[cuwo];
-                    if (scrpyr.Contains("Here be dragons!"))
-                    {
-
-                        Wood.WriteLine("Dragon thoughts found. Saying hi.");
-                        goto iolaa;
-                    }
-                }
-            iolaa:
-                {
-                    Wood.WriteLine("...");
-                    Wood.WriteLine("To you and your parent, greetings. May your work persist for as long as we do.");
-                    Wood.WriteLine("Wish you all well. Bzz!");
-                }
-            }
-            //if (VoiceOfBees.ModEntryList.Count > 0) { VoiceOfBees.ModEntryList[0].TryDownload(ModFolder); }
         }
         
         /// <summary>
@@ -157,7 +139,6 @@ namespace Blep
             foreach (var mod in Donkey.cargo) { if (ModSelectedByMask(mask, mod)) Modlist.Items.Add(mod); Modlist.SetItemChecked(Modlist.Items.Count - 1, mod.enabled); }
             Modlist.ItemCheck += Modlist_ItemCheck;
         }
-
         /// <summary>
         /// Returns if a <see cref="ModRelay"/> is selected by a given mask.
         /// </summary>
@@ -201,7 +182,7 @@ namespace Blep
         /// <summary>
         /// Gets <see cref="FolderStructureState"/> for currently selected path.
         /// </summary>
-        private static FolderStructureState currentStructureState 
+        public static FolderStructureState currentStructureState 
         {
             get
             {
@@ -213,7 +194,7 @@ namespace Blep
         }
 
         [Flags]
-        private enum FolderStructureState
+        public enum FolderStructureState
         {
             BlepFound = 1,
             GameFound = 2
@@ -390,7 +371,6 @@ namespace Blep
         /// <param name="e"></param>
         private void Modlist_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-#warning readd invalid mod warnings, additional pubstunt check
             var tm = Modlist.Items[e.Index] as ModRelay;
             if (Donkey.AintThisPS(tm.AssociatedModData.OrigLocation.FullName))
             {
@@ -556,5 +536,9 @@ namespace Blep
             };
             label5.Text = possible_lines[r.Next(0, possible_lines.Length)];
         }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Mono.Cecil;
+using System.Runtime.InteropServices;
+
 
 namespace Blep.Backend
 {
@@ -113,9 +115,11 @@ namespace Blep.Backend
         public static bool TryDeliver(int tIndex)
         {
             if (tIndex < 0 || tIndex >= cargo.Count) return false;
+            Wood.WriteLine($"Donkey: delivering {cargo[tIndex]}...");
             try
             {
                 cargo[tIndex].Enable();
+                Wood.WriteLine($"Donkey: {cargo[tIndex]} delivered.");
                 return true;
             }
             catch (Exception e)
@@ -147,9 +151,11 @@ namespace Blep.Backend
         public static bool TryRetract(int tIndex)
         {
             if (tIndex < 0 || tIndex >= cargo.Count) return false;
+            Wood.WriteLine($"Donkey: retracting {cargo[tIndex]}...");
             try
             {
                 cargo[tIndex].Disable();
+                Wood.WriteLine($"Donkey: retracted {cargo[tIndex]}");
                 return true;
             }
             catch (Exception e)

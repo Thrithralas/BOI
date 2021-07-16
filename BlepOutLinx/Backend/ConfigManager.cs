@@ -26,11 +26,11 @@ namespace Blep.Backend
                 Wood.WriteLine(joe);
                 Wood.Unindent();
             }
-            catch (IOException ioe)
+            catch (Exception e)
             {
                 Wood.WriteLine("ERROR OPENING BOI CONFIG FILE:");
                 Wood.Indent();
-                Wood.WriteLine(ioe);
+                Wood.WriteLine(e);
                 Wood.Unindent();
             }
         }
