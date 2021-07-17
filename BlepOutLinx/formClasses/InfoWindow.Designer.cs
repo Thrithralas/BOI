@@ -33,7 +33,6 @@
             this.tabInfo = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.tabTypes = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label7 = new System.Windows.Forms.Label();
@@ -71,6 +70,9 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
             this.TabControl.SuspendLayout();
             this.tabInfo.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -95,7 +97,7 @@
             this.TabControl.Location = new System.Drawing.Point(12, 12);
             this.TabControl.Name = "TabControl";
             this.TabControl.SelectedIndex = 0;
-            this.TabControl.Size = new System.Drawing.Size(370, 377);
+            this.TabControl.Size = new System.Drawing.Size(370, 367);
             this.TabControl.TabIndex = 0;
             // 
             // tabInfo
@@ -104,7 +106,7 @@
             this.tabInfo.Location = new System.Drawing.Point(4, 22);
             this.tabInfo.Name = "tabInfo";
             this.tabInfo.Padding = new System.Windows.Forms.Padding(3);
-            this.tabInfo.Size = new System.Drawing.Size(362, 351);
+            this.tabInfo.Size = new System.Drawing.Size(362, 341);
             this.tabInfo.TabIndex = 0;
             this.tabInfo.Text = "Information";
             this.tabInfo.UseVisualStyleBackColor = true;
@@ -114,17 +116,25 @@
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.AutoSize = true;
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label29, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label28, 0, 2);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 6);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
-            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowCount = 7;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(350, 339);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(350, 377);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
@@ -141,17 +151,6 @@
             this.label1.Text = "GENERAL INFO";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Location = new System.Drawing.Point(6, 23);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(338, 313);
-            this.label2.TabIndex = 1;
-            this.label2.Text = resources.GetString("label2.Text");
-            // 
             // tabTypes
             // 
             this.tabTypes.AutoScroll = true;
@@ -160,7 +159,7 @@
             this.tabTypes.Margin = new System.Windows.Forms.Padding(5);
             this.tabTypes.Name = "tabTypes";
             this.tabTypes.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTypes.Size = new System.Drawing.Size(362, 351);
+            this.tabTypes.Size = new System.Drawing.Size(362, 337);
             this.tabTypes.TabIndex = 1;
             this.tabTypes.Text = "Mod types";
             this.tabTypes.UseVisualStyleBackColor = true;
@@ -195,7 +194,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.19277F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.90361F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 21.68675F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(350, 339);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(350, 325);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // label7
@@ -208,7 +207,7 @@
             this.label7.Location = new System.Drawing.Point(79, 4);
             this.label7.Margin = new System.Windows.Forms.Padding(0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(267, 39);
+            this.label7.Size = new System.Drawing.Size(267, 37);
             this.label7.TabIndex = 4;
             this.label7.Text = "Files that BOI can not determine the type of.\r\nGo into BepInEx\\Plugins with their" +
     " original names when enabled.\r\n";
@@ -223,7 +222,7 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label3.Location = new System.Drawing.Point(7, 4);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(68, 39);
+            this.label3.Size = new System.Drawing.Size(68, 37);
             this.label3.TabIndex = 0;
             this.label3.Text = "Unknown";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -235,9 +234,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(7, 262);
+            this.label6.Location = new System.Drawing.Point(7, 251);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(68, 73);
+            this.label6.Size = new System.Drawing.Size(68, 70);
             this.label6.TabIndex = 3;
             this.label6.Text = "Invalid";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -248,10 +247,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(79, 262);
+            this.label10.Location = new System.Drawing.Point(79, 251);
             this.label10.Margin = new System.Windows.Forms.Padding(0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(267, 73);
+            this.label10.Size = new System.Drawing.Size(267, 70);
             this.label10.TabIndex = 7;
             this.label10.Text = "These mods are likely to not function correctly with BepInEx. They can still be e" +
     "nabled as patches, but expect an instant crash for most of them.";
@@ -264,9 +263,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label19.Location = new System.Drawing.Point(7, 44);
+            this.label19.Location = new System.Drawing.Point(7, 42);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(68, 54);
+            this.label19.Size = new System.Drawing.Size(68, 52);
             this.label19.TabIndex = 8;
             this.label19.Text = "BepPlugin";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -277,9 +276,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(82, 44);
+            this.label20.Location = new System.Drawing.Point(82, 42);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(261, 54);
+            this.label20.Size = new System.Drawing.Size(261, 52);
             this.label20.TabIndex = 9;
             this.label20.Text = "Native BepInEx plugins. Currently, there is very few out there, but this fact mig" +
     "ht change soon.\r\nGo into BepInEx\\Plugins with their original names when enabled." +
@@ -293,9 +292,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(7, 176);
+            this.label5.Location = new System.Drawing.Point(7, 169);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(68, 85);
+            this.label5.Size = new System.Drawing.Size(68, 81);
             this.label5.TabIndex = 2;
             this.label5.Text = "Patch";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -307,9 +306,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(7, 99);
+            this.label4.Location = new System.Drawing.Point(7, 95);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 76);
+            this.label4.Size = new System.Drawing.Size(68, 73);
             this.label4.TabIndex = 1;
             this.label4.Text = "Partmod";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -320,10 +319,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label9.Location = new System.Drawing.Point(79, 176);
+            this.label9.Location = new System.Drawing.Point(79, 169);
             this.label9.Margin = new System.Windows.Forms.Padding(0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(267, 85);
+            this.label9.Size = new System.Drawing.Size(267, 81);
             this.label9.TabIndex = 6;
             this.label9.Text = resources.GetString("label9.Text");
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -335,10 +334,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label8.Location = new System.Drawing.Point(79, 99);
+            this.label8.Location = new System.Drawing.Point(79, 95);
             this.label8.Margin = new System.Windows.Forms.Padding(0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(267, 76);
+            this.label8.Size = new System.Drawing.Size(267, 73);
             this.label8.TabIndex = 5;
             this.label8.Text = "Partiality mods, one of the most common mod types. Usually do not directly confli" +
     "ct with each other (there are exceptions).\r\nGo into BepInEx\\Plugins with their o" +
@@ -352,7 +351,7 @@
             this.tabLinks.Location = new System.Drawing.Point(4, 22);
             this.tabLinks.Name = "tabLinks";
             this.tabLinks.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLinks.Size = new System.Drawing.Size(362, 351);
+            this.tabLinks.Size = new System.Drawing.Size(362, 337);
             this.tabLinks.TabIndex = 2;
             this.tabLinks.Text = "Links";
             this.tabLinks.UseVisualStyleBackColor = true;
@@ -570,7 +569,7 @@
             this.tabTools.Location = new System.Drawing.Point(4, 22);
             this.tabTools.Name = "tabTools";
             this.tabTools.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTools.Size = new System.Drawing.Size(362, 351);
+            this.tabTools.Size = new System.Drawing.Size(362, 337);
             this.tabTools.TabIndex = 3;
             this.tabTools.Text = "Tools";
             this.tabTools.UseVisualStyleBackColor = true;
@@ -605,7 +604,7 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.51917F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.13864F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(350, 339);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(350, 325);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // label27
@@ -616,9 +615,9 @@
             this.label27.AutoSize = true;
             this.label27.BackColor = System.Drawing.SystemColors.Window;
             this.tableLayoutPanel5.SetColumnSpan(this.label27, 4);
-            this.label27.Location = new System.Drawing.Point(65, 246);
+            this.label27.Location = new System.Drawing.Point(65, 235);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(281, 92);
+            this.label27.Size = new System.Drawing.Size(281, 89);
             this.label27.TabIndex = 8;
             this.label27.Text = resources.GetString("label27.Text");
             this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -634,7 +633,7 @@
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label17.Location = new System.Drawing.Point(65, 1);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(281, 45);
+            this.label17.Size = new System.Drawing.Size(281, 43);
             this.label17.TabIndex = 0;
             this.label17.Text = "Options && Additional tools";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -647,9 +646,9 @@
             this.label18.AutoSize = true;
             this.label18.BackColor = System.Drawing.SystemColors.Window;
             this.tableLayoutPanel5.SetColumnSpan(this.label18, 4);
-            this.label18.Location = new System.Drawing.Point(65, 47);
+            this.label18.Location = new System.Drawing.Point(65, 45);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(281, 86);
+            this.label18.Size = new System.Drawing.Size(281, 82);
             this.label18.TabIndex = 1;
             this.label18.Text = resources.GetString("label18.Text");
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -662,9 +661,9 @@
             this.label22.AutoSize = true;
             this.label22.BackColor = System.Drawing.SystemColors.Window;
             this.tableLayoutPanel5.SetColumnSpan(this.label22, 4);
-            this.label22.Location = new System.Drawing.Point(65, 190);
+            this.label22.Location = new System.Drawing.Point(65, 182);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(281, 55);
+            this.label22.Size = new System.Drawing.Size(281, 52);
             this.label22.TabIndex = 3;
             this.label22.Text = "Very basic tool for fixing simple mistakes made while installing CommunicationMod" +
     "ule language packs.";
@@ -678,9 +677,9 @@
             this.label21.AutoSize = true;
             this.label21.BackColor = System.Drawing.SystemColors.Window;
             this.tableLayoutPanel5.SetColumnSpan(this.label21, 4);
-            this.label21.Location = new System.Drawing.Point(65, 134);
+            this.label21.Location = new System.Drawing.Point(65, 128);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(281, 55);
+            this.label21.Size = new System.Drawing.Size(281, 53);
             this.label21.TabIndex = 2;
             this.label21.Text = "GUI for changing values in edtSetup.json file, used by Extended devtools. Not use" +
     "ful unless you are a modder or want to mess with the game.";
@@ -693,9 +692,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label23.AutoSize = true;
             this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label23.Location = new System.Drawing.Point(4, 47);
+            this.label23.Location = new System.Drawing.Point(4, 45);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(54, 86);
+            this.label23.Size = new System.Drawing.Size(54, 82);
             this.label23.TabIndex = 4;
             this.label23.Text = "CRS";
             this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -707,9 +706,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label24.AutoSize = true;
             this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label24.Location = new System.Drawing.Point(4, 134);
+            this.label24.Location = new System.Drawing.Point(4, 128);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(54, 55);
+            this.label24.Size = new System.Drawing.Size(54, 53);
             this.label24.TabIndex = 5;
             this.label24.Text = "EDT";
             this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -721,9 +720,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label25.AutoSize = true;
             this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label25.Location = new System.Drawing.Point(4, 190);
+            this.label25.Location = new System.Drawing.Point(4, 182);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(54, 55);
+            this.label25.Size = new System.Drawing.Size(54, 52);
             this.label25.TabIndex = 6;
             this.label25.Text = "CM";
             this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -735,24 +734,61 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label26.AutoSize = true;
             this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label26.Location = new System.Drawing.Point(4, 246);
+            this.label26.Location = new System.Drawing.Point(4, 235);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(54, 92);
+            this.label26.Size = new System.Drawing.Size(54, 89);
             this.label26.TabIndex = 7;
             this.label26.Text = "Backup tool";
             this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(6, 23);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(338, 76);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Welcome to BOI <VersionNumber>.\r\n\r\nThis is a mod manager tool supplementing BepIn" +
+    "Ex.\r\nThis is not a modloader.";
+            // 
+            // label28
+            // 
+            this.label28.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label28.Location = new System.Drawing.Point(6, 99);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(338, 132);
+            this.label28.TabIndex = 2;
+            this.label28.Text = resources.GetString("label28.Text");
+            // 
+            // label29
+            // 
+            this.label29.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label29.Location = new System.Drawing.Point(6, 231);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(338, 83);
+            this.label29.TabIndex = 3;
+            this.label29.Text = "Selecting target path expects game\'s main directory, not Rain World/Mods.\r\nPath w" +
+    "ill not be perceived as valid if Bepinex is not installed correctly.";
             // 
             // InfoWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(394, 401);
+            this.ClientSize = new System.Drawing.Size(394, 391);
             this.Controls.Add(this.TabControl);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(410, 440);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(410, 395);
+            this.MinimumSize = new System.Drawing.Size(410, 430);
             this.Name = "InfoWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Help & Info";
@@ -760,6 +796,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.InfoWindow_FormClosed);
             this.TabControl.ResumeLayout(false);
             this.tabInfo.ResumeLayout(false);
+            this.tabInfo.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tabTypes.ResumeLayout(false);
@@ -783,7 +820,6 @@
         private System.Windows.Forms.TabPage tabInfo;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TabPage tabTypes;
         private System.Windows.Forms.TabPage tabLinks;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
@@ -821,5 +857,8 @@
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label29;
     }
 }

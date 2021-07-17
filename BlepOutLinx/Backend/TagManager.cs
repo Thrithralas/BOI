@@ -22,15 +22,17 @@ namespace Blep.Backend
         {
             try
             {
+                Wood.WriteLine($"Reading mod tags from file: {filepath}");
                 string json = File.ReadAllText(filepath);
                 ReadTagData(json);
+                Wood.WriteLine("Mod tags loaded successfully.");
                 return true;
             }
-            catch (IOException ioe)
+            catch (Exception e)
             {
                 Wood.WriteLine($"ERROR READING TAGS FILE FROM {filepath}:");
                 Wood.Indent();
-                Wood.WriteLine(ioe);
+                Wood.WriteLine(e);
                 Wood.Unindent();
                 return false;
             }
@@ -41,20 +43,21 @@ namespace Blep.Backend
             {
                 if (!string.IsNullOrEmpty(json)) TagData = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
             }
-            catch (JsonException je)
+            catch (Exception e)
             {
                 Wood.WriteLine("ERROR PARSING TAG DATA FILE:");
                 Wood.Indent();
-                Wood.WriteLine(je);
+                Wood.WriteLine(e);
                 Wood.Unindent();
             }
             
         }
 
-        private static Dictionary<string, string> TagData { get { if (_td == null) _td = new Dictionary<string, string>(); return _td; } set => _td = value; }
+        private static Dictionary<string, string> TagData { get { _td = _td ?? new Dictionary<string, string>(); return _td; } set => _td = value; }
         private static Dictionary<string, string> _td;
 
         /// <summary>
+        /// Gets JSON for modtags.
         /// </summary>
         /// <returns>JSON to be saved.</returns>
         private static string GetTDToSave()
@@ -65,14 +68,16 @@ namespace Blep.Backend
         {
             try
             {
+                Wood.WriteLine($"Saving tag data to file: {filepath}...");
                 File.WriteAllText(filepath, GetTDToSave());
+                Wood.WriteLine("Tag data saved successfully.");
                 return true;
             }
-            catch (IOException ioe)
+            catch (Exception e)
             {
                 Wood.WriteLine($"ERROR WRITING TAGS FILE TO {filepath}:");
                 Wood.Indent();
-                Wood.WriteLine(ioe);
+                Wood.WriteLine(e);
                 Wood.Unindent();
                 return false;
             }

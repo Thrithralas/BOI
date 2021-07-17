@@ -117,18 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label2.Text" xml:space="preserve">
-    <value>BOI is a mod manager created to supplement BepInEx loader port for Rain World.
-
-This tool only recognizes Rain World folder as valid if BepInEx is installed. All mods are stored inside Rain World\Mods and copied to BepInEx\plugins or BepInEx\monomod when enabled.
-
-HOW TO USE:
-Place mods' DLL files into RainWorld\Mods folder, enable them in main window. Never forget that dependancies and README files exist.
-
-See "Mod types" tab for more info on different mod types, "Links" tab for some potentially useful directions.
-BOI also has several additional tools that can be accessed through "Options and Tools" window. Descriptions for those are in Tools tab.
-
-If you have any questions, feel free to come ask them in #modding-support of the official Rain World discord server.</value>
+  <data name="label28.Text" xml:space="preserve">
+    <value>To use this tool, you need to have bepinex installed.
+To get Bepinex, head to links section of this window, or use downloader tool accessed at the bottom of main form.
+If you are installing Bepinex manually, make sure to unpack it correctly: game's root directory should naturally have winhttp.dll and doorstop_config.ini files in it.</value>
   </data>
   <data name="label9.Text" xml:space="preserve">
     <value>Mods that would naturally patch Assembly-CSharp.dll file of the game. If two patches edit one method, they are not compatible; INCOMPATIBILITIES ARE NOT DETECTED BY BOI.

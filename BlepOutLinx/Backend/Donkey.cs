@@ -39,7 +39,7 @@ namespace Blep.Backend
         /// </summary>
         public static List<ModRelay> cargo = new List<ModRelay>();
         public static DirectoryInfo currentSourceDir;
-        public static bool FullyFunctional => ((bool)pluginsTargetPath?.Exists && (bool)mmpTargetPath?.Exists && (bool)currentSourceDir?.Exists && (bool)bepPatcherTargetPath?.Exists);
+        public static bool FullyFunctional => (pluginsTargetPath?.Exists ?? false) && (mmpTargetPath?.Exists ?? false) && (currentSourceDir?.Exists ?? false) && (bepPatcherTargetPath?.Exists ?? false);
 
         public static void SetPluginsTarget(string path) { SetPluginsTarget(new DirectoryInfo(path)); }
         public static void SetPluginsTarget (DirectoryInfo target)
@@ -186,7 +186,7 @@ namespace Blep.Backend
         /// <returns>Number of errors encountered during the operation</returns>
         public static int CriticalSweep()
         {
-            if (!FullyFunctional) return 0;
+            if (!FullyFunctional) return -1;
             int errctr = 0;
             Wood.WriteLine("Starting critsweep");
             Wood.Indent();
@@ -224,7 +224,7 @@ namespace Blep.Backend
                 }
                 catch (Exception e)
                 {
-                    Wood.WriteLine($"error encountered during critsweep; current file: {fin.Name}");
+                    Wood.WriteLine($"Error encountered during critsweep; current file: {fin.Name}");
                     Wood.WriteLine(e);
                     errctr++;
                 }
@@ -232,6 +232,42 @@ namespace Blep.Backend
             Wood.Unindent();
             Wood.WriteLine("Critsweep over.");
             return errctr;
+        }
+        /// <summary>
+        /// Brings all mods up to date if needed.
+        /// </summary>
+        /// <returns>Number of errors encountered during the operation.</returns>
+        public static int BringUpToDate()
+        {
+            if (!FullyFunctional) return -1;
+            Wood.WriteLine("Syncing mod versions.");
+            Wood.Indent();
+            var errc = 0;
+            foreach (var mod in cargo) if (mod.enabled && !BoiCustom.BOIC_Bytearr_Compare(mod.origchecksum, mod.TarCheckSum))
+                {
+                    Wood.WriteLine($"{mod} checksums not matching; bringing up to date.");
+                    var orig = mod.AssociatedModData.OrigLocation;
+                    var tar = new FileInfo(mod.TarPath);
+                    string from;
+                    string to;
+                    if (orig.LastWriteTime > tar.LastWriteTime) { from = orig.FullName; to = tar.FullName; }
+                    else { from = tar.FullName; to = orig.FullName; }
+                    try
+                    {
+                        Wood.WriteLine($"Copying [ {from} ] to [ {to} ].");
+                        File.Copy(from, to, true);
+                        Wood.WriteLine($"{mod} updated.");
+                    }
+                    catch (Exception e)
+                    {
+                        Wood.WriteLine($"Error while updating {mod}:");
+                        Wood.WriteLine(e);
+                        errc++;
+                    }
+                }
+            Wood.Unindent();
+            Wood.WriteLine($"Sync complete, {errc} errors encountered.");
+            return errc;
         }
         /// <summary>
         /// Checks if the file under a given path is Pubstunt.

@@ -4,12 +4,13 @@ namespace Blep
 {
     public partial class InfoWindow : Form
     {
-        public InfoWindow(BlepOut mainform)
+        public InfoWindow()
         {
             InitializeComponent();
-            mf = mainform;
+            TabControl.TabPages[0].VerticalScroll.Visible = true;
+            TabControl.TabPages[0].VerticalScroll.Enabled = true;
+            label2.Text = label2.Text.Replace("<VersionNumber>", BlepOut.VersionNumber);
         }
-        private BlepOut mf;
         private int hmm = 0;
 
         private void linkLabelRDB_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

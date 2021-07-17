@@ -49,6 +49,9 @@ namespace Blep
             Modlist.Enabled = false;
             RootPath = path;
             BoiConfigManager.TarPath = path;
+            Donkey.SetBepPatcherTarget(PatchersFolder);
+            Donkey.SetMmpTarget(mmFolder);
+            Donkey.SetPluginsTarget(PluginsFolder);
             if (IsMyPathCorrect) Setup();
             StatusUpdate();
         }
@@ -68,13 +71,10 @@ namespace Blep
             metafiletracker = false;
             Modlist.Items.Clear();
             outrmixmods.Clear();
-
-            Donkey.TryLoadCargo(new DirectoryInfo(ModFolder));
-            Donkey.SetBepPatcherTarget(PatchersFolder);
-            Donkey.SetMmpTarget(mmFolder);
-            Donkey.SetPluginsTarget(PluginsFolder);
             Donkey.CriticalSweep();
             PrepareModsFolder();
+            Donkey.TryLoadCargo(new DirectoryInfo(ModFolder));
+            Donkey.BringUpToDate();
             FillModList();
             Modlist.Enabled = true;
             //btnLaunch.Enabled = true;
@@ -216,10 +216,7 @@ namespace Blep
         /// <see cref="Options"/> form instance.
         /// </summary>
         private Options opwin;
-        /// <summary>
-        /// <see cref="InvalidModPopup"/> form instance.
-        /// </summary>
-        private InvalidModPopup inp;
+        
         /// <summary>
         /// <see cref="InfoWindow"/> form instance.
         /// </summary>
@@ -339,7 +336,7 @@ namespace Blep
         /// <param name="e">Unused.</param>
         private void btn_Help_Click(object sender, EventArgs e)
         {
-            if (iw == null || iw.IsDisposed) iw = new Blep.InfoWindow(this);
+            if (iw == null || iw.IsDisposed) iw = new InfoWindow();
             iw.Show();
         }
         /// <summary>
@@ -536,9 +533,5 @@ namespace Blep
             };
             label5.Text = possible_lines[r.Next(0, possible_lines.Length)];
         }
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
     }
 }

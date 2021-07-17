@@ -246,7 +246,7 @@ namespace Blep
         private string langinmods => Path.Combine(BlepOut.ModFolder + "Language");
 
         //backups
-        private bool DoBUelmUpdates = true;
+        
         private void BackupRelatedBtnClick(object sender, EventArgs e)
         {
             if (!BlepOut.IsMyPathCorrect) return;
@@ -294,12 +294,10 @@ namespace Blep
         }
         private void FillBars()
         {
-            DoBUelmUpdates = false;
             BackupManager.UserDataStateRelay udsr = (BackupManager.UserDataStateRelay)listBackups.SelectedItem;
             NameBox.Text = udsr?.UserDefinedName ?? string.Empty;
             NoteBox.Text = udsr?.UserNotes ?? string.Empty;
-            labelBUcreationTime.Text = udsr?.DateTimeString;
-            DoBUelmUpdates = true;
+            labelBUcreationTime.Text = udsr?.DateTimeString;   
         }
 
         private void BackupSearchBar_TextChanged(object sender, EventArgs e)
