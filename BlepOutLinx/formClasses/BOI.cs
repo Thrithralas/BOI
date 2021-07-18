@@ -10,7 +10,6 @@ using Blep.Backend;
 using System.Runtime.InteropServices;
 
 
-
 namespace Blep
 {
     /// <summary>
@@ -500,7 +499,7 @@ namespace Blep
         }
         private AUDBBrowser browser;
 
-        public static string VersionNumber => "0.1.5+";
+        public static string VersionNumber => "0.1.6";
 
         private void label5_Click(object sender, EventArgs e)
         {
@@ -536,7 +535,7 @@ namespace Blep
                 "Vaccinated and ready to reassemble",
                 "How much of these trash jokes can you endure?",
                 "Can't even swear in a public use app",
-                "This is actually a copy of Slime",
+                "This is actually a ripoff from Slime",
                 "I am the real turtle road",
 
             };
