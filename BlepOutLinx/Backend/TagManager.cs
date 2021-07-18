@@ -109,7 +109,6 @@ namespace Blep.Backend
         {
             return System.Text.RegularExpressions.Regex.Split(GetTagString(modname), ", |\n|,", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         }
-
         public static void TagCleanup(string[] modnames)
         {
             Dictionary<string, string> ndic = new Dictionary<string, string>();

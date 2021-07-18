@@ -90,7 +90,7 @@ namespace Blep.Backend
 
         public static EUModType GetModType(string path)
         {
-            
+
             try
             {
                 using (ModuleDefinition md = ModuleDefinition.ReadModule(path))
@@ -98,15 +98,12 @@ namespace Blep.Backend
                     return GetModType(md);
                 }
             }
-            catch (IOException ioe)
+            catch (Exception e)
             {
-                Wood.WriteLine("ERROR CHECKING ASSEMBLY TYPE: IOException occured");
-                Wood.Indent();
-                Wood.WriteLine(ioe);
-                Wood.Unindent();
+                Wood.WriteLine($"ERROR CHECKING MODTYPE FOR {path}");
+                Wood.WriteLine(e);
                 return EUModType.Unknown;
             }
-
         }
 
         public static void CheckThisType(TypeDefinition td, ref ModTypeFlags state)

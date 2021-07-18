@@ -45,7 +45,7 @@ namespace Blep
             labelEntryDescription.Text = currEntry?.description ?? string.Empty;
             labelEntryName.Text = currEntry?.name ?? string.Empty;
             listDeps.Items.Clear();
-            if (currEntry?.deps != null) foreach (var dep in currEntry.deps) listDeps.Items.Add(currEntry);
+            if (currEntry?.deps != null) foreach (var dep in currEntry.deps) listDeps.Items.Add(dep);
             labelOperationStatus.Text = "[Idle]";
         }
 

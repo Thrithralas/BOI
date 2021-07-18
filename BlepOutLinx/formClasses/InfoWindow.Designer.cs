@@ -33,6 +33,9 @@
             this.tabInfo = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
             this.tabTypes = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label7 = new System.Windows.Forms.Label();
@@ -70,9 +73,6 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
             this.TabControl.SuspendLayout();
             this.tabInfo.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -151,6 +151,44 @@
             this.label1.Text = "GENERAL INFO";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(6, 23);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(338, 76);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Welcome to BOI <VersionNumber>.\r\n\r\nThis is a mod manager tool supplementing BepIn" +
+    "Ex.\r\nThis is not a modloader.";
+            // 
+            // label29
+            // 
+            this.label29.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label29.Location = new System.Drawing.Point(6, 265);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(338, 49);
+            this.label29.TabIndex = 3;
+            this.label29.Text = "Selecting target path expects game\'s main directory, not Rain World/Mods.\r\nPath w" +
+    "ill not be perceived as valid if Bepinex is not installed correctly.";
+            // 
+            // label28
+            // 
+            this.label28.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label28.Location = new System.Drawing.Point(6, 99);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(338, 166);
+            this.label28.TabIndex = 2;
+            this.label28.Text = resources.GetString("label28.Text");
+            // 
             // tabTypes
             // 
             this.tabTypes.AutoScroll = true;
@@ -159,7 +197,7 @@
             this.tabTypes.Margin = new System.Windows.Forms.Padding(5);
             this.tabTypes.Name = "tabTypes";
             this.tabTypes.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTypes.Size = new System.Drawing.Size(362, 337);
+            this.tabTypes.Size = new System.Drawing.Size(362, 341);
             this.tabTypes.TabIndex = 1;
             this.tabTypes.Text = "Mod types";
             this.tabTypes.UseVisualStyleBackColor = true;
@@ -351,7 +389,7 @@
             this.tabLinks.Location = new System.Drawing.Point(4, 22);
             this.tabLinks.Name = "tabLinks";
             this.tabLinks.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLinks.Size = new System.Drawing.Size(362, 337);
+            this.tabLinks.Size = new System.Drawing.Size(362, 341);
             this.tabLinks.TabIndex = 2;
             this.tabLinks.Text = "Links";
             this.tabLinks.UseVisualStyleBackColor = true;
@@ -569,7 +607,7 @@
             this.tabTools.Location = new System.Drawing.Point(4, 22);
             this.tabTools.Name = "tabTools";
             this.tabTools.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTools.Size = new System.Drawing.Size(362, 337);
+            this.tabTools.Size = new System.Drawing.Size(362, 341);
             this.tabTools.TabIndex = 3;
             this.tabTools.Text = "Tools";
             this.tabTools.UseVisualStyleBackColor = true;
@@ -740,44 +778,6 @@
             this.label26.TabIndex = 7;
             this.label26.Text = "Backup tool";
             this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(6, 23);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(338, 76);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Welcome to BOI <VersionNumber>.\r\n\r\nThis is a mod manager tool supplementing BepIn" +
-    "Ex.\r\nThis is not a modloader.";
-            // 
-            // label28
-            // 
-            this.label28.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label28.Location = new System.Drawing.Point(6, 99);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(338, 132);
-            this.label28.TabIndex = 2;
-            this.label28.Text = resources.GetString("label28.Text");
-            // 
-            // label29
-            // 
-            this.label29.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label29.Location = new System.Drawing.Point(6, 231);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(338, 83);
-            this.label29.TabIndex = 3;
-            this.label29.Text = "Selecting target path expects game\'s main directory, not Rain World/Mods.\r\nPath w" +
-    "ill not be perceived as valid if Bepinex is not installed correctly.";
             // 
             // InfoWindow
             // 

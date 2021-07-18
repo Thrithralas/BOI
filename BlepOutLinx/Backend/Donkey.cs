@@ -39,7 +39,7 @@ namespace Blep.Backend
         /// </summary>
         public static List<ModRelay> cargo = new List<ModRelay>();
         public static DirectoryInfo currentSourceDir;
-        public static bool FullyFunctional => (pluginsTargetPath?.Exists ?? false) && (mmpTargetPath?.Exists ?? false) && (currentSourceDir?.Exists ?? false) && (bepPatcherTargetPath?.Exists ?? false);
+        public static bool FullyFunctional => (pluginsTargetPath?.Exists ?? false) && (currentSourceDir?.Exists ?? false) && (bepPatcherTargetPath?.Exists ?? false);
 
         public static void SetPluginsTarget(string path) { SetPluginsTarget(new DirectoryInfo(path)); }
         public static void SetPluginsTarget (DirectoryInfo target)

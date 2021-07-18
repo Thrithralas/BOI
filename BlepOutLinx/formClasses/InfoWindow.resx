@@ -120,7 +120,9 @@
   <data name="label28.Text" xml:space="preserve">
     <value>To use this tool, you need to have bepinex installed.
 To get Bepinex, head to links section of this window, or use downloader tool accessed at the bottom of main form.
-If you are installing Bepinex manually, make sure to unpack it correctly: game's root directory should naturally have winhttp.dll and doorstop_config.ini files in it.</value>
+If you are installing Bepinex manually, make sure to unpack it correctly. 
+Game's root directory should naturally have winhttp.dll and doorstop_config.ini files in it.
+You can also always use "Browse AUDB" tool to install/update Bepinex in one click.</value>
   </data>
   <data name="label9.Text" xml:space="preserve">
     <value>Mods that would naturally patch Assembly-CSharp.dll file of the game. If two patches edit one method, they are not compatible; INCOMPATIBILITIES ARE NOT DETECTED BY BOI.

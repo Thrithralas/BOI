@@ -59,7 +59,7 @@ namespace Blep
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 129F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 132F));
             this.tableLayoutPanel1.Controls.Add(this.btn_InstallBep, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.labelEntryName, 5, 1);
             this.tableLayoutPanel1.Controls.Add(this.labelEntryAuthors, 5, 2);
@@ -93,10 +93,10 @@ namespace Blep
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.SetColumnSpan(this.btn_InstallBep, 2);
-            this.btn_InstallBep.Location = new System.Drawing.Point(121, 1);
+            this.btn_InstallBep.Location = new System.Drawing.Point(120, 1);
             this.btn_InstallBep.Margin = new System.Windows.Forms.Padding(0);
             this.btn_InstallBep.Name = "btn_InstallBep";
-            this.btn_InstallBep.Size = new System.Drawing.Size(125, 45);
+            this.btn_InstallBep.Size = new System.Drawing.Size(123, 45);
             this.btn_InstallBep.TabIndex = 15;
             this.btn_InstallBep.Text = "Install bepinex";
             this.btn_InstallBep.UseVisualStyleBackColor = true;
@@ -109,10 +109,10 @@ namespace Blep
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelEntryName.AutoSize = true;
             this.labelEntryName.BackColor = System.Drawing.Color.White;
-            this.labelEntryName.Location = new System.Drawing.Point(329, 48);
+            this.labelEntryName.Location = new System.Drawing.Point(326, 48);
             this.labelEntryName.Margin = new System.Windows.Forms.Padding(1);
             this.labelEntryName.Name = "labelEntryName";
-            this.labelEntryName.Size = new System.Drawing.Size(129, 38);
+            this.labelEntryName.Size = new System.Drawing.Size(132, 38);
             this.labelEntryName.TabIndex = 6;
             this.labelEntryName.Text = "[name]";
             this.labelEntryName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -124,10 +124,10 @@ namespace Blep
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelEntryAuthors.AutoSize = true;
             this.labelEntryAuthors.BackColor = System.Drawing.Color.White;
-            this.labelEntryAuthors.Location = new System.Drawing.Point(329, 89);
+            this.labelEntryAuthors.Location = new System.Drawing.Point(326, 89);
             this.labelEntryAuthors.Margin = new System.Windows.Forms.Padding(1);
             this.labelEntryAuthors.Name = "labelEntryAuthors";
-            this.labelEntryAuthors.Size = new System.Drawing.Size(129, 38);
+            this.labelEntryAuthors.Size = new System.Drawing.Size(132, 38);
             this.labelEntryAuthors.TabIndex = 7;
             this.labelEntryAuthors.Text = "[authors]";
             this.labelEntryAuthors.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -139,11 +139,11 @@ namespace Blep
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelEntryDescription.AutoSize = true;
             this.labelEntryDescription.BackColor = System.Drawing.Color.White;
-            this.labelEntryDescription.Location = new System.Drawing.Point(329, 130);
+            this.labelEntryDescription.Location = new System.Drawing.Point(326, 130);
             this.labelEntryDescription.Margin = new System.Windows.Forms.Padding(1);
             this.labelEntryDescription.Name = "labelEntryDescription";
             this.tableLayoutPanel1.SetRowSpan(this.labelEntryDescription, 2);
-            this.labelEntryDescription.Size = new System.Drawing.Size(129, 111);
+            this.labelEntryDescription.Size = new System.Drawing.Size(132, 111);
             this.labelEntryDescription.TabIndex = 8;
             this.labelEntryDescription.Text = "[description]";
             this.labelEntryDescription.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -154,7 +154,7 @@ namespace Blep
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(247, 129);
+            this.label2.Location = new System.Drawing.Point(244, 129);
             this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
             this.tableLayoutPanel1.SetRowSpan(this.label2, 2);
@@ -169,7 +169,7 @@ namespace Blep
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(247, 88);
+            this.label3.Location = new System.Drawing.Point(244, 88);
             this.label3.Margin = new System.Windows.Forms.Padding(0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 40);
@@ -183,7 +183,7 @@ namespace Blep
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(247, 47);
+            this.label1.Location = new System.Drawing.Point(244, 47);
             this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 40);
@@ -199,11 +199,11 @@ namespace Blep
             this.tableLayoutPanel1.SetColumnSpan(this.listAUDBEntries, 2);
             this.listAUDBEntries.FormattingEnabled = true;
             this.listAUDBEntries.IntegralHeight = false;
-            this.listAUDBEntries.Location = new System.Drawing.Point(122, 48);
+            this.listAUDBEntries.Location = new System.Drawing.Point(121, 48);
             this.listAUDBEntries.Margin = new System.Windows.Forms.Padding(1);
             this.listAUDBEntries.Name = "listAUDBEntries";
             this.tableLayoutPanel1.SetRowSpan(this.listAUDBEntries, 5);
-            this.listAUDBEntries.Size = new System.Drawing.Size(123, 267);
+            this.listAUDBEntries.Size = new System.Drawing.Size(121, 267);
             this.listAUDBEntries.TabIndex = 0;
             this.listAUDBEntries.SelectedIndexChanged += new System.EventHandler(this.listAUDBEntries_SelectedIndexChanged);
             // 
@@ -217,7 +217,7 @@ namespace Blep
             this.label5.Location = new System.Drawing.Point(1, 47);
             this.label5.Margin = new System.Windows.Forms.Padding(0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(119, 40);
+            this.label5.Size = new System.Drawing.Size(118, 40);
             this.label5.TabIndex = 12;
             this.label5.Text = "Dependencies";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -234,7 +234,7 @@ namespace Blep
             this.listDeps.Margin = new System.Windows.Forms.Padding(1);
             this.listDeps.Name = "listDeps";
             this.tableLayoutPanel1.SetRowSpan(this.listDeps, 4);
-            this.listDeps.Size = new System.Drawing.Size(117, 226);
+            this.listDeps.Size = new System.Drawing.Size(116, 226);
             this.listDeps.TabIndex = 13;
             // 
             // labelOperationStatus
@@ -245,10 +245,10 @@ namespace Blep
             this.labelOperationStatus.AutoSize = true;
             this.labelOperationStatus.BackColor = System.Drawing.Color.White;
             this.labelOperationStatus.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelOperationStatus.Location = new System.Drawing.Point(329, 244);
+            this.labelOperationStatus.Location = new System.Drawing.Point(326, 244);
             this.labelOperationStatus.Margin = new System.Windows.Forms.Padding(1);
             this.labelOperationStatus.Name = "labelOperationStatus";
-            this.labelOperationStatus.Size = new System.Drawing.Size(129, 71);
+            this.labelOperationStatus.Size = new System.Drawing.Size(132, 71);
             this.labelOperationStatus.TabIndex = 10;
             this.labelOperationStatus.Text = "[opstatus]";
             this.labelOperationStatus.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -261,7 +261,7 @@ namespace Blep
             this.label4.AutoSize = true;
             this.label4.Cursor = System.Windows.Forms.Cursors.Default;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(247, 243);
+            this.label4.Location = new System.Drawing.Point(244, 243);
             this.label4.Margin = new System.Windows.Forms.Padding(0);
             this.label4.Name = "label4";
             this.label4.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -279,7 +279,7 @@ namespace Blep
             this.buttonDownload.Location = new System.Drawing.Point(1, 1);
             this.buttonDownload.Margin = new System.Windows.Forms.Padding(0);
             this.buttonDownload.Name = "buttonDownload";
-            this.buttonDownload.Size = new System.Drawing.Size(119, 45);
+            this.buttonDownload.Size = new System.Drawing.Size(118, 45);
             this.buttonDownload.TabIndex = 9;
             this.buttonDownload.Text = "Download or update";
             this.buttonDownload.UseVisualStyleBackColor = true;
@@ -291,10 +291,10 @@ namespace Blep
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.SetColumnSpan(this.buttonRefreshEntries, 2);
-            this.buttonRefreshEntries.Location = new System.Drawing.Point(247, 1);
+            this.buttonRefreshEntries.Location = new System.Drawing.Point(244, 1);
             this.buttonRefreshEntries.Margin = new System.Windows.Forms.Padding(0);
             this.buttonRefreshEntries.Name = "buttonRefreshEntries";
-            this.buttonRefreshEntries.Size = new System.Drawing.Size(212, 45);
+            this.buttonRefreshEntries.Size = new System.Drawing.Size(215, 45);
             this.buttonRefreshEntries.TabIndex = 4;
             this.buttonRefreshEntries.Text = "Refresh list";
             this.buttonRefreshEntries.UseVisualStyleBackColor = true;
@@ -311,7 +311,6 @@ namespace Blep
             this.Name = "AUDBBrowser";
             this.ShowIcon = false;
             this.Text = "Browse AUDB";
-            this.Activated += new System.EventHandler(this.RefreshTriggered);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

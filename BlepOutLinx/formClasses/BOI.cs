@@ -65,34 +65,42 @@ namespace Blep
         private void Setup()
         {
             Wood.WriteLine("Path valid, starting setup " + DateTime.Now);
-            Wood.Indent();
             PubstuntFound = false;
             MixmodsFound = false;
             metafiletracker = false;
             Modlist.Items.Clear();
             outrmixmods.Clear();
-            Donkey.CriticalSweep();
-            PrepareModsFolder();
-            Donkey.TryLoadCargo(new DirectoryInfo(ModFolder));
-            Donkey.BringUpToDate();
-            FillModList();
-            Modlist.Enabled = true;
-            //btnLaunch.Enabled = true;
-            TargetSelect.SelectedPath = RootPath;
-            if (PubstuntFound && firstshow)
+            Wood.Indent();
+            try
             {
-                PubstuntInfoPopup popup;
-                popup = new PubstuntInfoPopup();
-                AddOwnedForm(popup);
-                popup.Show();
+                PrepareModsFolder();
+                Donkey.CriticalSweep();
+                Donkey.TryLoadCargo(new DirectoryInfo(ModFolder));
+                Donkey.BringUpToDate();
+                FillModList();
+                Modlist.Enabled = true;
+                //btnLaunch.Enabled = true;
+                TargetSelect.SelectedPath = RootPath;
+                if (PubstuntFound && firstshow)
+                {
+                    PubstuntInfoPopup popup;
+                    popup = new PubstuntInfoPopup();
+                    AddOwnedForm(popup);
+                    popup.Show();
+                }
+                if (MixmodsFound)
+                {
+                    MixmodsPopup mixmodsPopup = new Blep.MixmodsPopup(outrmixmods);
+                    AddOwnedForm(mixmodsPopup);
+                    mixmodsPopup.Show();
+                }
+                buttonClearMeta.Visible = metafiletracker;
             }
-            if (MixmodsFound)
+            catch (Exception e)
             {
-                MixmodsPopup mixmodsPopup = new Blep.MixmodsPopup(outrmixmods);
-                AddOwnedForm(mixmodsPopup);
-                mixmodsPopup.Show();
+                Wood.WriteLine("\nUNHANDLED EXCEPTION DURING SETUP!!!");
+                Wood.WriteLine(e, 1);
             }
-            buttonClearMeta.Visible = metafiletracker;
             Wood.Unindent();
         }
         /// <summary>
@@ -106,6 +114,7 @@ namespace Blep
                 Wood.WriteLine("Mods folder not found, creating.");
                 Directory.CreateDirectory(ModFolder);
             }
+            if (!Directory.Exists(mmFolder)) Directory.CreateDirectory(mmFolder);
             string[] modfldcontents = Directory.GetFiles(ModFolder);
             foreach (string path in modfldcontents)
             {
@@ -136,7 +145,7 @@ namespace Blep
         {
             Modlist.Items.Clear();
             Modlist.ItemCheck -= Modlist_ItemCheck;
-            foreach (var mod in Donkey.cargo) { if (ModSelectedByMask(mask, mod)) Modlist.Items.Add(mod); Modlist.SetItemChecked(Modlist.Items.Count - 1, mod.enabled); }
+            foreach (var mod in Donkey.cargo) { if (ModSelectedByMask(mask, mod)) { Modlist.Items.Add(mod); Modlist.SetItemChecked(Modlist.Items.Count - 1, mod.enabled); } }
             Modlist.ItemCheck += Modlist_ItemCheck;
         }
         /// <summary>
@@ -187,7 +196,7 @@ namespace Blep
             get
             {
                 FolderStructureState res = 0;
-                if (Directory.Exists(PluginsFolder) && Directory.Exists(mmFolder)) res |= FolderStructureState.BlepFound;
+                if (Directory.Exists(PluginsFolder) && Directory.Exists(PatchersFolder)) res |= FolderStructureState.BlepFound;
                 if (Directory.Exists(Path.Combine(RootPath, "RainWorld_Data"))) res |= FolderStructureState.GameFound;
                 return res;
             }
