@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Linq;
 using Blep.Backend;
 using System.Runtime.InteropServices;
-
+using System.Threading;
 
 namespace Blep
 {
@@ -74,7 +74,7 @@ namespace Blep
             {
                 PrepareModsFolder();
                 Donkey.CriticalSweep();
-                Donkey.TryLoadCargo(new DirectoryInfo(ModFolder));
+                Donkey.TryLoadCargoAsync(new DirectoryInfo(ModFolder));
                 Donkey.BringUpToDate();
                 FillModList();
                 Modlist.Enabled = true;
@@ -388,8 +388,8 @@ namespace Blep
                 var warning = new InvalidModPopup(this, tm.AssociatedModData.DisplayedName);
                 warning.Show();
             }
-            if (e.NewValue == CheckState.Checked) Donkey.TryDeliver(Donkey.cargo.IndexOf(tm));
-            else Donkey.TryRetract(Donkey.cargo.IndexOf(tm));
+            if (e.NewValue == CheckState.Checked) Donkey.DeliverAsync(Donkey.cargo.IndexOf(tm));
+            else Donkey.RetractAsync(Donkey.cargo.IndexOf(tm));
         }
 
         /// <summary>

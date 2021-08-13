@@ -6,7 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 using Blep.Backend;
+
 
 namespace Blep
 {
@@ -66,7 +68,7 @@ namespace Blep
 
         private void btn_InstallBep_Click(object sender, EventArgs e)
         {
-            int errc = VoiceOfBees.TryDownloadBep(BlepOut.RootPath);
+            int errc = VoiceOfBees.DownloadBepAsync(BlepOut.RootPath);
             labelOperationStatus.Text = (errc == 0) ? "BepInEx installed successfully" : $"{errc} error(s) encountered while installing!";
         }
     }

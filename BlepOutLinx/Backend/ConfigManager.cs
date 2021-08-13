@@ -44,11 +44,11 @@ namespace Blep.Backend
             {
                 Wood.WriteLine("Can not save config: nothing to write");
             }
-            catch (IOException ioe)
+            catch (Exception e)
             {
                 Wood.WriteLine("ERROR SERIALIZING BOI CONFIG FILE:");
                 Wood.Indent();
-                Wood.WriteLine(ioe);
+                Wood.WriteLine(e);
                 Wood.Unindent();
             }
         }

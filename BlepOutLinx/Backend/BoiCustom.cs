@@ -67,6 +67,4 @@ namespace Blep.Backend
             return errc;
         }
     }
-
-    
 }

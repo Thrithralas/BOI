@@ -5,8 +5,8 @@ using System.Text;
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
-
+using System.Threading.Tasks;
+using System.Threading;
 using System.Security.Cryptography;
 using System.IO;
 
@@ -96,6 +96,7 @@ namespace Blep.Backend
         /// <returns>Number of errors encountered during operation</returns>
         public static int TryDownloadBep(string RootPath)
         {
+            var start = DateTime.Now;
             int errc = 0;
             Wood.WriteLine($"Installing bepinex to {RootPath}. Total file count: {BepElements.Count}");
             Wood.Indent();
@@ -106,6 +107,34 @@ namespace Blep.Backend
             }
             Wood.Unindent();
             Wood.WriteLine($"Bep installation finished; downloaded {BepElements.Count - errc}/{BepElements.Count} files.");
+            TimeSpan ts = DateTime.Now - start;
+            Wood.WriteLine($"Elapsed time: {ts}");
+            return errc;
+        }
+        /// <summary>
+        /// Async variant of <see cref="TryDownloadBep(string)"/>
+        /// </summary>
+        /// <param name="RootPath"></param>
+        /// <returns></returns>
+        public static int DownloadBepAsync(string RootPath)
+        {
+            var start = DateTime.Now;
+            Wood.WriteLine($"Installing bepinex to {RootPath}. Total file count: {BepElements.Count}.");
+            Wood.Indent();
+            var tasklist = new List<Task<bool>>();
+            foreach (var elm in BepElements)
+            {
+                var downT = new Task<bool>(() => elm.TryDownload(RootPath));
+                downT.Start();
+                tasklist.Add(downT);
+            }
+            //Large files create chokepoints.
+            Task.WaitAll(tasklist.ToArray());
+            int errc = 0;
+            foreach (var r in tasklist) if (!r.Result) errc++; 
+            Wood.Unindent();
+            Wood.WriteLine($"Bep installation finished; downloaded {BepElements.Count - errc}/{BepElements.Count} files.");
+            Wood.WriteLine($"Elapsed time: {DateTime.Now - start}");
             return errc;
         }
 
@@ -224,6 +253,14 @@ namespace Blep.Backend
 
                 }
                 return false;
+            }
+            /// <summary>
+            /// Async wrapping for <see cref="TryDownload(string)"/>
+            /// </summary>
+            /// <param name="tarDir"></param>
+            public void DownloadAsync(string tarDir)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(x => { TryDownload(tarDir); }));
             }
             public bool Equals(AUDBEntryRelay other)
             {

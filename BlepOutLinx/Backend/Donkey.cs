@@ -5,7 +5,9 @@ using System.Text;
 using System.IO;
 using Mono.Cecil;
 using System.Runtime.InteropServices;
-
+using System.Threading.Tasks;
+using System.Threading;
+using System.Reflection;
 
 namespace Blep.Backend
 {
@@ -19,8 +21,8 @@ namespace Blep.Backend
         public static int TryLoadCargo(DirectoryInfo target)
         {
             currentSourceDir = target;
-            if (!target.Exists) return -1;
             cargo.Clear();
+            if (!target.Exists) return -1;
             var errcount = 0;
             foreach (var file in target.GetFiles("*", SearchOption.TopDirectoryOnly))
             {
@@ -34,6 +36,38 @@ namespace Blep.Backend
             }
             return errcount;
         }
+
+        public static int TryLoadCargoAsync(DirectoryInfo target)
+        {
+            Wood.WriteLine($"Attempting to load cargo from {target}.");
+            currentSourceDir = target;
+            cargo.Clear();
+            if (!target.Exists) return -1;
+            Wood.WriteLine("Path valid. ");
+            var start = DateTime.Now;
+            var tasklist = new List<Task<object>>();
+            foreach (var file in target.GetFiles("*", SearchOption.TopDirectoryOnly))
+            {
+                var nt = new Task<object>(() => Activator.CreateInstance(typeof(ModRelay), file));
+                nt.Start();
+                tasklist.Add(nt);
+            }
+            Task.WaitAll(tasklist.ToArray());
+            var errc = 0;
+            foreach (var t in tasklist)
+            {
+                if (t.Exception != null)
+                {
+                    Wood.WriteLine($"Unhandled exception during creation of a ModRelay: {t.Exception}");
+                    errc++;
+                    continue;
+                }
+                cargo.Add((ModRelay)t.Result);
+            }
+            Wood.WriteLine($"Loading complete. Time elapsed {DateTime.Now - start}");
+            return errc;
+        }
+
         /// <summary>
         /// modlist
         /// </summary>
@@ -130,6 +164,14 @@ namespace Blep.Backend
             }
         }
         /// <summary>
+        /// Async version of <see cref="TryDeliver(int)"/>
+        /// </summary>
+        /// <param name="tIndex"></param>
+        public static void DeliverAsync(int tIndex)
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(x => { TryDeliver(tIndex); }));
+        }
+        /// <summary>
         /// Enables mods by a range of indices
         /// </summary>
         /// <param name="range"></param>
@@ -142,6 +184,17 @@ namespace Blep.Backend
                 if (!TryDeliver(tIndex)) errcount++;
             }
             return errcount;
+        }
+        /// <summary>
+        /// Async version of <see cref="TryDeliverRange(IEnumerable{int})"/>
+        /// </summary>
+        /// <param name="range"></param>
+        public static void DeliverRangeAsync(IEnumerable<int> range)
+        {
+            foreach (var tIndex in range)
+            {
+                DeliverAsync(tIndex);
+            }
         }
         /// <summary>
         /// Disables a mod under selected index in <see cref="cargo"/>
@@ -166,6 +219,14 @@ namespace Blep.Backend
             }
         }
         /// <summary>
+        /// Async version of <see cref="TryRetract(int)"/>
+        /// </summary>
+        /// <param name="tIndex"></param>
+        public static void RetractAsync(int tIndex)
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(x => { TryRetract(tIndex); }));
+        }
+        /// <summary>
         /// Disables mods by a range of indices
         /// </summary>
         /// <param name="range"></param>
@@ -179,6 +240,19 @@ namespace Blep.Backend
             }
             return errcount;
         }
+        /// <summary>
+        /// Async version of <see cref="TryretractRange(IEnumerable{int})"/>
+        /// </summary>
+        /// <param name="range"></param>
+        public static void RetractRangeAsync(IEnumerable<int> range)
+        {
+            foreach (var tIndex in range)
+            {
+                RetractAsync(tIndex);
+            }
+        }
+
+        //public static List<Task<bool>> movetasks = new List<Task<bool>>();
 
         /// <summary>
         /// Deletes files from active folders that are extremely likely to crash the game instantly and absolutely should not be there
