@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
+using System.Collections.Concurrent;
 
 namespace Blep.Backend
 {
@@ -44,47 +46,92 @@ namespace Blep.Backend
         }
         public static void Write(object o)
         {
-            if (LogPath == null || !File.Exists(LogPath) || !LogPath.EndsWith(".txt"))
-            {
-                LogPath = Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt");
-            }
-            try
-            {
-                int ml = 512;
-                while (WriteQueue.Count > 0 && ml > 0) 
-                {
-                    ml--;
-                    RawWrite(WriteQueue[0]);
-                    WriteQueue.RemoveAt(0);
-                    
-                }
-            }
-            catch (IOException) { };
-            try
-            {
-                RawWrite(o);
-            }
-            catch (IOException)
-            {
-                WriteQueue.Add(o);
-            }
-        }
-        private static void RawWrite(object o)
-        {
-            Debug.Write(o);
-            string result = o?.ToString() ?? "null";
+            
             Console.Write(o);
-            File.AppendAllText(LogPath, result);
+            SpinUp();
+            WriteQueue.Enqueue(o ?? "null");
+
+//#error reimpl writing and io error handling, threaded
         }
+        
         public static void SetNewPathAndErase(string tar)
         {
             LogPath = tar;
-            if (File.Exists(tar)) File.Delete(tar);
+            File.CreateText(tar).Dispose();
         }
-        public static List<object> WriteQueue { get { _wc = _wc ?? new List<object>(); return _wc; } set { _wc = value; } }
-        private static List<Object> _wc;
-        public static string LogPath { get; set; } = string.Empty;
-        public static int IndentLevel { get { return _il; } set { _il = Math.Max(value, 0); } }
-        private static int _il = 0;
+        public static ConcurrentQueue<object> WriteQueue { get { _wc = _wc ?? new ConcurrentQueue<object>(); return _wc; } set { _wc = value; } }
+        private static ConcurrentQueue<Object> _wc = new ConcurrentQueue<object>();
+        private static ConcurrentQueue<Tuple<Exception, DateTime>> _encEx = new ConcurrentQueue<Tuple<Exception, DateTime>>();
+        public static string LogPath { get => LogTarget?.FullName; set { LogTarget = new FileInfo(value); } }
+        public static FileInfo LogTarget;
+        public static int IndentLevel { get { return _indl; } set { _indl = Math.Max(value, 0); } }
+        private static int _indl = 0;
+
+
+        public static void SpinUp()
+        {
+            Lifetime = 125;
+            if (wrThr?.IsAlive ?? false) return;
+            wrThr = new Thread(EternalWrite);
+            wrThr.IsBackground = false;
+            wrThr.Priority = ThreadPriority.BelowNormal;
+            wrThr.Start();
+        }
+        public static int Lifetime = 0;
+        public static void EternalWrite()
+        {
+            string startMessage = $"WOOD writer thread {Thread.CurrentThread.ManagedThreadId} booted up: {DateTime.Now}";
+            Console.WriteLine(startMessage);
+            WriteQueue.Enqueue(startMessage);
+            while (Lifetime > 0)
+            {
+                Thread.Sleep(250);
+                Lifetime--;
+                if (LogTarget == null) continue;
+                try
+                {
+                    using (var wt = LogTarget.AppendText())
+                    {
+                        while (!WriteQueue.IsEmpty)
+                        {
+                            if (WriteQueue.TryDequeue(out var toWrite))
+                            {
+                                //var bytesTW = Encoding.UTF8.GetBytes(toWrite.ToString());
+                                //wt.Seek(0, SeekOrigin.End);
+                                wt.Write(toWrite.ToString());
+                                wt.Flush();
+
+                            }
+                            //wt.Write(Encoding.UTF8.GetBytes(res.ToString()));
+                        }
+
+                        while (!_encEx.IsEmpty)
+                        {
+                            if (_encEx.TryDequeue(out var oldex))
+                            {
+                                //var bytesTW = Encoding.UTF8.GetBytes();
+                                //wt.Seek(0, SeekOrigin.End);
+                                wt.Write($"\nWrite exc encountered on {oldex.Item2}:\n{oldex.Item1}");
+                                wt.Flush();
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    _encEx.Enqueue(new Tuple<Exception, DateTime>(e, DateTime.Now));
+                }
+                
+            }
+            using (var wt = LogTarget.OpenWrite())
+            {
+                string endMessage = $"Logger thread {Thread.CurrentThread.ManagedThreadId} expired due to inactivity: {DateTime.Now}\n";
+                Console.WriteLine(endMessage);
+                var bytesTW = Encoding.UTF8.GetBytes(endMessage);
+                wt.Write(bytesTW, 0, bytesTW.Length);
+                wt.Flush();
+            }
+        }
+        public static Thread wrThr;
     }
 }

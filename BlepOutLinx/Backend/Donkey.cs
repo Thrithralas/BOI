@@ -20,6 +20,7 @@ namespace Blep.Backend
         /// <returns>Number of errors encountered during the operation</returns>
         public static int TryLoadCargo(DirectoryInfo target)
         {
+            var start = DateTime.Now;
             currentSourceDir = target;
             cargo.Clear();
             if (!target.Exists) return -1;
@@ -34,6 +35,7 @@ namespace Blep.Backend
                 }
                 catch (Exception e) { errcount++; Wood.WriteLine("Error checking mod entry:"); Wood.WriteLine(e); }
             }
+            Wood.WriteLine($"Sync loading complete. Time elapsed: {DateTime.Now - start}");
             return errcount;
         }
 

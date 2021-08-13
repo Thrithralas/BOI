@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using Newtonsoft.Json;
-
+using System.Threading.Tasks;
 
 namespace Blep.Backend
 {
@@ -73,7 +73,7 @@ namespace Blep.Backend
         public static bool RestoreActiveSaveFromBackup(UserDataStateRelay backup)
         {
             if (backup.Location == ActiveSave?.Location) { Wood.WriteLine("Can not copy active save into itself!"); return false; }
-            if (ActiveSave?.CurrState != UserDataStateRelay.StateState.Empty) { Wood.WriteLine("Active save not empty, will not overwrite!"); return false; };
+            if (ActiveSave?.CurrState != UserDataStateRelay.UDSRState.Empty) { Wood.WriteLine("Active save not empty, will not overwrite!"); return false; };
             try
             {
                 Wood.WriteLine("Restoring save from backup...");
@@ -181,7 +181,7 @@ namespace Blep.Backend
             /// <returns><c>true</c> if the operation was successful; <c>false</c> otherwise.</returns>
             internal bool RecordData()
             {
-                if (CurrState == StateState.Invalid) return false;
+                if (CurrState == UDSRState.Invalid) return false;
                 try
                 {
                     string outjson = JsonConvert.SerializeObject(Data, Formatting.Indented);
@@ -204,16 +204,16 @@ namespace Blep.Backend
             public DirectoryInfo Locdir { get; set; }
             public bool IsActiveSave => Location == BackupManager.ActiveSave?.Location;
 
-            public StateState CurrState
+            public UDSRState CurrState
             {
                 get
                 {
-                    if (!Locdir.Exists) return StateState.Invalid;
-                    if (Locdir.GetFiles().Length > 1) return StateState.Normal;
-                    return StateState.Empty;
+                    if (!Locdir.Exists) return UDSRState.Invalid;
+                    if (Locdir.GetFiles().Length > 1) return UDSRState.Normal;
+                    return UDSRState.Empty;
                 }
-            }            
-            public enum StateState
+            }
+            public enum UDSRState
             {
                 Invalid,
                 Empty,
@@ -226,15 +226,23 @@ namespace Blep.Backend
             /// <returns>A newly created <see cref="UserDataStateRelay"/>.</returns>
             public UserDataStateRelay CloneTo(string to)
             {
-
-                int terrc = BoiCustom.BOIC_RecursiveDirectoryCopy(Location, to);
-                Wood.WriteLine((terrc == 0) ? $"Savefolder state successfully copied to {to}" : $"Attempt to copy a savefolder from {Location} to {to} complete; total of {terrc} errors encountered.");
-                UserDataStateRelay Nudsr = new UserDataStateRelay(to)
+                var movequeue = new DirectoryInfo(Location).EnqueueRecursiveCopy(to);
+                Task.WaitAll(movequeue.ToArray());
+                int terrc = 0;// BoiCustom.BOIC_RecursiveDirectoryCopy(Location, to);
+                foreach (var movt in movequeue)
                 {
-                    CreationTime = DateTime.Now,
-                    UserDefinedName = this.UserDefinedName,
-                    UserNotes = this.UserNotes
-                };
+                    if (movt.Exception != null)
+                    {
+                        Wood.WriteLine("Error during EnqRecDir:");
+                        Wood.WriteLine(movt.Exception, 1);
+                        terrc++;
+                    }
+                }
+#warning test queued copying in practice
+                Wood.WriteLine((terrc == 0) ? $"Savefolder state successfully copied to {to}" : $"Attempt to copy a savefolder from {Location} to {to} complete; total of {terrc} errors encountered.");
+                UserDataStateRelay Nudsr = new UserDataStateRelay(to);
+                Nudsr.Data = this.Data;
+                Nudsr.Data.CreationTime = DateTime.Now;
                 return Nudsr;
             }
             public override string ToString()

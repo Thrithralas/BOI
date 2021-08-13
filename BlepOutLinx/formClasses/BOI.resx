@@ -172,7 +172,7 @@
     <value>True</value>
   </data>
   <data name="Modlist.Size" type="System.Drawing.Size, System.Drawing">
-    <value>283, 284</value>
+    <value>282, 284</value>
   </data>
   <data name="Modlist.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -307,7 +307,7 @@
     <value>191, 0</value>
   </data>
   <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>89, 52</value>
+    <value>88, 52</value>
   </data>
   <data name="label5.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -337,7 +337,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>283, 52</value>
+    <value>282, 52</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -376,7 +376,7 @@
     <value>5, 22</value>
   </data>
   <data name="labelDesc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>273, 74</value>
+    <value>272, 74</value>
   </data>
   <data name="labelDesc.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -416,7 +416,7 @@ BOI IS NOT A MODLOADER</value>
     <value>5, 2</value>
   </data>
   <data name="labelHead.Size" type="System.Drawing.Size, System.Drawing">
-    <value>273, 20</value>
+    <value>272, 20</value>
   </data>
   <data name="labelHead.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -450,7 +450,7 @@ BOI IS NOT A MODLOADER</value>
     <value>2</value>
   </data>
   <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>283, 98</value>
+    <value>282, 98</value>
   </data>
   <data name="tableLayoutPanel2.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -519,7 +519,7 @@ BOI IS NOT A MODLOADER</value>
     <value>4, 1</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>254, 40</value>
+    <value>255, 40</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -588,7 +588,7 @@ BOI IS NOT A MODLOADER</value>
     <value>130, 3</value>
   </data>
   <data name="MaskModeSelect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 21</value>
+    <value>122, 21</value>
   </data>
   <data name="MaskModeSelect.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -612,7 +612,7 @@ BOI IS NOT A MODLOADER</value>
     <value>1</value>
   </data>
   <data name="tableLayoutPanel7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>254, 28</value>
+    <value>255, 28</value>
   </data>
   <data name="tableLayoutPanel7.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -639,7 +639,7 @@ BOI IS NOT A MODLOADER</value>
     <value>4, 45</value>
   </data>
   <data name="textBox_MaskInput.Size" type="System.Drawing.Size, System.Drawing">
-    <value>254, 20</value>
+    <value>255, 20</value>
   </data>
   <data name="textBox_MaskInput.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -669,7 +669,7 @@ BOI IS NOT A MODLOADER</value>
     <value>4, 105</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>254, 46</value>
+    <value>255, 46</value>
   </data>
   <data name="label3.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -702,7 +702,7 @@ BOI IS NOT A MODLOADER</value>
     <value>4, 152</value>
   </data>
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>254, 53</value>
+    <value>255, 53</value>
   </data>
   <data name="label4.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -739,7 +739,7 @@ BOI IS NOT A MODLOADER</value>
     <value>Vertical</value>
   </data>
   <data name="TagInputBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>254, 235</value>
+    <value>255, 235</value>
   </data>
   <data name="TagInputBox.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -760,13 +760,13 @@ BOI IS NOT A MODLOADER</value>
     <value>5</value>
   </data>
   <data name="tableLayoutPanel6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>294, 4</value>
+    <value>293, 4</value>
   </data>
   <data name="tableLayoutPanel6.RowCount" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
   <data name="tableLayoutPanel6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>262, 448</value>
+    <value>263, 448</value>
   </data>
   <data name="tableLayoutPanel6.TabIndex" type="System.Int32, mscorlib">
     <value>22</value>
@@ -995,7 +995,7 @@ Install BepInEx</value>
     <value>0</value>
   </data>
   <data name="tableLayoutPanel3.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tableLayoutPanel2" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel6" Row="0" RowSpan="3" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel1" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel5" Row="3" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="Modlist" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,268" /&gt;&lt;Rows Styles="Absolute,104,Absolute,58,Percent,100,Absolute,55" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tableLayoutPanel2" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel6" Row="0" RowSpan="3" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel1" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel5" Row="3" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="Modlist" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,269" /&gt;&lt;Rows Styles="Absolute,104,Absolute,58,Percent,100,Absolute,55" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

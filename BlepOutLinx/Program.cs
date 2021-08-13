@@ -16,7 +16,7 @@ namespace Blep
             Console.WriteLine("Reminder: you can always select text in console and then copy it by pressing enter. It also pauses the app.\n");
             BlepOut Currblep = new BlepOut();
             Application.Run(Currblep);
-            
+            Backend.Wood.Lifetime = 5;
         }
     }
 }

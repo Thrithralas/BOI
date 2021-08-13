@@ -190,7 +190,6 @@ namespace Blep
                 {
                     EDTCFGDATA.cfg.force_selected_character = res;
                 }
-
             }
             else if (sender == checkBoxEDT_DISABLERAIN)
             {
@@ -302,7 +301,6 @@ namespace Blep
 
         private void BackupSearchBar_TextChanged(object sender, EventArgs e)
         {
-            
             CompileBackupList(BackupSearchBar.Text);
         }
 

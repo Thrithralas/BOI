@@ -3,6 +3,11 @@ using System.IO;
 using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Reflection;
 
 namespace Blep.Backend
 {
@@ -65,6 +70,33 @@ namespace Blep.Backend
 
             }
             return errc;
+        }
+
+        
+        public static List<Task> EnqueueRecursiveCopy(this DirectoryInfo from, string to)
+        {
+            if (from == null || to == null) throw new ArgumentNullException();
+            return EnqueueRecursiveCopy(from, new DirectoryInfo(to));
+        }
+
+        public static List<Task> EnqueueRecursiveCopy(this DirectoryInfo from, DirectoryInfo to)
+        {
+            if (from == null || to == null) throw new ArgumentNullException();
+            if (!from.Exists) throw new ArgumentException("Can not copy from a nonexistent directory!");
+            var res = new List<Task>();
+            if (!to.Exists) to.Create();
+            foreach (var sdir in from.GetDirectories("*", SearchOption.TopDirectoryOnly))
+            {
+                res.AddRange(sdir.EnqueueRecursiveCopy(Path.Combine(to.FullName, sdir.Name)));
+            }
+            foreach (var file in from.GetFiles("*", SearchOption.TopDirectoryOnly))
+            {
+                var nt = new Task(() => file.CopyTo(Path.Combine(to.FullName, file.Name)));
+                nt.Start();
+                res.Add(nt);
+            }
+
+            return res;
         }
     }
 }

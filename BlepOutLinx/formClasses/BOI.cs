@@ -22,7 +22,6 @@ namespace Blep
         /// </summary>
         public BlepOut()
         {
-#warning Nuking nearing completion
             InitializeComponent();
             this.Text = this.Text.Replace("<VersionNumber>", VersionNumber);
             firstshow = true;
@@ -33,7 +32,8 @@ namespace Blep
             outrmixmods = new List<string>();
             TagManager.ReadTagsFromFile(tagfilePath);
             BoiConfigManager.ReadConfig();
-            UpdateTargetPath(BoiConfigManager.TarPath);
+            RootPath = BoiConfigManager.TarPath;
+            //UpdateTargetPath(BoiConfigManager.TarPath);
             firstshow = false;
         }
         
