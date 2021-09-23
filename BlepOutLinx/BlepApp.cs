@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using Blep.Backend;
 
 namespace Blep
 {
@@ -21,7 +22,9 @@ namespace Blep
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var argl = args?.ToList() ?? new List<string>(); ;
+            var argl = args?.ToList() ?? new List<string>();
+            Wood.SetNewPathAndErase(Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt"));
+            Wood.WriteLine("BOI starting " + DateTime.Now);
             if (File.Exists("showConsole.txt") || argl.Contains("-nc") || argl.Contains("--new-console"))
             {
                 Backend.BoiCustom.AllocConsole();
@@ -34,14 +37,23 @@ namespace Blep
                 Console.WriteLine("\nLaunching BOI and attempting to attach parent process console.");
             }
             //enter the form
-            BlepOut Currblep = new BlepOut();
-            Application.Run(Currblep);
+            try
+            {
+                BlepOut Currblep = new BlepOut();
+                Application.Run(Currblep);
+            }
+            catch (Exception e)
+            {
+                Wood.IndentLevel = 0;
+                Wood.WriteLine("Unhandled exception in the application loop:");
+                Wood.WriteLine(e);
+            }
             //form is dead
             if (File.Exists("changelog.txt")) File.Delete("changelog.txt");
             if (argl.Contains("-nu") || argl.Contains("--no-update") || File.Exists("neverUpdate.txt")) 
-                Backend.Wood.WriteLine("Skipping self update.");
+                Wood.WriteLine("Skipping self update.");
             else TrySelfUpdate();
-            Backend.Wood.Lifetime = 5;
+            Wood.Lifetime = 5;
         }
 
         public const string REPOADDRESS = "https://api.github.com/repos/Rain-World-Modding/BOI/releases/latest";
@@ -50,7 +62,7 @@ namespace Blep
         private static async void TrySelfUpdate()
         {
             var start = DateTime.Now;
-            Backend.Wood.WriteLine($"Starting self-update: {start}");
+            Wood.WriteLine($"Starting self-update: {start}");
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             ServicePointManager.Expect100Continue = true;
             try
@@ -68,7 +80,7 @@ namespace Blep
                     var responsejson = Newtonsoft.Json.Linq.JObject.Parse(await reqTask.Result.Content.ReadAsStringAsync());
                     //good enough diff detection
                     if (DateTime.Parse((string)responsejson["published_at"]) < File.GetLastWriteTimeUtc(System.Reflection.Assembly.GetExecutingAssembly().Location)) 
-                    { Backend.Wood.WriteLine("Update not needed; youngest release is older than me."); return; }
+                    { Wood.WriteLine("Update not needed; youngest release is older than me."); return; }
                     ht.DefaultRequestHeaders.Clear();
                     ht.DefaultRequestHeaders.Add("User-Agent", "Rain-World-Modding/BOI");
                     ht.DefaultRequestHeaders.Add("Accept", "application/octet-stream");
@@ -87,12 +99,12 @@ namespace Blep
                 var xcs = new System.Diagnostics.ProcessStartInfo("cmd.exe");
                 xcs.Arguments = $"/c xcopy /Y {dumpFolder.Name} \"{Directory.GetCurrentDirectory()}\"";
                 System.Diagnostics.Process.Start(xcs);
-                Backend.Wood.WriteLine($"Self-update completed. Time elapsed: {DateTime.Now - start}");
+                Wood.WriteLine($"Self-update completed. Time elapsed: {DateTime.Now - start}");
             }
             catch (Exception e)
             {
-                Backend.Wood.WriteLine("Unhandled exception while attempting self-update:");
-                Backend.Wood.WriteLine(e, 1);
+                Wood.WriteLine("Unhandled exception while attempting self-update:");
+                Wood.WriteLine(e, 1);
             }
             
         }

@@ -25,8 +25,6 @@ namespace Blep
             firstshow = true;
             MaskModeSelect.Items.AddRange(new object[] { Maskmode.Names, Maskmode.Tags, Maskmode.NamesAndTags });
             MaskModeSelect.SelectedItem = Maskmode.NamesAndTags;
-            Wood.SetNewPathAndErase(Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt"));
-            Wood.WriteLine("BOI starting " + DateTime.Now);
             outrmixmods = new List<string>();
             TagManager.ReadTagsFromFile(tagfilePath);
             BoiConfigManager.ReadConfig();
@@ -133,7 +131,7 @@ namespace Blep
         {
             Modlist.Items.Clear();
             Modlist.ItemCheck -= Modlist_ItemCheck;
-            foreach (var mod in Donkey.cargo) { Modlist.Items.Add(mod); Modlist.SetItemChecked(Modlist.Items.Count - 1, mod.enabled); }
+            foreach (var mod in Donkey.cargo) { Modlist.Items.Add(mod); Modlist.SetItemChecked(Modlist.Items.Count - 1, mod.Enabled); }
 
             Modlist.ItemCheck += Modlist_ItemCheck;
         }
@@ -145,7 +143,7 @@ namespace Blep
         {
             Modlist.Items.Clear();
             Modlist.ItemCheck -= Modlist_ItemCheck;
-            foreach (var mod in Donkey.cargo) { if (ModSelectedByMask(mask, mod)) { Modlist.Items.Add(mod); Modlist.SetItemChecked(Modlist.Items.Count - 1, mod.enabled); } }
+            foreach (var mod in Donkey.cargo) { if (ModSelectedByMask(mask, mod)) { Modlist.Items.Add(mod); Modlist.SetItemChecked(Modlist.Items.Count - 1, mod.Enabled); } }
             Modlist.ItemCheck += Modlist_ItemCheck;
         }
         /// <summary>

@@ -25,8 +25,8 @@ namespace Blep.Backend
         public ModRelay(string path)
         {
             ModPath = path;
-            isValid = !ModData.AbsolutelyIgnore(ModPath);
-            if (isValid)
+            IsValid = !ModData.AbsolutelyIgnore(ModPath);
+            if (IsValid)
             {
                 if (Donkey.AintThisPS(path))
                 {
@@ -35,31 +35,29 @@ namespace Blep.Backend
                     return;
                 }
                 EUModType mt = GetModType(ModPath);
+                MyType = mt;
                 switch (mt)
                 {
                     case EUModType.Unknown:
-                        AssociatedModData = new ModData(path);
-                        MyType = EUModType.Unknown;
-                        break;
+                        
                     case EUModType.mmPatch:
                         AssociatedModData = new mmPatchData(path);
-                        MyType = EUModType.mmPatch;
                         break;
                     case EUModType.Partmod:
                         AssociatedModData = new PartModData(path);
-                        MyType = EUModType.Partmod;
                         break;
                     case EUModType.BepPlugin:
                         AssociatedModData = new BepPluginData(path);
-                        MyType = EUModType.BepPlugin;
                         break;
                     case EUModType.BepPatcher:
                         AssociatedModData = new BepPatcherData(path);
-                        MyType = EUModType.BepPatcher;
                         break;
                     case EUModType.Invalid:
                         AssociatedModData = new InvalidModData(path);
-                        MyType = EUModType.Invalid;
+                        break;
+                    default:
+                        AssociatedModData = new ModData(path);
+                        MyType = EUModType.Unknown;
                         break;
                 }
             }
@@ -159,7 +157,7 @@ namespace Blep.Backend
         }
         public EUModType MyType;
 
-        public byte[] origchecksum
+        public byte[] OrigChecksum
         {
             get
             {
@@ -176,7 +174,7 @@ namespace Blep.Backend
             {
                 if (AssociatedModData is InvalidModData)
                 {
-                    return origchecksum;
+                    return OrigChecksum;
                 }
                 using (FileStream fs = File.OpenRead(TarPath))
                 {
@@ -195,20 +193,20 @@ namespace Blep.Backend
 
         public string ModPath { get; set; }
         public ModData AssociatedModData { get; set; }
-        public bool isValid { get; set; }
+        public bool IsValid { get; set; }
 
-        public bool enabled
+        public bool Enabled
         {
             get { return AssociatedModData.Enabled; }
         }
         public void Enable()
         {
-            if (enabled) return;
+            if (Enabled) return;
             AssociatedModData.OrigLocation.CopyTo(TarPath);
         }
         public void Disable()
         {
-            if (!enabled) return;
+            if (!Enabled) return;
             File.Delete(TarPath);
         }
         public override string ToString()

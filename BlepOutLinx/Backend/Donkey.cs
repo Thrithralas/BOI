@@ -319,7 +319,7 @@ namespace Blep.Backend
             Wood.WriteLine("Syncing mod versions.");
             Wood.Indent();
             var errc = 0;
-            foreach (var mod in cargo) if (mod.enabled && !BoiCustom.BOIC_Bytearr_Compare(mod.origchecksum, mod.TarCheckSum))
+            foreach (var mod in cargo) if (mod.Enabled && !BoiCustom.BOIC_Bytearr_Compare(mod.OrigChecksum, mod.TarCheckSum))
                 {
                     Wood.WriteLine($"{mod} checksums not matching; bringing up to date.");
                     var orig = mod.AssociatedModData.OrigLocation;
