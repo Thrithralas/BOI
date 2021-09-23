@@ -96,22 +96,6 @@ namespace Blep.Backend
 
             return res;
         }
-        public static int CompareVersions(string vn1, string vn2)
-        {
-            var segs1 = vn1.Split('.');
-            var segs2 = vn2.Split('.');
-            for (int i = 0; i < Math.Min(segs1.Length, segs2.Length); i++)
-            {
-#warning missing parts
-                if (int.TryParse(segs1[i], out var s1) &&
-                int.TryParse(segs2[i], out var s2))
-                {
-                    var locRes = s1.CompareTo(s2);
-                    if (locRes != 0) return locRes;
-                }
-            }
-            return 0;
-        }
 
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]

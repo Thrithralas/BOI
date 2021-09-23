@@ -1,14 +1,12 @@
 ﻿using Mono.Cecil;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+//using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Linq;
 using Blep.Backend;
-using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace Blep
 {
@@ -33,7 +31,10 @@ namespace Blep
             TagManager.ReadTagsFromFile(tagfilePath);
             BoiConfigManager.ReadConfig();
             RootPath = BoiConfigManager.TarPath;
-            //UpdateTargetPath(BoiConfigManager.TarPath);
+            if (File.Exists("changelog.txt"))
+            {
+                System.Diagnostics.Process.Start("changelog.txt");
+            }
             firstshow = false;
         }
 

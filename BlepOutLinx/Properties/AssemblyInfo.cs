@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Unlicense")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyInformationalVersion("0.1.7a")]
+[assembly: AssemblyInformationalVersion("0.1.7")]
 [assembly: AssemblyVersion("0.1.7")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

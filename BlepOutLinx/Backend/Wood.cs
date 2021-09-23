@@ -80,12 +80,12 @@ namespace Blep.Backend
         public static int Lifetime = 0;
         public static void EternalWrite()
         {
-            string startMessage = $"WOOD writer thread {Thread.CurrentThread.ManagedThreadId} booted up: {DateTime.Now}";
+            string startMessage = $"WOOD writer thread {Thread.CurrentThread.ManagedThreadId} booted up: {DateTime.Now}\n";
             Console.WriteLine(startMessage);
             WriteQueue.Enqueue(startMessage);
             while (Lifetime > 0)
             {
-                Thread.Sleep(250);
+                Thread.Sleep(50);
                 Lifetime--;
                 if (LogTarget == null) continue;
                 try
@@ -123,12 +123,11 @@ namespace Blep.Backend
                 }
                 
             }
-            using (var wt = LogTarget.OpenWrite())
+            using (var wt = LogTarget.AppendText())
             {
                 string endMessage = $"Logger thread {Thread.CurrentThread.ManagedThreadId} expired due to inactivity: {DateTime.Now}\n";
                 Console.WriteLine(endMessage);
-                var bytesTW = Encoding.UTF8.GetBytes(endMessage);
-                wt.Write(bytesTW, 0, bytesTW.Length);
+                wt.Write(endMessage);
                 wt.Flush();
             }
         }
