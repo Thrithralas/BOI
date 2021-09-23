@@ -25,7 +25,7 @@ namespace Blep
             InitializeComponent();
             this.Text = this.Text.Replace("<VersionNumber>", VersionNumber);
             firstshow = true;
-            MaskModeSelect.Items.AddRange(new object[] {Maskmode.Names, Maskmode.Tags, Maskmode.NamesAndTags});
+            MaskModeSelect.Items.AddRange(new object[] { Maskmode.Names, Maskmode.Tags, Maskmode.NamesAndTags });
             MaskModeSelect.SelectedItem = Maskmode.NamesAndTags;
             Wood.SetNewPathAndErase(Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt"));
             Wood.WriteLine("BOI starting " + DateTime.Now);
@@ -36,7 +36,7 @@ namespace Blep
             //UpdateTargetPath(BoiConfigManager.TarPath);
             firstshow = false;
         }
-        
+
         /// <summary>
         /// Ran every time there's a need to refresh mod manager's state, with new path or the same one as before.
         /// Runs regardless of whether selected path is valid or not.
@@ -166,8 +166,8 @@ namespace Blep
                     if (tag.ToLower().Contains(mask.ToLower())) return true;
                 }
             }
-            
-                
+
+
             return false;
         }
 
@@ -190,7 +190,7 @@ namespace Blep
         /// <summary>
         /// Gets <see cref="FolderStructureState"/> for currently selected path.
         /// </summary>
-        public static FolderStructureState currentStructureState 
+        public static FolderStructureState currentStructureState
         {
             get
             {
@@ -224,7 +224,7 @@ namespace Blep
         /// <see cref="Options"/> form instance.
         /// </summary>
         private Options opwin;
-        
+
         /// <summary>
         /// <see cref="InfoWindow"/> form instance.
         /// </summary>
@@ -256,7 +256,7 @@ namespace Blep
         /// <summary>
         /// Setup tracker for invalid mods.
         /// </summary>
-        private bool MixmodsFound;        
+        private bool MixmodsFound;
         public static string ModFolder => Path.Combine(RootPath, "Mods");
         public static string PluginsFolder => Path.Combine(RootPath, "BepInEx", "plugins");
         public static string mmFolder => Path.Combine(RootPath, "BepInEx", "monomod");
@@ -329,14 +329,14 @@ namespace Blep
 
             //}
             //else Modlist.Enabled = true;
-            
+
             lblProcessStatus.BackColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.PaleTurquoise);
             Modlist.Enabled = IsMyPathCorrect;
             //btnLaunch.Enabled = Modlist.Enabled;
             btnSelectPath.Enabled = true;
 
         }
-        
+
         /// <summary>
         /// Brings up the help window.
         /// </summary>
@@ -438,7 +438,7 @@ namespace Blep
                 }
                 // move the dll file to the Mods folder
                 string ModFilePath = Path.Combine(RootPath, "Mods", ModFileInfo.Name);
-                if(File.Exists(ModFilePath))
+                if (File.Exists(ModFilePath))
                 {
                     Wood.WriteLine($"Error: {ModFileInfo.Name} was ignored, as it already exists.");
                     continue;
@@ -499,7 +499,15 @@ namespace Blep
         }
         private AUDBBrowser browser;
 
-        public static string VersionNumber => "0.1.6";
+        public static string VersionNumber// => "0.1.7a";
+        {
+            get
+            {
+                foreach (var aat in Assembly.GetExecutingAssembly().GetCustomAttributes(false))
+                    if (aat is AssemblyInformationalVersionAttribute verA) return verA.InformationalVersion;
+                return "vUnk";
+            }
+        }
 
         private void label5_Click(object sender, EventArgs e)
         {

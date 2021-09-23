@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A573182F-8EA2-46C2-BA60-6B527A61668D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		BlepOutLinx\Backend\BoiCustom.cs = BlepOutLinx\Backend\BoiCustom.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntiBlep", "AntiBlep\AntiBlep.csproj", "{0F3C4446-3BEA-4D71-B38C-42AB29FD5990}"

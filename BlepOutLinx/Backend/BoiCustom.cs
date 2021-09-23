@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Reflection;
 
 namespace Blep.Backend
@@ -71,14 +72,11 @@ namespace Blep.Backend
             }
             return errc;
         }
-
-        
         public static List<Task> EnqueueRecursiveCopy(this DirectoryInfo from, string to)
         {
             if (from == null || to == null) throw new ArgumentNullException();
             return EnqueueRecursiveCopy(from, new DirectoryInfo(to));
         }
-
         public static List<Task> EnqueueRecursiveCopy(this DirectoryInfo from, DirectoryInfo to)
         {
             if (from == null || to == null) throw new ArgumentNullException();
@@ -98,5 +96,28 @@ namespace Blep.Backend
 
             return res;
         }
+        public static int CompareVersions(string vn1, string vn2)
+        {
+            var segs1 = vn1.Split('.');
+            var segs2 = vn2.Split('.');
+            for (int i = 0; i < Math.Min(segs1.Length, segs2.Length); i++)
+            {
+#warning missing parts
+                if (int.TryParse(segs1[i], out var s1) &&
+                int.TryParse(segs2[i], out var s2))
+                {
+                    var locRes = s1.CompareTo(s2);
+                    if (locRes != 0) return locRes;
+                }
+            }
+            return 0;
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool AllocConsole();
+        [DllImport("kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool AttachConsole(int dwProcessId);
     }
 }
