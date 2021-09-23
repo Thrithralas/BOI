@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 using System.Linq;
 using Blep.Backend;
@@ -482,6 +481,11 @@ namespace Blep {
         public static string BOIpath => Directory.GetCurrentDirectory();
 
         /// <summary>
+        /// The steam command to run the game.
+        /// </summary>
+        public static string runSteam => "steam://rungameid/312520";
+
+        /// <summary>
         /// Returns path to BOI config file.
         /// </summary>
         public static string cfgpath => Path.Combine(BOIpath, "cfg.json");
@@ -668,13 +672,12 @@ namespace Blep {
         }
 
         /// <summary>
-        /// Brings up the help window.
+        /// Disables Steam Launch, replacing useless helper window
         /// </summary>
         /// <param name="sender">Unused.</param>
         /// <param name="e">Unused.</param>
         private void btn_Help_Click(object sender, EventArgs e) {
-            if (iw == null || iw.IsDisposed) iw = new Blep.InfoWindow(this);
-            iw.Show();
+            Process.Start(runSteam);
         }
 
         /// <summary>
