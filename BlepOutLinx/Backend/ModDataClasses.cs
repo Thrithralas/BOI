@@ -38,8 +38,6 @@ namespace Blep.Backend
                 MyType = mt;
                 switch (mt)
                 {
-                    case EUModType.Unknown:
-                        
                     case EUModType.mmPatch:
                         AssociatedModData = new mmPatchData(path);
                         break;
@@ -55,6 +53,7 @@ namespace Blep.Backend
                     case EUModType.Invalid:
                         AssociatedModData = new InvalidModData(path);
                         break;
+                    case EUModType.Unknown:
                     default:
                         AssociatedModData = new ModData(path);
                         MyType = EUModType.Unknown;
@@ -172,7 +171,7 @@ namespace Blep.Backend
         {
             get
             {
-                if (AssociatedModData is InvalidModData)
+                if (!Enabled)
                 {
                     return OrigChecksum;
                 }

@@ -95,6 +95,7 @@ namespace Blep
                 foreach (var f in dumpFolder.GetFiles())
                 {
                     if (f.Extension == ".zip") ZipFile.ExtractToDirectory(f.FullName, dumpFolder.FullName);
+                    f.Delete();
                 }
                 var xcs = new System.Diagnostics.ProcessStartInfo("cmd.exe");
                 xcs.Arguments = $"/c xcopy /Y {dumpFolder.Name} \"{Directory.GetCurrentDirectory()}\"";
