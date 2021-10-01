@@ -24,7 +24,7 @@ namespace Blep
             Application.SetCompatibleTextRenderingDefault(false);
             var argl = args?.ToList() ?? new List<string>();
             Wood.SetNewPathAndErase(Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt"));
-            Wood.WriteLine("BOI starting " + DateTime.Now);
+            Wood.WriteLine($"BOI {BlepOut.VersionNumber} starting {DateTime.Now}");
             if (File.Exists("showConsole.txt") || argl.Contains("-nc") || argl.Contains("--new-console"))
             {
                 Backend.BoiCustom.AllocConsole();
@@ -94,8 +94,11 @@ namespace Blep
                 }
                 foreach (var f in dumpFolder.GetFiles())
                 {
-                    if (f.Extension == ".zip") ZipFile.ExtractToDirectory(f.FullName, dumpFolder.FullName);
-                    f.Delete();
+                    if (f.Extension == ".zip")
+                    {
+                        ZipFile.ExtractToDirectory(f.FullName, dumpFolder.FullName);
+                        f.Delete();
+                    }
                 }
                 var xcs = new System.Diagnostics.ProcessStartInfo("cmd.exe");
                 xcs.Arguments = $"/c xcopy /Y {dumpFolder.Name} \"{Directory.GetCurrentDirectory()}\"";

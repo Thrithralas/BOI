@@ -25,12 +25,12 @@ namespace Blep.Backend
             cargo.Clear();
             if (!target.Exists) return -1;
             var errcount = 0;
-            foreach (var file in target.GetFiles("*", SearchOption.TopDirectoryOnly))
+            foreach (var file in target.GetFiles("*.dll", SearchOption.TopDirectoryOnly))
             {
-                if (file.Extension != ".dll") continue;
                 try
                 {
                     var mr = new ModRelay(file);
+                    if (mr.AssociatedModData == null) throw new ArgumentNullException("NULL MOD DATA! something went wrong in ModRelay ctor");
                     cargo.Add(mr);
                 }
                 catch (Exception e) { errcount++; Wood.WriteLine("Error checking mod entry:"); Wood.WriteLine(e); }
@@ -47,10 +47,10 @@ namespace Blep.Backend
             if (!target.Exists) return -1;
             Wood.WriteLine("Path valid. ");
             var start = DateTime.Now;
-            var tasklist = new List<Task<object>>();
-            foreach (var file in target.GetFiles("*", SearchOption.TopDirectoryOnly))
+            var tasklist = new List<Task<ModRelay>>();
+            foreach (var file in target.GetFiles("*.dll", SearchOption.TopDirectoryOnly))
             {
-                var nt = new Task<object>(() => Activator.CreateInstance(typeof(ModRelay), file));
+                var nt = new Task<ModRelay>(() => (ModRelay)Activator.CreateInstance(typeof(ModRelay), file));
                 nt.Start();
                 tasklist.Add(nt);
             }
@@ -61,6 +61,12 @@ namespace Blep.Backend
                 if (t.Exception != null)
                 {
                     Wood.WriteLine($"Unhandled exception during creation of a ModRelay: {t.Exception}");
+                    errc++;
+                    continue;
+                }
+                if (t.Result.AssociatedModData == null)
+                {
+                    Wood.WriteLine($"Empty mod data: something went wrong in ModRelay ctor for {t.Result.AssociatedModData.OrigLocation}");
                     errc++;
                     continue;
                 }
