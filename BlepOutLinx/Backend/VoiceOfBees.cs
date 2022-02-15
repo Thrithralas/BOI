@@ -37,7 +37,7 @@ namespace Blep.Backend
                 {
                     ModEntryList.Clear();
                     BepElements.Clear();
-                    Wood.WriteLine($"Fetching mod entries from AUDB... {DateTime.Now}");
+                    Wood.WriteLine($"Fetching mod entries from AUDB... {DateTime.UtcNow}");
                     string json = wc.DownloadString(ModEntriesEP);
                     var jo = JArray.Parse(json);
                     foreach (JToken entry in jo)
@@ -59,7 +59,7 @@ namespace Blep.Backend
                     Wood.Indent();
                     foreach (var entry in ModEntryList) { Wood.WriteLine(entry.name); }
                     Wood.Unindent();
-                    Wood.WriteLine($"Fetching bep parts from AUDB... {DateTime.Now}");
+                    Wood.WriteLine($"Fetching bep parts from AUDB... {DateTime.UtcNow}");
                     json = wc.DownloadString(BepEP);
                     jo = JArray.Parse(json);
                     foreach(var entry in jo)
@@ -96,7 +96,7 @@ namespace Blep.Backend
         /// <returns>Number of errors encountered during operation</returns>
         public static int TryDownloadBep(string RootPath)
         {
-            var start = DateTime.Now;
+            var start = DateTime.UtcNow;
             int errc = 0;
             Wood.WriteLine($"Installing bepinex to {RootPath}. Total file count: {BepElements.Count}");
             Wood.Indent();
@@ -107,7 +107,7 @@ namespace Blep.Backend
             }
             Wood.Unindent();
             Wood.WriteLine($"Bep installation finished; downloaded {BepElements.Count - errc}/{BepElements.Count} files.");
-            TimeSpan ts = DateTime.Now - start;
+            TimeSpan ts = DateTime.UtcNow - start;
             Wood.WriteLine($"Elapsed time: {ts}");
             return errc;
         }
@@ -118,7 +118,7 @@ namespace Blep.Backend
         /// <returns></returns>
         public static int DownloadBepAsync(string RootPath)
         {
-            var start = DateTime.Now;
+            var start = DateTime.UtcNow;
             Wood.WriteLine($"Installing bepinex to {RootPath}. Total file count: {BepElements.Count}.");
             Wood.Indent();
             var tasklist = new List<Task<bool>>();
@@ -134,7 +134,7 @@ namespace Blep.Backend
             foreach (var r in tasklist) if (!r.Result) errc++; 
             Wood.Unindent();
             Wood.WriteLine($"Bep installation finished; downloaded {BepElements.Count - errc}/{BepElements.Count} files.");
-            Wood.WriteLine($"Elapsed time: {DateTime.Now - start}");
+            Wood.WriteLine($"Elapsed time: {DateTime.UtcNow - start}");
             return errc;
         }
 

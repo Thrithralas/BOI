@@ -96,12 +96,35 @@ namespace Blep.Backend
 
             return res;
         }
-
-        [DllImport("kernel32.dll", SetLastError = true)]
+        public static string ContentsAsStringOrNothing(string uri)
+        {
+            try
+            {
+                return File.Exists(uri) ? File.ReadAllText(uri) : null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public static bool TryWriteText(string uri, string contents)
+        {
+            try
+            {
+                File.WriteAllText(uri, contents);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+#warning figure out why alloc no work
+        [DllImport("kernel32.dll", SetLastError = true, EntryPoint = "AllocConsole")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool AllocConsole();
         [DllImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool AttachConsole(int dwProcessId);
+        public static extern bool AttachConsole([MarshalAs(UnmanagedType.I4)]int dwProcessId);
     }
 }

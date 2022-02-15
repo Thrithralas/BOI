@@ -8,6 +8,8 @@ using System.Net;
 using System.Net.Http;
 using Blep.Backend;
 
+using static Blep.Backend.BoiCustom;
+
 namespace Blep
 {
     internal static class BlepApp
@@ -24,22 +26,33 @@ namespace Blep
             Application.SetCompatibleTextRenderingDefault(false);
             var argl = args?.ToList() ?? new List<string>();
             Wood.SetNewPathAndErase(Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt"));
-            Wood.WriteLine($"BOI {BlepOut.VersionNumber} starting {DateTime.Now}");
+            Wood.WriteLine($"BOI {BlepOut.VersionNumber} starting {DateTime.UtcNow}");
             if (File.Exists("showConsole.txt") || argl.Contains("-nc") || argl.Contains("--new-console"))
             {
-                Backend.BoiCustom.AllocConsole();
-                Console.WriteLine("Launching BOI with output to a new console window.");
-                Console.WriteLine("Reminder: you can always select text in console and then copy it by pressing enter. It also pauses the app.\n");
+                //Wood.WriteLine("");
+                //BoiCustom.AllocConsole();
+                //Console.WriteLine("Launching BOI with output to a new console window.");
+                //Console.WriteLine("Reminder: you can always select text in console and then copy it by pressing enter. It also pauses the app.\n");
             }
             else if (argl.Contains("-ac") || argl.Contains("--attach-console"))
             {
-                Backend.BoiCustom.AttachConsole(-1);
-                Console.WriteLine("\nLaunching BOI and attempting to attach parent process console.");
+                //BoiCustom.AttachConsole(-1);
+                //Console.WriteLine("\nLaunching BOI and attempting to attach parent process console.");
             }
+            Wood.WriteLine("Console output is disabled for the time being, sorry.");
             //enter the form
             try
             {
                 BlepOut Currblep = new BlepOut();
+                Application.ThreadException += (sender, e) => {
+                    var oind = Wood.IndentLevel;
+                    Wood.IndentLevel = 0;
+                    Wood.WriteLine("\n<--------------------->\nUNHANDLED EXCEPTION IN APPLICATION LOOP");
+                    Wood.WriteLine(e.Exception);
+                    Wood.WriteLine("<--------------------->\n");
+                    Wood.IndentLevel = oind;
+                    if (e.Exception is TypeLoadException) Currblep.Close();
+                };
                 Application.Run(Currblep);
             }
             catch (Exception e)
@@ -61,34 +74,39 @@ namespace Blep
         //self updates from GH stable releases.
         private static async void TrySelfUpdate()
         {
-            var start = DateTime.Now;
+            var start = DateTime.UtcNow;
             Wood.WriteLine($"Starting self-update: {start}");
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             ServicePointManager.Expect100Continue = true;
             try
             {
                 var dumpFolder = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "downloadDump"));
+                //cleaning out old stuff
                 if (!dumpFolder.Exists) dumpFolder.Create(); foreach (var f in dumpFolder.GetFiles()) f.Delete();
                 using (var ht = new HttpClient())
                 {
                     ht.DefaultRequestHeaders.Clear();
                     ht.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
                     ht.DefaultRequestHeaders.Add("User-Agent", "Rain-World-Modding/BOI");
-                    //ht.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-                    //ht.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Rain-World-Modding_BOI", BlepOut.VersionNumber));
                     var reqTask = ht.GetAsync(REPOADDRESS);
                     var responsejson = Newtonsoft.Json.Linq.JObject.Parse(await reqTask.Result.Content.ReadAsStringAsync());
-                    //good enough diff detection
-                    if (DateTime.Parse((string)responsejson["published_at"]) < File.GetLastWriteTimeUtc(System.Reflection.Assembly.GetExecutingAssembly().Location)) 
-                    { Wood.WriteLine("Update not needed; youngest release is older than me."); return; }
+                    //good enough (i hope????) diff detection
+#warning semvering instead
+                    if (Version.Parse(System.Text.RegularExpressions.Regex.Replace((string)responsejson["tag_name"], "[^0-9.]", string.Empty)) <= typeof(BlepApp).Assembly.GetName().Version) 
+                    { Wood.WriteLine($"Update not needed; youngest release ({responsejson["tag_name"]}) is older than me ({typeof(BlepApp).Assembly.GetName().Version})."); return; }
+                    Wood.WriteLine($"Youngest release is {responsejson["tag_name"]}, I am {typeof(BlepApp).Assembly.GetName().Version}.");
+                    //downloading begins
                     ht.DefaultRequestHeaders.Clear();
                     ht.DefaultRequestHeaders.Add("User-Agent", "Rain-World-Modding/BOI");
                     ht.DefaultRequestHeaders.Add("Accept", "application/octet-stream");
                     foreach (var asset in responsejson["assets"] as Newtonsoft.Json.Linq.JArray)
                     {
-                        //Backend.Wood.WriteLine(asset.ToString(Newtonsoft.Json.Formatting.Indented));
                         using (var wc = new WebClient()) 
-                            wc.DownloadFile((string)asset["browser_download_url"], Path.Combine(dumpFolder.FullName, (string)asset["name"]));
+                            wc.DownloadFile(
+                                //System.Text.RegularExpressions.Regex.Replace((string)asset["browser_download_url"], "[^0-9.]", string.Empty), 
+                                //i am so confused why did i do the thing above
+                                (string)asset["browser_download_url"],
+                                Path.Combine(dumpFolder.FullName, (string)asset["name"]));
                     }
                     File.WriteAllText("changelog.txt", (string)responsejson["body"]);
                 }
@@ -100,17 +118,18 @@ namespace Blep
                         f.Delete();
                     }
                 }
-                var xcs = new System.Diagnostics.ProcessStartInfo("cmd.exe");
-                xcs.Arguments = $"/c xcopy /Y {dumpFolder.Name} \"{Directory.GetCurrentDirectory()}\"";
+                var xcs = new System.Diagnostics.ProcessStartInfo("cmd.exe")
+                {
+                    Arguments = $"/c xcopy /Y {dumpFolder.Name} \"{Directory.GetCurrentDirectory()}\""
+                };
                 System.Diagnostics.Process.Start(xcs);
-                Wood.WriteLine($"Self-update completed. Time elapsed: {DateTime.Now - start}");
+                Wood.WriteLine($"Self-update completed. Time elapsed: {DateTime.UtcNow - start}");
             }
             catch (Exception e)
             {
                 Wood.WriteLine("Unhandled exception while attempting self-update:");
                 Wood.WriteLine(e, 1);
             }
-            
         }
     }
 }

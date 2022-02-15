@@ -18,9 +18,10 @@ namespace Blep.Backend
         /// </summary>
         /// <param name="target">Target directory</param>
         /// <returns>Number of errors encountered during the operation</returns>
+        [Obsolete]
         public static int TryLoadCargo(DirectoryInfo target)
         {
-            var start = DateTime.Now;
+            var start = DateTime.UtcNow;
             currentSourceDir = target;
             cargo.Clear();
             if (!target.Exists) return -1;
@@ -35,10 +36,9 @@ namespace Blep.Backend
                 }
                 catch (Exception e) { errcount++; Wood.WriteLine("Error checking mod entry:"); Wood.WriteLine(e); }
             }
-            Wood.WriteLine($"Sync loading complete. Time elapsed: {DateTime.Now - start}");
+            Wood.WriteLine($"Sync loading complete. Time elapsed: {DateTime.UtcNow - start}");
             return errcount;
         }
-
         public static int TryLoadCargoAsync(DirectoryInfo target)
         {
             Wood.WriteLine($"Attempting to load cargo from {target}.");
@@ -46,7 +46,7 @@ namespace Blep.Backend
             cargo.Clear();
             if (!target.Exists) return -1;
             Wood.WriteLine("Path valid. ");
-            var start = DateTime.Now;
+            var start = DateTime.UtcNow;
             var tasklist = new List<Task<ModRelay>>();
             foreach (var file in target.GetFiles("*.dll", SearchOption.TopDirectoryOnly))
             {
@@ -72,9 +72,10 @@ namespace Blep.Backend
                 }
                 cargo.Add((ModRelay)t.Result);
             }
-            Wood.WriteLine($"Loading complete. Time elapsed {DateTime.Now - start}");
+            Wood.WriteLine($"Loading complete. Time elapsed {DateTime.UtcNow - start}");
             return errc;
         }
+
 
         /// <summary>
         /// modlist
@@ -83,6 +84,7 @@ namespace Blep.Backend
         public static DirectoryInfo currentSourceDir;
         public static bool FullyFunctional => (pluginsTargetPath?.Exists ?? false) && (currentSourceDir?.Exists ?? false) && (bepPatcherTargetPath?.Exists ?? false);
 
+        #region targets and blacklists
         public static void SetPluginsTarget(string path) { SetPluginsTarget(new DirectoryInfo(path)); }
         public static void SetPluginsTarget (DirectoryInfo target)
         {
@@ -136,7 +138,7 @@ namespace Blep.Backend
             {
                 if (blp.Length > 0) { pluginsBlacklist.AddRange(File.ReadAllLines(blp[0].FullName)); }
                 else {
-                    var sampleBl = new[] { "BepInEx.MonoMod.Loader.dll", "Dragons.dll", "Dragons.HookGenCompatibility.dll", "Dragons.PublicDragon.dll" };
+                    var sampleBl = new[] { "BepInEx.MonoMod.Loader.dll", "Dragons.dll", "Dragons.HookGenCompatibility.dll", "Dragons.PublicDragon.dll", "Dragons.Core.dll" };
                     bepPatcherBlacklist.AddRange(sampleBl);
                     File.WriteAllLines(Path.Combine(target.FullName, "patchers_blacklist.txt"), sampleBl); }
             }
@@ -148,6 +150,10 @@ namespace Blep.Backend
         }
         public static DirectoryInfo bepPatcherTargetPath;
         public static List<string> bepPatcherBlacklist = new List<string>();
+
+#warning revise blacklist system, bringback ignores it atm
+#warning blacklist templates to ER?
+        #endregion
 
         /// <summary>
         /// Enables a mod under selected index in <see cref="cargo"/>
@@ -261,6 +267,25 @@ namespace Blep.Backend
         }
 
         //public static List<Task<bool>> movetasks = new List<Task<bool>>();
+        public static int RetrieveLost()
+        {
+            int errc = 0;
+            foreach (var afld in new[] { pluginsTargetPath, bepPatcherTargetPath, mmpTargetPath })
+            {
+                if (afld == null) continue;
+                var blfn = new FileInfo(Path.Combine(afld.FullName, afld.Name + "_blacklist.txt"));
+                string[] bl = blfn.Exists ? File.ReadAllLines(blfn.FullName) : new string[] { };
+                
+                foreach (var mf in afld.GetFiles("*.dll", SearchOption.TopDirectoryOnly))
+                {
+                    if (bl.Contains(mf.Name)) continue;
+                    var expectedSource = Path.Combine(currentSourceDir.FullName, 
+                        afld == mmpTargetPath ? mmPatchData.GiveMeBackMyName(mf.Name) : mf.Name); // why do mmpatches even need these stupid ass names wtf
+                    if (!File.Exists(expectedSource)) mf.CopyTo(expectedSource);
+                }
+            }
+            return errc;
+        }
 
         /// <summary>
         /// Deletes files from active folders that are extremely likely to crash the game instantly and absolutely should not be there

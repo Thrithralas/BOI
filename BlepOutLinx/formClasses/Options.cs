@@ -14,7 +14,7 @@ namespace Blep
         {
             InitializeComponent();
             mf = mainForm;
-            Wood.WriteLine("Options window opened " + DateTime.Now);
+            Wood.WriteLine("Options window opened " + DateTime.UtcNow);
             labelREGIONNAME.Text = string.Empty;
             labelREGIONDESC.Text = string.Empty;
             labelSTRUCTURESTATUS.Text = string.Empty;

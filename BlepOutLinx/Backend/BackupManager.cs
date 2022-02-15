@@ -21,7 +21,7 @@ namespace Blep.Backend
             if (!Directory.Exists(BackupFolderPath)) Directory.CreateDirectory(BackupFolderPath);
             if (flag)
             {
-                ActiveSave = new UserDataStateRelay(UserDataFolder) { CreationTime = DateTime.Now } ;
+                ActiveSave = new UserDataStateRelay(UserDataFolder) { CreationTime = DateTime.UtcNow } ;
             }
             AllBackups.Clear();
             foreach (DirectoryInfo dir in new DirectoryInfo(BackupFolderPath).GetDirectories())
@@ -121,7 +121,7 @@ namespace Blep.Backend
         /// <summary>
         /// Returns a path for a new backup to be created.
         /// </summary>
-        public static string PathForNewBackup => Path.Combine(BackupFolderPath, $"{DateTime.Now.Ticks}");
+        public static string PathForNewBackup => Path.Combine(BackupFolderPath, $"{DateTime.UtcNow.Ticks}");
         /// <summary>
         /// Path to active save.
         /// </summary>
@@ -242,7 +242,7 @@ namespace Blep.Backend
                 Wood.WriteLine((terrc == 0) ? $"Savefolder state successfully copied to {to}" : $"Attempt to copy a savefolder from {Location} to {to} complete; total of {terrc} errors encountered.");
                 UserDataStateRelay Nudsr = new UserDataStateRelay(to);
                 Nudsr.Data = this.Data;
-                Nudsr.Data.CreationTime = DateTime.Now;
+                Nudsr.Data.CreationTime = DateTime.UtcNow;
                 return Nudsr;
             }
             public override string ToString()

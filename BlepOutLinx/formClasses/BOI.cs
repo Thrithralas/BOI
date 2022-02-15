@@ -20,6 +20,7 @@ namespace Blep
         /// </summary>
         public BlepOut()
         {
+#warning add first time launch scanning for game folder
             InitializeComponent();
             this.Text = this.Text.Replace("<VersionNumber>", VersionNumber);
             firstshow = true;
@@ -62,7 +63,7 @@ namespace Blep
         /// </summary>
         private void Setup()
         {
-            Wood.WriteLine("Path valid, starting setup " + DateTime.Now);
+            Wood.WriteLine("Path valid, starting setup " + DateTime.UtcNow);
             PubstuntFound = false;
             MixmodsFound = false;
             metafiletracker = false;
@@ -72,7 +73,10 @@ namespace Blep
             try
             {
                 PrepareModsFolder();
+#warning move csd init somewhere else
+                Donkey.currentSourceDir = new DirectoryInfo(ModFolder);
                 Donkey.CriticalSweep();
+                Donkey.RetrieveLost();
                 Donkey.TryLoadCargoAsync(new DirectoryInfo(ModFolder));
                 Donkey.BringUpToDate();
                 FillModList();
@@ -88,7 +92,7 @@ namespace Blep
                 }
                 if (MixmodsFound)
                 {
-                    MixmodsPopup mixmodsPopup = new Blep.MixmodsPopup(outrmixmods);
+                    MixmodsPopup mixmodsPopup = new(outrmixmods);
                     AddOwnedForm(mixmodsPopup);
                     mixmodsPopup.Show();
                 }
@@ -243,7 +247,7 @@ namespace Blep
         /// <summary>
         /// List of mods that have been erased during rootout.
         /// </summary>
-        private List<string> outrmixmods;
+        private readonly List<string> outrmixmods = new();
         /// <summary>
         /// Indicates whether the form is being viewed for the first time in the session.
         /// </summary>
@@ -292,6 +296,7 @@ namespace Blep
             StatusUpdate();
             ApplyMaskToModlist(textBox_MaskInput.Text);
             buttonUprootPart.Visible = Directory.Exists(Path.Combine(RootPath, "RainWorld_Data", "Managed_backup"));
+            //throw new Exception();
         }
         private void BlepOut_Deactivate(object sender, EventArgs e)
         {
@@ -353,7 +358,7 @@ namespace Blep
         /// <param name="e"></param>
         private void buttonUprootPart_Click(object sender, EventArgs e)
         {
-            Blep.PartYeet py = new Blep.PartYeet(this);
+            Blep.PartYeet py = new(this);
             AddOwnedForm(py);
             py.ShowDialog();
         }
@@ -364,7 +369,7 @@ namespace Blep
         /// <param name="e">Unused.</param>
         private void buttonClearMeta_Click(object sender, EventArgs e)
         {
-            Blep.MetafilePurgeSuggestion psg = new Blep.MetafilePurgeSuggestion(this);
+            Blep.MetafilePurgeSuggestion psg = new(this);
             AddOwnedForm(psg);
             psg.ShowDialog();
         }
@@ -398,9 +403,9 @@ namespace Blep
         /// <param name="e"></param>
         private void BlepOut_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Wood.WriteLine("BOI shutting down. " + DateTime.Now);
+            Wood.WriteLine("BOI shutting down. " + DateTime.UtcNow);
             BoiConfigManager.WriteConfig();
-            List<string> mns = new List<string>();
+            List<string> mns = new();
             foreach (ModRelay mr in Donkey.cargo) mns.Add(mr.AssociatedModData.DisplayedName);
             TagManager.TagCleanup(mns.ToArray());
             TagManager.SaveToFile(tagfilePath);
@@ -428,7 +433,7 @@ namespace Blep
             foreach (string file in files)
             {
                 // get the file info for easier operations
-                FileInfo ModFileInfo = new FileInfo(file);
+                FileInfo ModFileInfo = new(file);
                 // check if we are dealing with a dll file
                 if (!String.Equals(ModFileInfo.Extension, ".dll", StringComparison.CurrentCultureIgnoreCase))
                 {
@@ -511,14 +516,14 @@ namespace Blep
         private void label5_Click(object sender, EventArgs e)
         {
             var r = new Random();
-            var possible_lines = new[]
+            relBtnLines ??= new[]
             {
                 "Launch the game as you normally would",
                 "You don't need to launch through BOI",
                 "Please, stop being confused",
                 "There's nothing for you here",
                 "Thrith? Is this you? Go away",
-                "Can you actually play already",
+                //"Can you actually play already",
                 "Don't contrib to tConfigWrapper",
                 "\'Substratum\'\n(c) Substratum",
                 "el garon",
@@ -528,7 +533,7 @@ namespace Blep
                 "Consider playing Vangers",
                 $"Singal {r.Next(-9,10)}.{r.Next(1, 1000)}e+{r.Next(0, 34)} ready to view",
                 "Miimows style slugcat hips",
-                "We are the Skeleton Crew, or What Remains",
+                //"We are the Skeleton Crew, or What Remains",
                 "Demon_Swedish.ogg",
                 "Seven Flowers, Mood Is Sung",
                 "Papu flowers for the Fung",
@@ -538,15 +543,17 @@ namespace Blep
                 "UnityEngine.Random.value has getter and setter",
                 "Getter is broken, setter is broken too",
                 "No one can hear you scream",
-                "Boulder and granite",
+                //"Boulder and granite",
                 "Vaccinated and ready to reassemble",
-                "How much of these trash jokes can you endure?",
                 "Can't even swear in a public use app",
                 "This is actually a ripoff from Slime",
                 "I am the real turtle road",
-
+                "Oh my ugly organs, how lucky we are",
+                ""
             };
-            label5.Text = possible_lines[r.Next(0, possible_lines.Length)];
+            //possible_lines ??= new();
+            label5.Text = relBtnLines[r.Next(0, relBtnLines.Length)];
         }
+        internal static string[] relBtnLines;
     }
 }
