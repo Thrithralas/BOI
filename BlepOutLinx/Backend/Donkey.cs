@@ -80,7 +80,7 @@ namespace Blep.Backend
         /// <summary>
         /// modlist
         /// </summary>
-        public static List<ModRelay> cargo = new List<ModRelay>();
+        public static List<ModRelay> cargo = new();
         public static DirectoryInfo currentSourceDir;
         public static bool FullyFunctional => (pluginsTargetPath?.Exists ?? false) && (currentSourceDir?.Exists ?? false) && (bepPatcherTargetPath?.Exists ?? false);
 
@@ -104,7 +104,7 @@ namespace Blep.Backend
             }
         }
         public static DirectoryInfo pluginsTargetPath;
-        public static List<string> pluginsBlacklist = new List<string>();
+        public static List<string> pluginsBlacklist = new();
 
         public static void SetMmpTarget(string path) { SetMmpTarget(new DirectoryInfo(path)); }
         public static void SetMmpTarget(DirectoryInfo target) 
@@ -125,7 +125,7 @@ namespace Blep.Backend
             }
         }
         public static DirectoryInfo mmpTargetPath;
-        public static List<string> mmpBlacklist = new List<string>();
+        public static List<string> mmpBlacklist = new();
 
         public static void SetBepPatcherTarget(string path) { SetBepPatcherTarget(new DirectoryInfo(path)); }
         public static void SetBepPatcherTarget(DirectoryInfo target)
@@ -149,7 +149,7 @@ namespace Blep.Backend
             }
         }
         public static DirectoryInfo bepPatcherTargetPath;
-        public static List<string> bepPatcherBlacklist = new List<string>();
+        public static List<string> bepPatcherBlacklist = new();
 
 #warning revise blacklist system, bringback ignores it atm
 #warning blacklist templates to ER?
@@ -387,10 +387,8 @@ namespace Blep.Backend
             if (fi.Extension != ".dll" || fi.Attributes.HasFlag(FileAttributes.ReparsePoint)) return false;
             try
             {
-                using (ModuleDefinition md = ModuleDefinition.ReadModule(path))
-                {
-                    return (md.Assembly.FullName.Contains("PublicityStunt"));
-                }
+                using ModuleDefinition md = ModuleDefinition.ReadModule(path);
+                return (md.Assembly.FullName.Contains("PublicityStunt"));
             }
             catch (IOException ioe)
             {
