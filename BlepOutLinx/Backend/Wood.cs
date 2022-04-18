@@ -67,7 +67,6 @@ namespace Blep.Backend
         public static int IndentLevel { get { return _indl; } set { _indl = Math.Max(value, 0); } }
         private static int _indl = 0;
 
-
         public static void SpinUp()
         {
             Lifetime = 125;

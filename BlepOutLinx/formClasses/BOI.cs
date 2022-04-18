@@ -20,7 +20,7 @@ namespace Blep
         /// </summary>
         public BlepOut()
         {
-#warning add first time launch scanning for game folder
+            //TODO: add first time launch scanning for game folder
             InitializeComponent();
             this.Text = this.Text.Replace("<VersionNumber>", VersionNumber);
             firstshow = true;
@@ -30,10 +30,10 @@ namespace Blep
             TagManager.ReadTagsFromFile(tagfilePath);
             BoiConfigManager.ReadConfig();
             RootPath = BoiConfigManager.TarPath;
-            if (File.Exists("changelog.txt"))
-            {
-                System.Diagnostics.Process.Start("changelog.txt");
-            }
+            //if (File.Exists("changelog.txt"))
+            //{
+            //    System.Diagnostics.Process.Start("changelog.txt");
+            //}
             firstshow = false;
         }
 
@@ -73,7 +73,7 @@ namespace Blep
             try
             {
                 PrepareModsFolder();
-#warning move csd init somewhere else
+                //TODO: move csd init somewhere else
                 Donkey.currentSourceDir = new DirectoryInfo(ModFolder);
                 Donkey.CriticalSweep();
                 Donkey.RetrieveLost();
@@ -117,15 +117,9 @@ namespace Blep
                 Directory.CreateDirectory(ModFolder);
             }
             if (!Directory.Exists(mmFolder)) Directory.CreateDirectory(mmFolder);
-            string[] modfldcontents = Directory.GetFiles(ModFolder);
-            foreach (string path in modfldcontents)
-            {
-                var fi = new FileInfo(path);
-                if (fi.Extension == ".modHash" || fi.Extension == ".modMeta")
-                {
-                    metafiletracker = true;
-                }
-            }
+            string[] modfldcontents = Directory.GetFiles(ModFolder, "*", SearchOption.TopDirectoryOnly);
+            foreach (string path in modfldcontents) 
+                metafiletracker |= (path.EndsWith(".modHash") | path.EndsWith(".modMeta"));
             Wood.WriteLineIf(metafiletracker, "Found modhash/modmeta files in mods folder.");
         }
         /// <summary>
@@ -368,7 +362,7 @@ namespace Blep
         /// <param name="e"></param>
         private void buttonUprootPart_Click(object sender, EventArgs e)
         {
-            Blep.PartYeet py = new(this);
+            PartYeet py = new(this);
             AddOwnedForm(py);
             py.ShowDialog();
         }
@@ -379,7 +373,7 @@ namespace Blep
         /// <param name="e">Unused.</param>
         private void buttonClearMeta_Click(object sender, EventArgs e)
         {
-            Blep.MetafilePurgeSuggestion psg = new(this);
+            MetafilePurgeSuggestion psg = new(this);
             AddOwnedForm(psg);
             psg.ShowDialog();
         }
@@ -548,18 +542,24 @@ namespace Blep
                 "Seven Flowers, Mood Is Sung",
                 "Papu flowers for the Fung",
                 "goto picular;",
-                "You can do this all day",
+                //"You can do this all day",
                 "You can drag-n-drop DLLs into BOI",
-                "UnityEngine.Random.value has getter and setter",
-                "Getter is broken, setter is broken too",
+                //"UnityEngine.Random.value has getter and setter",
+                //"Getter is broken, setter is broken too",
                 "No one can hear you scream",
                 //"Boulder and granite",
-                "Vaccinated and ready to reassemble",
-                "Can't even swear in a public use app",
+                //"Vaccinated and ready to reassemble",
+                //"Can't even swear in a public use app",
                 "This is actually a ripoff from Slime",
                 "I am the real turtle road",
                 "Oh my ugly organs, how lucky we are",
-                ""
+                "By the nine i'm tweakin",
+                "MRUOW",
+                ":rivowo:",
+                "COGGY",
+                "scr0m",
+                "don't make war",
+                "you grab a hammer\nand then you sleep"
             };
             //possible_lines ??= new();
             label5.Text = relBtnLines[r.Next(0, relBtnLines.Length)];

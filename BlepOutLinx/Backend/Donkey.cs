@@ -150,9 +150,8 @@ namespace Blep.Backend
         }
         public static DirectoryInfo bepPatcherTargetPath;
         public static List<string> bepPatcherBlacklist = new();
-
-#warning revise blacklist system, bringback ignores it atm
-#warning blacklist templates to ER?
+        //TODO: revise blacklist system, bringback ignores it atm
+        //blacklist templates to ER?
         #endregion
 
         /// <summary>

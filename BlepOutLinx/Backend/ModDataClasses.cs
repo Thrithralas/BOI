@@ -268,7 +268,7 @@ namespace Blep.Backend
         public override DirectoryInfo TarFolder => Donkey.mmpTargetPath;
         public static string GiveMeBackMyName(string partname)
         {
-#warning make more proof?
+            //TODO: make more proof?
             string sl = partname;
             if (sl.StartsWith("Assembly-CSharp.") && sl.EndsWith(".mm.dll"))
             {

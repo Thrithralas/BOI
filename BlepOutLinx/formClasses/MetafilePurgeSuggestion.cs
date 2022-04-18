@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using Blep.Backend;
 
 namespace Blep
 {
@@ -13,24 +14,35 @@ namespace Blep
             mf.Enabled = false;
         }
 
-        private Blep.BlepOut mf;
+        private BlepOut mf;
 
         private void buttonUproot_Click(object sender, EventArgs e)
         {
-            
-            string[] modfoldercontents = Directory.GetFiles(Blep.BlepOut.ModFolder);
+            int errc = 0, succ = 0;
+            string[] modfoldercontents = Directory.GetFiles(BlepOut.ModFolder);
             foreach (string path in modfoldercontents)
             {
-                var fi = new FileInfo(path);
-                if (fi.Extension == ".modHash" || fi.Extension == ".modMeta")
+                try
                 {
-                    File.Delete(path);
+                    var fi = new FileInfo(path);
+                    if (fi.Extension == ".modHash" || fi.Extension == ".modMeta")
+                    {
+                        File.Delete(path);
+                        succ++;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Wood.WriteLine("Error cremating PL victims:");
+                    Wood.WriteLine(ex, 1);
+                    errc++;
                 }
             }
             mf.buttonClearMeta.Visible = false;
             buttonUproot.Visible = false;
             buttonCancel.Text = "Back";
-            label2.Text = "Hash and meta files deleted successfully. Your karma just went up a notch.";
+            label2.Text = $"Cleanup complete. Your karma just went up by {succ - errc}.";
         }
 
         private void MetafilePurgeSuggestion_FormClosed(object sender, FormClosedEventArgs e)

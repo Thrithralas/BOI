@@ -238,10 +238,11 @@ namespace Blep.Backend
                         terrc++;
                     }
                 }
-#warning test queued copying in practice
                 Wood.WriteLine((terrc == 0) ? $"Savefolder state successfully copied to {to}" : $"Attempt to copy a savefolder from {Location} to {to} complete; total of {terrc} errors encountered.");
-                UserDataStateRelay Nudsr = new UserDataStateRelay(to);
-                Nudsr.Data = this.Data;
+                UserDataStateRelay Nudsr = new UserDataStateRelay(to)
+                {
+                    Data = this.Data
+                };
                 Nudsr.Data.CreationTime = DateTime.UtcNow;
                 return Nudsr;
             }

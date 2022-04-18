@@ -22,16 +22,12 @@ namespace Blep.Backend
             catch (JsonException joe)
             {
                 Wood.WriteLine("ERROR PARSING BOI CONFIG FILE:");
-                Wood.Indent();
-                Wood.WriteLine(joe);
-                Wood.Unindent();
+                Wood.WriteLine(joe, 1);
             }
             catch (Exception e)
             {
                 Wood.WriteLine("ERROR OPENING BOI CONFIG FILE:");
-                Wood.Indent();
-                Wood.WriteLine(e);
-                Wood.Unindent();
+                Wood.WriteLine(e, 1);
             }
         }
         public static void WriteConfig()
@@ -47,9 +43,7 @@ namespace Blep.Backend
             catch (Exception e)
             {
                 Wood.WriteLine("ERROR SERIALIZING BOI CONFIG FILE:");
-                Wood.Indent();
-                Wood.WriteLine(e);
-                Wood.Unindent();
+                Wood.WriteLine(e, 1);
             }
         }
         public static string TarPath

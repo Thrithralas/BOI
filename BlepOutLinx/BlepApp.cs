@@ -62,7 +62,7 @@ namespace Blep
                 Wood.WriteLine(e);
             }
             //form is dead
-            if (File.Exists("changelog.txt")) File.Delete("changelog.txt");
+            //if (File.Exists("changelog.txt")) File.Delete("changelog.txt");
             if (argl.Contains("-nu") || argl.Contains("--no-update") || File.Exists("neverUpdate.txt")) 
                 Wood.WriteLine("Skipping self update.");
             else TrySelfUpdate();

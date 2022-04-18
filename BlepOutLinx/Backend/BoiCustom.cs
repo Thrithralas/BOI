@@ -50,9 +50,7 @@ namespace Blep.Backend
                 catch (IOException ioe)
                 {
                     Wood.Write("Could not copy a file during recursive copy process");
-                    Wood.Indent();
-                    Wood.WriteLine(ioe);
-                    Wood.Unindent();
+                    Wood.WriteLine(ioe, 1);
                     errc++;
                 }
 
@@ -63,9 +61,7 @@ namespace Blep.Backend
                 catch (IOException ioe)
                 {
                     Wood.Write("Could not copy a subfolder during recursive copy process");
-                    Wood.Indent();
-                    Wood.WriteLine(ioe);
-                    Wood.Unindent();
+                    Wood.WriteLine(ioe, 1);
 
                 }
 
