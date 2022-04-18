@@ -138,7 +138,7 @@ namespace Blep.Backend
             {
                 if (blp.Length > 0) { pluginsBlacklist.AddRange(File.ReadAllLines(blp[0].FullName)); }
                 else {
-                    var sampleBl = new[] { "BepInEx.MonoMod.Loader.dll", "Dragons.dll", "Dragons.HookGenCompatibility.dll", "Dragons.PublicDragon.dll", "Dragons.Core.dll" };
+                    var sampleBl = new[] { "BepInEx.MonoMod.Loader.dll", "Dragons.dll", "Dragons.HookGenCompatibility.dll", "Dragons.PublicDragon.dll", "Dragons.Core.dll", "Dragons.AUFix.dll" };
                     bepPatcherBlacklist.AddRange(sampleBl);
                     File.WriteAllLines(Path.Combine(target.FullName, "patchers_blacklist.txt"), sampleBl); }
             }
