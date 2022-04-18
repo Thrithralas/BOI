@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyInformationalVersion("0.1.7.3")]
+#warning Are you making a release? make sure the tag matches here! ^v^ ^v^ 
 [assembly: AssemblyVersion("0.1.7.3")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
