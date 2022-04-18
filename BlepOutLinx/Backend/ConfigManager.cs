@@ -63,8 +63,10 @@ namespace Blep.Backend
             {
                 if (confjo == null)
                 {
-                    confjo = new JObject();
-                    confjo.Add("tarpath", value);
+                    confjo = new JObject
+                    {
+                        { "tarpath", value }
+                    };
                 }
                 if (confjo.ContainsKey("tarpath")) confjo["tarpath"] = value;
                 else

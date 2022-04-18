@@ -90,10 +90,8 @@ namespace Blep.Backend
 
             try
             {
-                using (ModuleDefinition md = ModuleDefinition.ReadModule(path))
-                {
-                    return GetModType(md);
-                }
+                using ModuleDefinition md = ModuleDefinition.ReadModule(path);
+                return GetModType(md);
             }
             catch (Exception e)
             {
@@ -160,11 +158,9 @@ namespace Blep.Backend
         {
             get
             {
-                using (FileStream fs = File.OpenRead(ModPath))
-                {
-                    SHA256 sha = new SHA256Managed();
-                    return sha.ComputeHash(fs);
-                }
+                using FileStream fs = File.OpenRead(ModPath);
+                SHA256 sha = new SHA256Managed();
+                return sha.ComputeHash(fs);
             }
         }
         public byte[] TarCheckSum
@@ -175,11 +171,9 @@ namespace Blep.Backend
                 {
                     return OrigChecksum;
                 }
-                using (FileStream fs = File.OpenRead(TarPath))
-                {
-                    SHA256 sha = new SHA256Managed();
-                    return sha.ComputeHash(fs);
-                }
+                using FileStream fs = File.OpenRead(TarPath);
+                SHA256 sha = new SHA256Managed();
+                return sha.ComputeHash(fs);
             }
         }
         public string TarPath
@@ -374,16 +368,13 @@ namespace Blep.Backend
         {
             get
             {
-                switch (CurrCfgState)
+                return CurrCfgState switch
                 {
-                    case CfgState.PackInfo:
-                        return Path.Combine(path, "packInfo.json");
-                    case CfgState.RegInfo:
-                        return Path.Combine(path + "regionInfo.json");
-                    case CfgState.None:
-                        return null;
-                    default: return null;
-                }
+                    CfgState.PackInfo => Path.Combine(path, "packInfo.json"),
+                    CfgState.RegInfo => Path.Combine(path + "regionInfo.json"),
+                    CfgState.None => null,
+                    _ => null,
+                };
             }
         }
         public string regionName

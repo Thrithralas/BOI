@@ -31,62 +31,60 @@ namespace Blep.Backend
         /// <returns></returns>
         public static bool FetchRelays()
         {
-            using (var wc = new WebClient())
+            using var wc = new WebClient();
+            try
             {
-                try
+                ModEntryList.Clear();
+                BepElements.Clear();
+                Wood.WriteLine($"Fetching mod entries from AUDB... {DateTime.UtcNow}");
+                string json = wc.DownloadString(ModEntriesEP);
+                var jo = JArray.Parse(json);
+                foreach (JToken entry in jo)
                 {
-                    ModEntryList.Clear();
-                    BepElements.Clear();
-                    Wood.WriteLine($"Fetching mod entries from AUDB... {DateTime.UtcNow}");
-                    string json = wc.DownloadString(ModEntriesEP);
-                    var jo = JArray.Parse(json);
-                    foreach (JToken entry in jo)
+                    try
                     {
-                        try
-                        {
-                            AUDBEntryRelay rel = entry.ToObject<AUDBEntryRelay>();
-                            ModEntryList.Add(rel);
-                        }
-                        catch (JsonReaderException je)
-                        {
-                            Wood.WriteLine($"Error deserializing AUDB entry :");
-                            Wood.WriteLine(je, 1);
-                            Wood.WriteLine("Json text:");
-                            Wood.WriteLine(entry, 1);
-                        }
+                        AUDBEntryRelay rel = entry.ToObject<AUDBEntryRelay>();
+                        ModEntryList.Add(rel);
                     }
-                    Wood.WriteLine("Entrylist fetched and parsed:");
-                    Wood.Indent();
-                    foreach (var entry in ModEntryList) { Wood.WriteLine(entry.name); }
-                    Wood.Unindent();
-                    Wood.WriteLine($"Fetching bep parts from AUDB... {DateTime.UtcNow}");
-                    json = wc.DownloadString(BepEP);
-                    jo = JArray.Parse(json);
-                    foreach(var entry in jo)
+                    catch (JsonReaderException je)
                     {
-                        try
-                        {
-                            var rel = entry.ToObject<BepPartRelay>();
-                            BepElements.Add(rel);
-                        }
-                        catch (JsonReaderException je)
-                        {
-                            Wood.WriteLine($"Error deserializing AUDB entry :");
-                            Wood.WriteLine(je, 1);
-                            Wood.WriteLine("Json text:");
-                            Wood.WriteLine(entry, 1);
-                        }
+                        Wood.WriteLine($"Error deserializing AUDB entry :");
+                        Wood.WriteLine(je, 1);
+                        Wood.WriteLine("Json text:");
+                        Wood.WriteLine(entry, 1);
                     }
-                    Wood.WriteLine("Bep parts fetched and parsed:");
-                    Wood.Indent();
-                    foreach (var part in BepElements) Wood.WriteLine(part.mod.name);
-                    Wood.Unindent();
-                    return true;
                 }
-                catch (WebException we) { Wood.WriteLine("Error fetching info from AUDB:");  Wood.WriteLine(we.Response, 1); }
-                catch (JsonException jse) { Wood.WriteLine("Error deserializing AUDB entry lists"); Wood.WriteLine(jse.Message, 1); }
-                return false;
+                Wood.WriteLine("Entrylist fetched and parsed:");
+                Wood.Indent();
+                foreach (var entry in ModEntryList) { Wood.WriteLine(entry.name); }
+                Wood.Unindent();
+                Wood.WriteLine($"Fetching bep parts from AUDB... {DateTime.UtcNow}");
+                json = wc.DownloadString(BepEP);
+                jo = JArray.Parse(json);
+                foreach (var entry in jo)
+                {
+                    try
+                    {
+                        var rel = entry.ToObject<BepPartRelay>();
+                        BepElements.Add(rel);
+                    }
+                    catch (JsonReaderException je)
+                    {
+                        Wood.WriteLine($"Error deserializing AUDB entry :");
+                        Wood.WriteLine(je, 1);
+                        Wood.WriteLine("Json text:");
+                        Wood.WriteLine(entry, 1);
+                    }
+                }
+                Wood.WriteLine("Bep parts fetched and parsed:");
+                Wood.Indent();
+                foreach (var part in BepElements) Wood.WriteLine(part.mod.name);
+                Wood.Unindent();
+                return true;
             }
+            catch (WebException we) { Wood.WriteLine("Error fetching info from AUDB:"); Wood.WriteLine(we.Response, 1); }
+            catch (JsonException jse) { Wood.WriteLine("Error deserializing AUDB entry lists"); Wood.WriteLine(jse.Message, 1); }
+            return false;
         }
 
         /// <summary>
@@ -138,10 +136,10 @@ namespace Blep.Backend
             return errc;
         }
 
-        public static List<AUDBEntryRelay> ModEntryList { get { _el = _el ?? new List<AUDBEntryRelay>(); return _el; } set { _el = value; } }
+        public static List<AUDBEntryRelay> ModEntryList { get { _el ??= new List<AUDBEntryRelay>(); return _el; } set { _el = value; } }
         private static List<AUDBEntryRelay> _el;
 
-        public static List<BepPartRelay> BepElements { get { _be = _be ?? new List<BepPartRelay>(); return _be; } set { _be = value; }  }
+        public static List<BepPartRelay> BepElements { get { _be ??= new List<BepPartRelay>(); return _be; } set { _be = value; }  }
         private static List<BepPartRelay> _be;
 
         /// <summary>
@@ -149,7 +147,7 @@ namespace Blep.Backend
         /// </summary>
         public class AUDBEntryRelay : IEquatable<AUDBEntryRelay>
         {
-            public List<AUDBEntryRelay> deps { get { _deps = _deps ?? new List<AUDBEntryRelay>(); return _deps; } set { _deps = value; } }
+            public List<AUDBEntryRelay> deps { get { _deps ??= new List<AUDBEntryRelay>(); return _deps; } set { _deps = value; } }
             private List<AUDBEntryRelay> _deps;
             public KEY key;
             public string name;
@@ -191,9 +189,11 @@ namespace Blep.Backend
                         var sha = new SHA512Managed();
                         var modhash = sha.ComputeHash(fileContents);
                         var sigbytes = Convert.FromBase64String(sig);
-                        var rsaParams = new RSAParameters();
-                        rsaParams.Exponent = Convert.FromBase64String(key.e);
-                        rsaParams.Modulus = Convert.FromBase64String(key.n);
+                        var rsaParams = new RSAParameters
+                        {
+                            Exponent = Convert.FromBase64String(key.e),
+                            Modulus = Convert.FromBase64String(key.n)
+                        };
                         var rsa = RSA.Create();
                         rsa.ImportParameters(rsaParams);
                         var def = new RSAPKCS1SignatureDeformatter(rsa);

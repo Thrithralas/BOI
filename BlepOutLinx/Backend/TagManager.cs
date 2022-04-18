@@ -57,7 +57,7 @@ namespace Blep.Backend
             
         }
 
-        private static Dictionary<string, string> TagData { get { _td = _td ?? new Dictionary<string, string>(); return _td; } set => _td = value; }
+        private static Dictionary<string, string> TagData { get { _td ??= new Dictionary<string, string>(); return _td; } set => _td = value; }
         private static Dictionary<string, string> _td;
 
         /// <summary>

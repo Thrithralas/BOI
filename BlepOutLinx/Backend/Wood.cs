@@ -59,7 +59,7 @@ namespace Blep.Backend
             LogPath = tar;
             File.CreateText(tar).Dispose();
         }
-        public static ConcurrentQueue<object> WriteQueue { get { _wc = _wc ?? new ConcurrentQueue<object>(); return _wc; } set { _wc = value; } }
+        public static ConcurrentQueue<object> WriteQueue { get { _wc ??= new ConcurrentQueue<object>(); return _wc; } set { _wc = value; } }
         private static ConcurrentQueue<Object> _wc = new ConcurrentQueue<object>();
         private static ConcurrentQueue<Tuple<Exception, DateTime>> _encEx = new ConcurrentQueue<Tuple<Exception, DateTime>>();
         public static string LogPath { get => LogTarget?.FullName; set { LogTarget = new FileInfo(value); } }
@@ -72,9 +72,11 @@ namespace Blep.Backend
         {
             Lifetime = 125;
             if (wrThr?.IsAlive ?? false) return;
-            wrThr = new Thread(EternalWrite);
-            wrThr.IsBackground = false;
-            wrThr.Priority = ThreadPriority.BelowNormal;
+            wrThr = new Thread(EternalWrite)
+            {
+                IsBackground = false,
+                Priority = ThreadPriority.BelowNormal
+            };
             wrThr.Start();
         }
         public static int Lifetime = 0;
@@ -90,30 +92,28 @@ namespace Blep.Backend
                 if (LogTarget == null) continue;
                 try
                 {
-                    using (var wt = LogTarget.AppendText())
+                    using var wt = LogTarget.AppendText();
+                    while (!WriteQueue.IsEmpty)
                     {
-                        while (!WriteQueue.IsEmpty)
+                        if (WriteQueue.TryDequeue(out var toWrite))
                         {
-                            if (WriteQueue.TryDequeue(out var toWrite))
-                            {
-                                //var bytesTW = Encoding.UTF8.GetBytes(toWrite.ToString());
-                                //wt.Seek(0, SeekOrigin.End);
-                                wt.Write(toWrite.ToString());
-                                wt.Flush();
+                            //var bytesTW = Encoding.UTF8.GetBytes(toWrite.ToString());
+                            //wt.Seek(0, SeekOrigin.End);
+                            wt.Write(toWrite.ToString());
+                            wt.Flush();
 
-                            }
-                            //wt.Write(Encoding.UTF8.GetBytes(res.ToString()));
                         }
+                        //wt.Write(Encoding.UTF8.GetBytes(res.ToString()));
+                    }
 
-                        while (!_encEx.IsEmpty)
+                    while (!_encEx.IsEmpty)
+                    {
+                        if (_encEx.TryDequeue(out var oldex))
                         {
-                            if (_encEx.TryDequeue(out var oldex))
-                            {
-                                //var bytesTW = Encoding.UTF8.GetBytes();
-                                //wt.Seek(0, SeekOrigin.End);
-                                wt.Write($"\nWrite exc encountered on {oldex.Item2}:\n{oldex.Item1}");
-                                wt.Flush();
-                            }
+                            //var bytesTW = Encoding.UTF8.GetBytes();
+                            //wt.Seek(0, SeekOrigin.End);
+                            wt.Write($"\nWrite exc encountered on {oldex.Item2}:\n{oldex.Item1}");
+                            wt.Flush();
                         }
                     }
                 }

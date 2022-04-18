@@ -101,12 +101,12 @@ namespace Blep
                     ht.DefaultRequestHeaders.Add("Accept", "application/octet-stream");
                     foreach (var asset in responsejson["assets"] as Newtonsoft.Json.Linq.JArray)
                     {
-                        using (var wc = new WebClient()) 
-                            wc.DownloadFile(
-                                //System.Text.RegularExpressions.Regex.Replace((string)asset["browser_download_url"], "[^0-9.]", string.Empty), 
-                                //i am so confused why did i do the thing above
-                                (string)asset["browser_download_url"],
-                                Path.Combine(dumpFolder.FullName, (string)asset["name"]));
+                        using var wc = new WebClient();
+                        wc.DownloadFile(
+                            //System.Text.RegularExpressions.Regex.Replace((string)asset["browser_download_url"], "[^0-9.]", string.Empty), 
+                            //i am so confused why did i do the thing above
+                            (string)asset["browser_download_url"],
+                            Path.Combine(dumpFolder.FullName, (string)asset["name"]));
                     }
                     File.WriteAllText("changelog.txt", (string)responsejson["body"]);
                 }
