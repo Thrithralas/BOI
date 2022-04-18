@@ -70,7 +70,7 @@ namespace Blep.Backend
                     errc++;
                     continue;
                 }
-                cargo.Add((ModRelay)t.Result);
+                cargo.Add(t.Result);
             }
             Wood.WriteLine($"Loading complete. Time elapsed {DateTime.UtcNow - start}");
             return errc;
@@ -390,11 +390,11 @@ namespace Blep.Backend
                 using ModuleDefinition md = ModuleDefinition.ReadModule(path);
                 return (md.Assembly.FullName.Contains("PublicityStunt"));
             }
-            catch (IOException ioe)
+            catch (Exception e)
             {
                 Wood.WriteLine("ATPS: ERROR CHECKING MOD ASSEMBLY :");
                 Wood.Indent();
-                Wood.WriteLine(ioe);
+                Wood.WriteLine(e);
                 Wood.Unindent();
                 Wood.WriteLine("Well, it's probably not PS.");
                 return false;

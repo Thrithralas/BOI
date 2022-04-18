@@ -119,6 +119,7 @@
             resources.ApplyResources(this.lblProcessStatus, "lblProcessStatus");
             this.lblProcessStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblProcessStatus.Name = "lblProcessStatus";
+            this.lblProcessStatus.UseWaitCursor = true;
             // 
             // label5
             // 

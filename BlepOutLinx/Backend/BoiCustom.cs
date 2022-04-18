@@ -119,7 +119,7 @@ namespace Blep.Backend
                 return false;
             }
         }
-#warning figure out why alloc no work
+        //TODO: figure out why alloc no work
         [DllImport("kernel32.dll", SetLastError = true, EntryPoint = "AllocConsole")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool AllocConsole();

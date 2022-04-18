@@ -186,9 +186,8 @@ namespace Blep
         /// Checks if enabled mods are identical to their counterparts in active folders; if not, brings the needed side up to date.
         /// </summary>
         public static bool IsMyPathCorrect
-        {
-            get { return (currentStructureState.HasFlag(FolderStructureState.BlepFound | FolderStructureState.GameFound)); }
-        }
+            => currentStructureState.HasFlag(FolderStructureState.BlepFound | FolderStructureState.GameFound)
+            && !currentStructureState.HasFlag(FolderStructureState.RealmFound);
 
         /// <summary>
         /// Gets <see cref="FolderStructureState"/> for currently selected path.
@@ -198,8 +197,13 @@ namespace Blep
             get
             {
                 FolderStructureState res = 0;
-                if (Directory.Exists(PluginsFolder) && Directory.Exists(PatchersFolder)) res |= FolderStructureState.BlepFound;
+                if (Directory.Exists(PluginsFolder) && Directory.Exists(PatchersFolder))
+                {
+                    res |= FolderStructureState.BlepFound;
+                    if (File.Exists(Path.Combine(PatchersFolder, "Realm.dll"))) res |= FolderStructureState.RealmFound;
+                }
                 if (Directory.Exists(Path.Combine(RootPath, "RainWorld_Data"))) res |= FolderStructureState.GameFound;
+                
                 return res;
             }
         }
@@ -207,8 +211,9 @@ namespace Blep
         [Flags]
         public enum FolderStructureState
         {
-            BlepFound = 1,
-            GameFound = 2
+            BlepFound   = 0x00000001,
+            GameFound   = 0x00000010,
+            RealmFound  = 0x00000100,
         }
 
         /// <summary>
@@ -308,7 +313,12 @@ namespace Blep
         private void StatusUpdate()
         {
             var cf = currentStructureState;
-            if (cf.HasFlag(FolderStructureState.BlepFound | FolderStructureState.GameFound))
+            if (cf.HasFlag(FolderStructureState.RealmFound))
+            {
+                lblPathStatus.Text = "REALM";
+                lblPathStatus.BackColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.LightYellow);
+            }
+            else if (cf.HasFlag(FolderStructureState.BlepFound | FolderStructureState.GameFound))
             {
                 lblPathStatus.Text = "Path valid";
                 lblPathStatus.BackColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.LightGreen);

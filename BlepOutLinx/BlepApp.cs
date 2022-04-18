@@ -91,9 +91,9 @@ namespace Blep
                     var reqTask = ht.GetAsync(REPOADDRESS);
                     var responsejson = Newtonsoft.Json.Linq.JObject.Parse(await reqTask.Result.Content.ReadAsStringAsync());
                     //good enough (i hope????) diff detection
-#warning semvering instead
+                    //i think this works?
                     if (Version.Parse(System.Text.RegularExpressions.Regex.Replace((string)responsejson["tag_name"], "[^0-9.]", string.Empty)) <= typeof(BlepApp).Assembly.GetName().Version) 
-                    { Wood.WriteLine($"Update not needed; youngest release ({responsejson["tag_name"]}) is older than me ({typeof(BlepApp).Assembly.GetName().Version})."); return; }
+                    { Wood.WriteLine($"Update not needed; youngest release ({responsejson["tag_name"]}) is not younger than me ({typeof(BlepApp).Assembly.GetName().Version})."); return; }
                     Wood.WriteLine($"Youngest release is {responsejson["tag_name"]}, I am {typeof(BlepApp).Assembly.GetName().Version}.");
                     //downloading begins
                     ht.DefaultRequestHeaders.Clear();

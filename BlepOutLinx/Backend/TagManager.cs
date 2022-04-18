@@ -23,10 +23,14 @@ namespace Blep.Backend
             try
             {
                 Wood.WriteLine($"Reading mod tags from file: {filepath}");
+                if (!File.Exists(filepath)) goto fnf;
                 string json = File.ReadAllText(filepath);
                 ReadTagData(json);
                 Wood.WriteLine("Mod tags loaded successfully.");
                 return true;
+            fnf:
+                Wood.WriteLine($"NO TAG FILE TO READ: {filepath}");
+                return false;
             }
             catch (Exception e)
             {
