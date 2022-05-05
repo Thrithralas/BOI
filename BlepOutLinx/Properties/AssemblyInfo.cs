@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("BOI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Mod manager for Rain World Bepinex configuration")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("BOI")]
