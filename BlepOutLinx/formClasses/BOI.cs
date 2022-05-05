@@ -46,6 +46,7 @@ namespace Blep
         {
             //btnLaunch.Enabled = false;
             Modlist.Enabled = false;
+            Modlist.Items.Clear();
             RootPath = path;
             BoiConfigManager.TarPath = path;
             Donkey.SetBepPatcherTarget(PatchersFolder);
@@ -67,7 +68,6 @@ namespace Blep
             PubstuntFound = false;
             MixmodsFound = false;
             metafiletracker = false;
-            Modlist.Items.Clear();
             outrmixmods.Clear();
             Wood.Indent();
             try
@@ -82,7 +82,8 @@ namespace Blep
                 FillModList();
                 Modlist.Enabled = true;
                 //btnLaunch.Enabled = true;
-                TargetSelect.SelectedPath = RootPath;
+                targetSelectD.FileName = RootPath.EndsWith(".exe") ? RootPath : Directory.GetFiles(RootPath, "*.exe").FirstOrDefault() ?? RootPath;//Path.Combine(RootPath, "RainWorld.exe");
+                
                 if (PubstuntFound && firstshow)
                 {
                     PubstuntInfoPopup popup;
@@ -273,13 +274,16 @@ namespace Blep
         {
             if (TSbtnMode)
             {
-                TargetSelect.ShowDialog();
+                //TargetSelect.ShowDialog();
+                targetSelectD.ShowDialog();
                 btnSelectPath.Text = "Press again to load modlist";
                 TSbtnMode = false;
             }
             else
             {
-                UpdateTargetPath(TargetSelect.SelectedPath);
+                FileInfo fi = new(targetSelectD.FileName);
+                //RootPath = fi.DirectoryName;
+                UpdateTargetPath(fi.DirectoryName);
                 btnSelectPath.Text = "Select path";
                 TSbtnMode = true;
             }
@@ -293,7 +297,7 @@ namespace Blep
         {
             UpdateTargetPath(RootPath);
             StatusUpdate();
-            ApplyMaskToModlist(textBox_MaskInput.Text);
+            if (IsMyPathCorrect) ApplyMaskToModlist(textBox_MaskInput.Text);
             buttonUprootPart.Visible = Directory.Exists(Path.Combine(RootPath, "RainWorld_Data", "Managed_backup"));
             //throw new Exception();
         }
@@ -352,8 +356,20 @@ namespace Blep
         /// <param name="e">Unused.</param>
         private void btn_Help_Click(object sender, EventArgs e)
         {
-            if (iw == null || iw.IsDisposed) iw = new InfoWindow();
-            iw.Show();
+            //if (iw == null || iw.IsDisposed) iw = new InfoWindow();
+            //iw.Show();
+            try
+            {
+                System.Diagnostics.Process.Start(Path.Combine(Directory.GetCurrentDirectory(), "INFO.md"));
+            }
+            catch (Exception ee)
+            {
+                Console.WriteLine(ee);
+            }
+            finally
+            {
+
+            }
         }
         /// <summary>
         /// Shows PL uproot dialog.

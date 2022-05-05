@@ -54,6 +54,9 @@ namespace Blep
                     if (e.Exception is TypeLoadException) Currblep.Close();
                 };
                 Application.Run(Currblep);
+                var o = File.CreateText(Path.Combine(Directory.GetCurrentDirectory(), "INFO.md"));
+                o.Write(System.Text.Encoding.UTF8.GetString(Properties.Resources.INFO));
+                o.Close();
             }
             catch (Exception e)
             {

@@ -59,5 +59,15 @@ namespace Blep.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] INFO {
+            get {
+                object obj = ResourceManager.GetObject("INFO", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

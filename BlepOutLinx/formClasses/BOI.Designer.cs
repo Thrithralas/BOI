@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BlepOut));
             this.btnSelectPath = new System.Windows.Forms.Button();
-            this.TargetSelect = new System.Windows.Forms.FolderBrowserDialog();
             this.Modlist = new System.Windows.Forms.CheckedListBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -57,6 +56,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.TagInputBox = new System.Windows.Forms.RichTextBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.targetSelectD = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -72,12 +72,6 @@
             this.btnSelectPath.Name = "btnSelectPath";
             this.btnSelectPath.UseVisualStyleBackColor = true;
             this.btnSelectPath.Click += new System.EventHandler(this.buttonSelectPath_Click);
-            // 
-            // TargetSelect
-            // 
-            resources.ApplyResources(this.TargetSelect, "TargetSelect");
-            this.TargetSelect.RootFolder = System.Environment.SpecialFolder.MyComputer;
-            this.TargetSelect.ShowNewFolderButton = false;
             // 
             // Modlist
             // 
@@ -269,6 +263,11 @@
             this.tableLayoutPanel3.Controls.Add(this.Modlist, 0, 2);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             // 
+            // targetSelectD
+            // 
+            resources.ApplyResources(this.targetSelectD, "targetSelectD");
+            this.targetSelectD.SupportMultiDottedExtensions = true;
+            // 
             // BlepOut
             // 
             resources.ApplyResources(this, "$this");
@@ -302,7 +301,6 @@
 
         #endregion
         private System.Windows.Forms.Button btnSelectPath;
-        private System.Windows.Forms.FolderBrowserDialog TargetSelect;
         private System.Windows.Forms.CheckedListBox Modlist;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
@@ -329,6 +327,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Button buttonBrowseAUDB;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.OpenFileDialog targetSelectD;
     }
 }
 

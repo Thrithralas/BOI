@@ -126,7 +126,7 @@
     <value>3, 3</value>
   </data>
   <data name="btnSelectPath.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 62</value>
+    <value>83, 62</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="btnSelectPath.TabIndex" type="System.Int32, mscorlib">
@@ -147,15 +147,6 @@
   <data name="&gt;&gt;btnSelectPath.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <metadata name="TargetSelect.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>301, 17</value>
-  </metadata>
-  <data name="TargetSelect.Description" xml:space="preserve">
-    <value>Choose Rain World's installation folder</value>
-  </data>
-  <data name="TargetSelect.SelectedPath" xml:space="preserve">
-    <value>C:\</value>
-  </data>
   <data name="Modlist.AccessibleDescription" xml:space="preserve">
     <value>hoo</value>
   </data>
@@ -172,7 +163,7 @@
     <value>True</value>
   </data>
   <data name="Modlist.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 268</value>
+    <value>268, 268</value>
   </data>
   <data name="Modlist.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -214,7 +205,7 @@
     <value>3, 33</value>
   </data>
   <data name="lblPathStatus.Size" type="System.Drawing.Size, System.Drawing">
-    <value>82, 33</value>
+    <value>81, 33</value>
   </data>
   <data name="lblPathStatus.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -247,7 +238,7 @@
     <value>3, 0</value>
   </data>
   <data name="lblProcessStatus.Size" type="System.Drawing.Size, System.Drawing">
-    <value>82, 33</value>
+    <value>81, 33</value>
   </data>
   <data name="lblProcessStatus.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -271,7 +262,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanel4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>91, 1</value>
+    <value>90, 1</value>
   </data>
   <data name="tableLayoutPanel4.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 1, 1, 1</value>
@@ -280,7 +271,7 @@
     <value>2</value>
   </data>
   <data name="tableLayoutPanel4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 66</value>
+    <value>87, 66</value>
   </data>
   <data name="tableLayoutPanel4.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -310,7 +301,7 @@
     <value>Microsoft Sans Serif, 8.25pt</value>
   </data>
   <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>183, 0</value>
+    <value>181, 0</value>
   </data>
   <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>84, 68</value>
@@ -343,7 +334,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 68</value>
+    <value>268, 68</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -382,7 +373,7 @@
     <value>5, 22</value>
   </data>
   <data name="labelDesc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>260, 74</value>
+    <value>258, 74</value>
   </data>
   <data name="labelDesc.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -422,7 +413,7 @@ BOI IS NOT A MODLOADER</value>
     <value>5, 2</value>
   </data>
   <data name="labelHead.Size" type="System.Drawing.Size, System.Drawing">
-    <value>260, 20</value>
+    <value>258, 20</value>
   </data>
   <data name="labelHead.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -456,7 +447,7 @@ BOI IS NOT A MODLOADER</value>
     <value>2</value>
   </data>
   <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 98</value>
+    <value>268, 98</value>
   </data>
   <data name="tableLayoutPanel2.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -477,7 +468,7 @@ BOI IS NOT A MODLOADER</value>
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelDesc" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelHead" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0" /&gt;&lt;Rows Styles="Absolute,20,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="rwp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>420, 17</value>
+    <value>431, 11</value>
   </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -525,7 +516,7 @@ BOI IS NOT A MODLOADER</value>
     <value>4, 1</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 40</value>
+    <value>269, 40</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -564,7 +555,7 @@ BOI IS NOT A MODLOADER</value>
     <value>3, 0</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 28</value>
+    <value>128, 28</value>
   </data>
   <data name="label2.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -591,10 +582,10 @@ BOI IS NOT A MODLOADER</value>
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="MaskModeSelect.Location" type="System.Drawing.Point, System.Drawing">
-    <value>136, 3</value>
+    <value>137, 3</value>
   </data>
   <data name="MaskModeSelect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 21</value>
+    <value>129, 21</value>
   </data>
   <data name="MaskModeSelect.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -618,7 +609,7 @@ BOI IS NOT A MODLOADER</value>
     <value>1</value>
   </data>
   <data name="tableLayoutPanel7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 28</value>
+    <value>269, 28</value>
   </data>
   <data name="tableLayoutPanel7.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -645,7 +636,7 @@ BOI IS NOT A MODLOADER</value>
     <value>4, 45</value>
   </data>
   <data name="textBox_MaskInput.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 20</value>
+    <value>269, 20</value>
   </data>
   <data name="textBox_MaskInput.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -675,7 +666,7 @@ BOI IS NOT A MODLOADER</value>
     <value>4, 105</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 46</value>
+    <value>269, 46</value>
   </data>
   <data name="label3.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -708,7 +699,7 @@ BOI IS NOT A MODLOADER</value>
     <value>4, 152</value>
   </data>
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 53</value>
+    <value>269, 53</value>
   </data>
   <data name="label4.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -745,7 +736,7 @@ BOI IS NOT A MODLOADER</value>
     <value>Vertical</value>
   </data>
   <data name="TagInputBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 235</value>
+    <value>269, 235</value>
   </data>
   <data name="TagInputBox.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -766,13 +757,13 @@ BOI IS NOT A MODLOADER</value>
     <value>5</value>
   </data>
   <data name="tableLayoutPanel6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>281, 4</value>
+    <value>279, 4</value>
   </data>
   <data name="tableLayoutPanel6.RowCount" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
   <data name="tableLayoutPanel6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>275, 448</value>
+    <value>277, 448</value>
   </data>
   <data name="tableLayoutPanel6.TabIndex" type="System.Int32, mscorlib">
     <value>22</value>
@@ -1001,7 +992,7 @@ Install BepInEx</value>
     <value>0</value>
   </data>
   <data name="tableLayoutPanel3.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tableLayoutPanel2" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel6" Row="0" RowSpan="3" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel1" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel5" Row="3" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="Modlist" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,281" /&gt;&lt;Rows Styles="Absolute,104,Absolute,74,Percent,100,Absolute,55" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tableLayoutPanel2" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel6" Row="0" RowSpan="3" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel1" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel5" Row="3" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="Modlist" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,283" /&gt;&lt;Rows Styles="Absolute,104,Absolute,74,Percent,100,Absolute,55" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1085,22 +1076,28 @@ Install BepInEx</value>
   <data name="$this.Text" xml:space="preserve">
     <value>BOI &lt;VersionNumber&gt;</value>
   </data>
-  <data name="&gt;&gt;TargetSelect.Name" xml:space="preserve">
-    <value>TargetSelect</value>
-  </data>
-  <data name="&gt;&gt;TargetSelect.Type" xml:space="preserve">
-    <value>System.Windows.Forms.FolderBrowserDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;rwp.Name" xml:space="preserve">
     <value>rwp</value>
   </data>
   <data name="&gt;&gt;rwp.Type" xml:space="preserve">
     <value>System.Diagnostics.Process, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;targetSelectD.Name" xml:space="preserve">
+    <value>targetSelectD</value>
+  </data>
+  <data name="&gt;&gt;targetSelectD.Type" xml:space="preserve">
+    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>BlepOut</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <metadata name="targetSelectD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>503, 11</value>
+  </metadata>
+  <data name="targetSelectD.Filter" xml:space="preserve">
+    <value>Game executable|*.exe|All files|*.*</value>
   </data>
 </root>
