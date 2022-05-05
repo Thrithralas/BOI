@@ -1,8 +1,9 @@
 ﻿using System.Windows.Forms;
+using System;
 
 namespace Blep
 {
-//TODO: replace with plaintext file? its like really bad atm
+    [Obsolete]
     public partial class InfoWindow : Form
     {
         public InfoWindow()
