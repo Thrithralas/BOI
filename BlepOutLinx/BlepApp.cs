@@ -43,8 +43,12 @@ namespace Blep
             //enter the form
             try
             {
+                var casm = System.Reflection.Assembly.GetExecutingAssembly();
                 var o = File.CreateText(Path.Combine(Directory.GetCurrentDirectory(), "INFO.md"));
-                o.Write(System.Text.Encoding.UTF8.GetString(Properties.Resources.INFO));
+                var str = casm.GetManifestResourceStream(casm.GetManifestResourceNames()[0]) as MemoryStream;
+                var bf = new byte[str.Length];
+                str.Read(bf, 0, (int)str.Length);
+                o.Write(System.Text.Encoding.UTF8.GetString(bf));
                 o.Close();
             }
             catch

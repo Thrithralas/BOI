@@ -82,7 +82,7 @@ namespace Blep
                 FillModList();
                 Modlist.Enabled = true;
                 //btnLaunch.Enabled = true;
-                targetSelectD.FileName = RootPath.EndsWith(".exe") ? RootPath : Directory.GetFiles(RootPath, "*.exe").FirstOrDefault() ?? RootPath;//Path.Combine(RootPath, "RainWorld.exe");
+                targetSelectD.FileName = RootPath;//RootPath.EndsWith(".exe") ? RootPath : Directory.GetFiles(RootPath, "*.exe").FirstOrDefault() ?? RootPath;//Path.Combine(RootPath, "RainWorld.exe");
                 
                 if (PubstuntFound && firstshow)
                 {
@@ -227,11 +227,6 @@ namespace Blep
         /// <see cref="Options"/> form instance.
         /// </summary>
         private Options opwin;
-
-        /// <summary>
-        /// <see cref="InfoWindow"/> form instance.
-        /// </summary>
-        private InfoWindow iw;
         /// <summary>
         /// Returns BOI folder path.
         /// </summary>
@@ -282,7 +277,7 @@ namespace Blep
             else
             {
                 FileInfo fi = new(targetSelectD.FileName);
-                //RootPath = fi.DirectoryName;
+                RootPath = fi.DirectoryName;
                 UpdateTargetPath(fi.DirectoryName);
                 btnSelectPath.Text = "Select path";
                 TSbtnMode = true;
