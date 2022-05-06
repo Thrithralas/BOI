@@ -266,7 +266,7 @@
             // targetSelectD
             // 
             resources.ApplyResources(this.targetSelectD, "targetSelectD");
-            this.targetSelectD.ShowReadOnly = true;
+            this.targetSelectD.RestoreDirectory = true;
             this.targetSelectD.SupportMultiDottedExtensions = true;
             // 
             // BlepOut

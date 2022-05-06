@@ -12,9 +12,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Unlicense")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyInformationalVersion("0.1.7.3")]
+[assembly: AssemblyInformationalVersion("0.1.7.4")]
 #warning Are you making a release? make sure the tag matches here! ^v^ ^v^
-[assembly: AssemblyVersion("0.1.7.3")]
+[assembly: AssemblyVersion("0.1.7.4")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from

@@ -27,37 +27,43 @@ namespace Blep
             var argl = args?.ToList() ?? new List<string>();
             Wood.SetNewPathAndErase(Path.Combine(Directory.GetCurrentDirectory(), "BOILOG.txt"));
             Wood.WriteLine($"BOI {BlepOut.VersionNumber} starting {DateTime.UtcNow}");
+            Wood.WriteLine("Console output is disabled for the time being, sorry.");
+#if !DEBUG
+            goto noconsolesqm;
+#endif
+            //broken
             if (File.Exists("showConsole.txt") || argl.Contains("-nc") || argl.Contains("--new-console"))
             {
-                //Wood.WriteLine("");
-                //BoiCustom.AllocConsole();
-                //Console.WriteLine("Launching BOI with output to a new console window.");
-                //Console.WriteLine("Reminder: you can always select text in console and then copy it by pressing enter. It also pauses the app.\n");
+                Wood.WriteLine("");
+                AllocConsole();
+                Console.WriteLine("Launching BOI with output to a new console window.");
+                Console.WriteLine("Reminder: you can always select text in console and then copy it by pressing enter. It also pauses the app.\n");
             }
             else if (argl.Contains("-ac") || argl.Contains("--attach-console"))
             {
-                //BoiCustom.AttachConsole(-1);
-                //Console.WriteLine("\nLaunching BOI and attempting to attach parent process console.");
+                AttachConsole(-1);
+                Console.WriteLine("\nLaunching BOI and attempting to attach parent process console.");
             }
-            Wood.WriteLine("Console output is disabled for the time being, sorry.");
-            //enter the form
+            noconsolesqm:
+            //write the help file
+            StreamWriter o = default;
             try
             {
                 var casm = System.Reflection.Assembly.GetExecutingAssembly();
-                var o = File.CreateText(Path.Combine(Directory.GetCurrentDirectory(), "INFO.md"));
-                var str = casm.GetManifestResourceStream(casm.GetManifestResourceNames()[0]) as MemoryStream;
+                foreach (var resname in casm.GetManifestResourceNames()) Wood.WriteLine(resname);
+                var str = casm.GetManifestResourceStream("Blep.Resources.BOI_INFO.txt");
                 var bf = new byte[str.Length];
                 str.Read(bf, 0, (int)str.Length);
-                o.Write(System.Text.Encoding.UTF8.GetString(bf));
-                o.Close();
+                o = File.CreateText(Path.Combine(Directory.GetCurrentDirectory(), "BOI_INFO.txt"));
+                o.WriteLine(System.Text.Encoding.UTF8.GetString(bf));
             }
-            catch
-            {
-
-            }
+            catch (Exception ee) { Wood.WriteLine(ee); }
+            finally { o?.Close(); }
+            //enter the form
             try
             {
                 BlepOut Currblep = new BlepOut();
+#if !DEBUG
                 Application.ThreadException += (sender, e) => {
                     var oind = Wood.IndentLevel;
                     Wood.IndentLevel = 0;
@@ -67,6 +73,7 @@ namespace Blep
                     Wood.IndentLevel = oind;
                     if (e.Exception is TypeLoadException) Currblep.Close();
                 };
+#endif
                 Application.Run(Currblep);
             }
             catch (Exception e)

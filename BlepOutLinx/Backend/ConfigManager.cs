@@ -34,6 +34,7 @@ namespace Blep.Backend
         {
             try
             {
+                Wood.WriteLine($"Saving config: {BlepOut.cfgpath}");
                 File.WriteAllText(BlepOut.cfgpath, confjo.ToString());
             }
             catch (NullReferenceException)

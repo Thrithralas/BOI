@@ -82,7 +82,7 @@ namespace Blep
                 FillModList();
                 Modlist.Enabled = true;
                 //btnLaunch.Enabled = true;
-                targetSelectD.FileName = RootPath;//RootPath.EndsWith(".exe") ? RootPath : Directory.GetFiles(RootPath, "*.exe").FirstOrDefault() ?? RootPath;//Path.Combine(RootPath, "RainWorld.exe");
+                //targetSelectD.FileName = RootPath;//RootPath.EndsWith(".exe") ? RootPath : Directory.GetFiles(RootPath, "*.exe").FirstOrDefault() ?? RootPath;//Path.Combine(RootPath, "RainWorld.exe");
                 
                 if (PubstuntFound && firstshow)
                 {
@@ -355,15 +355,12 @@ namespace Blep
             //iw.Show();
             try
             {
-                System.Diagnostics.Process.Start(Path.Combine(Directory.GetCurrentDirectory(), "INFO.md"));
+                System.Diagnostics.Process.Start(Path.Combine(Directory.GetCurrentDirectory(), "BOI_INFO.txt"));
             }
             catch (Exception ee)
             {
-                Console.WriteLine(ee);
-            }
-            finally
-            {
-
+                Wood.WriteLine("Couldn't open help file:");
+                Wood.WriteLine(ee, 1);
             }
         }
         /// <summary>
