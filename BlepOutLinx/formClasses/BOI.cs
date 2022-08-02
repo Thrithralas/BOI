@@ -504,6 +504,17 @@ namespace Blep
         {
             ApplyMaskToModlist(textBox_MaskInput.Text);
         }
+        private void selected_on(object sender, EventArgs e)
+        {
+            Donkey.DeliverRangeAsync(allSelected).Wait();
+            FillModList();
+        }
+
+        private void selected_off(object sender, EventArgs e)
+        {
+            Donkey.RetractRangeAsync(allSelected).Wait();
+            FillModList();
+        }
         /// <summary>
         /// Brings up AUDBrowser.
         /// </summary>
@@ -524,7 +535,7 @@ namespace Blep
                 return "vUnk";
             }
         }
-
+        #region meme
         private void label5_Click(object sender, EventArgs e)
         {
             var r = new Random();
@@ -573,5 +584,10 @@ namespace Blep
             label5.Text = relBtnLines[r.Next(0, relBtnLines.Length)];
         }
         internal static string[] relBtnLines;
+
+        #endregion
+
+        internal IEnumerable<int> allSelected => Donkey.cargo.TakeWhile(xx => ModSelectedByMask(this.textBox_MaskInput.Text, xx)).Select(xx => Donkey.cargo.IndexOf(xx));
+
     }
 }

@@ -180,9 +180,9 @@ namespace Blep.Backend
         /// Async version of <see cref="TryDeliver(int)"/>
         /// </summary>
         /// <param name="tIndex"></param>
-        public static void DeliverAsync(int tIndex)
+        public static async Task<bool> DeliverAsync(int tIndex)
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(x => { TryDeliver(tIndex); }));
+            return TryDeliver(tIndex);
         }
         /// <summary>
         /// Enables mods by a range of indices
@@ -197,17 +197,22 @@ namespace Blep.Backend
                 if (!TryDeliver(tIndex)) errcount++;
             }
             return errcount;
+
         }
         /// <summary>
         /// Async version of <see cref="TryDeliverRange(IEnumerable{int})"/>
         /// </summary>
         /// <param name="range"></param>
-        public static void DeliverRangeAsync(IEnumerable<int> range)
+        public static async Task<int> DeliverRangeAsync(IEnumerable<int> range)
         {
+            var errc = 0;
+            List<Task<bool>> reslist = new();
             foreach (var tIndex in range)
             {
-                DeliverAsync(tIndex);
+                reslist.Add(DeliverAsync(tIndex));
             }
+            foreach (var r in reslist) try { await r; if (!r.Result) errc++; } catch { errc++; }
+            return errc;
         }
         /// <summary>
         /// Disables a mod under selected index in <see cref="cargo"/>
@@ -235,9 +240,9 @@ namespace Blep.Backend
         /// Async version of <see cref="TryRetract(int)"/>
         /// </summary>
         /// <param name="tIndex"></param>
-        public static void RetractAsync(int tIndex)
+        public static async Task<bool> RetractAsync(int tIndex)
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(x => { TryRetract(tIndex); }));
+            return TryRetract(tIndex);
         }
         /// <summary>
         /// Disables mods by a range of indices
@@ -257,12 +262,16 @@ namespace Blep.Backend
         /// Async version of <see cref="TryretractRange(IEnumerable{int})"/>
         /// </summary>
         /// <param name="range"></param>
-        public static void RetractRangeAsync(IEnumerable<int> range)
+        public static async Task<int> RetractRangeAsync(IEnumerable<int> range)
         {
+            var errc = 0;
+            List<Task<bool>> reslist = new();
             foreach (var tIndex in range)
             {
-                RetractAsync(tIndex);
+                reslist.Add(RetractAsync(tIndex));
             }
+            foreach (var r in reslist) try { await r; if (!r.Result) errc++; } catch { errc++; }
+            return errc;
         }
 
         //public static List<Task<bool>> movetasks = new List<Task<bool>>();
