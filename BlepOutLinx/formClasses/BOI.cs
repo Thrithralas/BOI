@@ -506,14 +506,16 @@ namespace Blep
         }
         private void selected_on(object sender, EventArgs e)
         {
-            Donkey.DeliverRangeAsync(allSelected).Wait();
-            FillModList();
+            Donkey.DeliverRangeAsync(allSelected()).Wait();
+            //FillModList();
+            ApplyMaskToModlist(textBox_MaskInput.Text);
         }
 
         private void selected_off(object sender, EventArgs e)
         {
-            Donkey.RetractRangeAsync(allSelected).Wait();
-            FillModList();
+            Donkey.RetractRangeAsync(allSelected()).Wait();
+            //FillModList();
+            ApplyMaskToModlist(textBox_MaskInput.Text);
         }
         /// <summary>
         /// Brings up AUDBrowser.
@@ -587,7 +589,11 @@ namespace Blep
 
         #endregion
 
-        internal IEnumerable<int> allSelected => Donkey.cargo.TakeWhile(xx => ModSelectedByMask(this.textBox_MaskInput.Text, xx)).Select(xx => Donkey.cargo.IndexOf(xx));
+        internal IEnumerable<int> allSelected()
+        {
+            foreach (ModRelay mr in Modlist.Items) yield return Donkey.cargo.IndexOf(mr);
+
+        }
 
     }
 }

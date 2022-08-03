@@ -249,7 +249,7 @@ namespace Blep.Backend
         /// </summary>
         /// <param name="range"></param>
         /// <returns>number of failed operations</returns>
-        public static int TryretractRange (IEnumerable<int> range)
+        public static int TryRetractRange (IEnumerable<int> range)
         {
             var errcount = 0;
             foreach (var tIndex in range)
@@ -259,7 +259,7 @@ namespace Blep.Backend
             return errcount;
         }
         /// <summary>
-        /// Async version of <see cref="TryretractRange(IEnumerable{int})"/>
+        /// Async version of <see cref="TryRetractRange(IEnumerable{int})"/>
         /// </summary>
         /// <param name="range"></param>
         public static async Task<int> RetractRangeAsync(IEnumerable<int> range)
